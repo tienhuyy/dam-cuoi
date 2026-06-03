@@ -773,8 +773,7 @@
       const item = document.createElement('div');
       item.className = 'photo-item';
       item.innerHTML = `
-        <img src="${p.src}" alt="Ảnh cưới ${i+1}" loading="lazy">
-        <div class="overlay"><span class="overlay-text">📸 Ảnh ${i+1}</span></div>`;
+        <img src="${p.src}" alt="Ảnh cưới ${i+1}" loading="lazy">`;
       item.onclick = () => openLightbox(i);
       grid.appendChild(item);
     });
