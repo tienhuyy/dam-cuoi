@@ -677,7 +677,21 @@
         subtitle: document.getElementById('hero-subtitle').textContent,
         messages, photos
       }));
-    } catch(e) { alert('Lưu thất bại — ảnh có thể quá nặng!'); }
+    } catch(e) {
+      // localStorage đầy → tự xóa data cũ rồi thử lại
+      try {
+        localStorage.clear();
+        localStorage.setItem('wedding_data', JSON.stringify({
+          groom: currentGroom, bride: currentBride,
+          date: document.getElementById('hero-date').textContent,
+          subtitle: document.getElementById('hero-subtitle').textContent,
+          messages, photos
+        }));
+      } catch(e2) {
+        // Ảnh quá nặng không thể lưu localStorage — bỏ qua, không báo lỗi
+        console.warn('localStorage full, photos may not persist');
+      }
+    }
   }
 
   function updateNames(g, b) {
