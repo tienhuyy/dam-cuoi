@@ -533,9 +533,9 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-decoration">✦ ✦ ✦</div>
-  <h1 id="hero-names"><em>Anh</em> &amp; <em>Em</em></h1>
+  <h1 id="hero-names"><em>Huy</em> &amp; <em>Hoa</em></h1>
   <div class="hero-divider"><span>💍</span></div>
-  <div class="hero-date" id="hero-date">DD · MM · YYYY</div>
+  <div class="hero-date" id="hero-date">Sắp được công bố 🌸</div>
   <div class="hero-subtitle" id="hero-subtitle">Chúng mình đã nên duyên vợ chồng 🌸</div>
   <span class="scroll-hint">Cuộn xuống</span>
 </section>
@@ -550,16 +550,17 @@
 <section class="gallery-section">
   <h2 class="section-title">Khoảnh Khắc Đáng Nhớ</h2>
 
-  <div class="upload-area" id="upload-area">
+  <!-- Upload area: chỉ hiện khi admin -->
+  <div class="upload-area" id="upload-area" style="display:none">
     <div class="upload-icon">📸</div>
-    <h3>Thêm ảnh cưới của bạn</h3>
+    <h3>Thêm ảnh cưới</h3>
     <p>Kéo thả ảnh vào đây hoặc nhấn nút bên dưới</p>
     <input type="file" id="file-input" multiple accept="image/*">
     <button class="upload-btn" onclick="document.getElementById('file-input').click()">Chọn Ảnh</button>
   </div>
 
   <div class="empty-state" id="empty-state">
-    Chưa có ảnh nào — hãy thêm ảnh cưới đẹp của bạn nhé! 🌸
+    Ảnh cưới sẽ sớm được cập nhật — hãy đón chờ nhé! 🌸
   </div>
 
   <div class="photo-grid" id="photo-grid"></div>
@@ -589,16 +590,30 @@
 <!-- FOOTER -->
 <footer>
   <span class="footer-heart">💕</span>
-  <span id="footer-names">Anh &amp; Em — Mãi bên nhau</span>
+  <span id="footer-names">Huy &amp; Hoa — Mãi bên nhau</span>
 </footer>
 
-<!-- EDIT BUTTON -->
-<button class="edit-btn" onclick="openModal()">✏️ Chỉnh sửa thông tin</button>
+<!-- ADMIN LOGIN BUTTON (luôn ẩn, vào bằng ?admin) -->
+<button class="edit-btn" id="admin-btn" style="display:none" onclick="openAdminPanel()">⚙️ Admin</button>
 
-<!-- EDIT MODAL -->
-<div class="modal-overlay" id="modal">
+<!-- ADMIN LOGIN MODAL -->
+<div class="modal-overlay" id="login-modal">
   <div class="modal">
-    <h3>Chỉnh sửa thông tin cưới</h3>
+    <h3>🔐 Đăng nhập Admin</h3>
+    <label>Mật khẩu</label>
+    <input type="password" id="input-password" placeholder="Nhập mật khẩu..." onkeydown="if(event.key==='Enter')doLogin()">
+    <div id="login-error" style="color:#c0392b;font-size:0.85rem;margin-top:-0.5rem;margin-bottom:0.8rem;display:none">Sai mật khẩu rồi! 🔒</div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeLoginModal()">Hủy</button>
+      <button class="btn-save" onclick="doLogin()">Đăng nhập</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL MODAL -->
+<div class="modal-overlay" id="admin-modal">
+  <div class="modal" style="max-height:90vh;overflow-y:auto">
+    <h3>⚙️ Quản lý Album Cưới</h3>
     <label>Tên chú rể</label>
     <input type="text" id="input-groom" placeholder="Tên chú rể">
     <label>Tên cô dâu</label>
@@ -607,52 +622,129 @@
     <input type="text" id="input-date" placeholder="VD: 15 · 06 · 2025">
     <label>Câu tagline</label>
     <input type="text" id="input-subtitle" placeholder="VD: Chúng mình đã nên duyên vợ chồng 🌸">
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal()">Hủy</button>
-      <button class="btn-save" onclick="saveInfo()">Lưu</button>
+    <div style="margin:1rem 0;border-top:1px solid var(--rose);padding-top:1rem">
+      <label style="margin-bottom:0.6rem;display:block">Upload ảnh cưới</label>
+      <button class="upload-btn" style="margin:0" onclick="document.getElementById('file-input-admin').click()">📸 Chọn Ảnh</button>
+      <input type="file" id="file-input-admin" multiple accept="image/*" style="display:none">
+    </div>
+    <div id="admin-photo-count" style="font-size:0.85rem;color:var(--text-light);margin-bottom:1rem"></div>
+    <div class="modal-actions" style="flex-wrap:wrap;gap:0.5rem">
+      <button class="btn-cancel" onclick="closeAdminModal()">Đóng</button>
+      <button class="btn-cancel" style="color:#c0392b;border-color:#c0392b!important" onclick="clearAllPhotos()">🗑️ Xóa hết ảnh</button>
+      <button class="btn-save" onclick="saveInfo()">💾 Lưu</button>
     </div>
   </div>
 </div>
 
 <script>
+  const ADMIN_PASS = '12345678';
+  let isAdmin = false;
   let photos = [];
   let currentIdx = 0;
   let messages = [];
+  let currentGroom = 'Huy', currentBride = 'Hoa';
 
-  // Load saved data
-  (function init() {
+  // Kiểm tra URL có ?admin không
+  function checkAdminMode() {
+    if (window.location.search.includes('admin')) {
+      document.getElementById('admin-btn').style.display = 'block';
+      openLoginModal();
+    }
+  }
+
+  // Load data từ localStorage
+  function init() {
     try {
       const saved = JSON.parse(localStorage.getItem('wedding_data') || '{}');
-      if (saved.groom || saved.bride) updateNames(saved.groom || 'Anh', saved.bride || 'Em');
+      if (saved.groom) { currentGroom = saved.groom; }
+      if (saved.bride) { currentBride = saved.bride; }
+      updateNames(currentGroom, currentBride);
       if (saved.date) document.getElementById('hero-date').textContent = saved.date;
       if (saved.subtitle) document.getElementById('hero-subtitle').textContent = saved.subtitle;
-      if (saved.messages) { messages = saved.messages; renderMessages(); }
-      if (saved.photos) { photos = saved.photos; renderGrid(); }
+      if (saved.messages) { messages = saved.messages; }
+      if (saved.photos) { photos = saved.photos; }
     } catch(e) {}
-  })();
+    renderMessages();
+    renderGrid();
+    checkAdminMode();
+  }
 
   function saveData() {
     try {
       localStorage.setItem('wedding_data', JSON.stringify({
-        groom: document.getElementById('input-groom').value || currentGroom,
-        bride: document.getElementById('input-bride').value || currentBride,
+        groom: currentGroom, bride: currentBride,
         date: document.getElementById('hero-date').textContent,
         subtitle: document.getElementById('hero-subtitle').textContent,
         messages, photos
       }));
-    } catch(e) {}
+    } catch(e) { alert('Lưu thất bại — ảnh có thể quá nặng!'); }
   }
 
-  let currentGroom = 'Anh', currentBride = 'Em';
   function updateNames(g, b) {
     currentGroom = g; currentBride = b;
     document.getElementById('hero-names').innerHTML = `<em>${g}</em> &amp; <em>${b}</em>`;
     document.getElementById('footer-names').textContent = `${g} & ${b} — Mãi bên nhau`;
   }
 
-  // Upload
+  // ===== LOGIN =====
+  function openLoginModal() {
+    document.getElementById('login-modal').classList.add('active');
+    setTimeout(() => document.getElementById('input-password').focus(), 100);
+  }
+  function closeLoginModal() {
+    document.getElementById('login-modal').classList.remove('active');
+    document.getElementById('input-password').value = '';
+    document.getElementById('login-error').style.display = 'none';
+  }
+  function doLogin() {
+    const pw = document.getElementById('input-password').value;
+    if (pw === ADMIN_PASS) {
+      isAdmin = true;
+      closeLoginModal();
+      document.getElementById('upload-area').style.display = 'block';
+      openAdminPanel();
+    } else {
+      document.getElementById('login-error').style.display = 'block';
+      document.getElementById('input-password').value = '';
+      document.getElementById('input-password').focus();
+    }
+  }
+
+  // ===== ADMIN PANEL =====
+  function openAdminPanel() {
+    if (!isAdmin) { openLoginModal(); return; }
+    document.getElementById('input-groom').value = currentGroom;
+    document.getElementById('input-bride').value = currentBride;
+    document.getElementById('input-date').value = document.getElementById('hero-date').textContent;
+    document.getElementById('input-subtitle').value = document.getElementById('hero-subtitle').textContent;
+    document.getElementById('admin-photo-count').textContent = `Hiện có ${photos.length} ảnh`;
+    document.getElementById('admin-modal').classList.add('active');
+  }
+  function closeAdminModal() { document.getElementById('admin-modal').classList.remove('active'); }
+
+  function saveInfo() {
+    const g = document.getElementById('input-groom').value.trim() || currentGroom;
+    const b = document.getElementById('input-bride').value.trim() || currentBride;
+    const d = document.getElementById('input-date').value.trim();
+    const s = document.getElementById('input-subtitle').value.trim();
+    updateNames(g, b);
+    if (d) document.getElementById('hero-date').textContent = d;
+    if (s) document.getElementById('hero-subtitle').textContent = s;
+    saveData();
+    closeAdminModal();
+    alert('✅ Đã lưu thành công!');
+  }
+
+  function clearAllPhotos() {
+    if (!confirm('Xóa hết tất cả ảnh? Không khôi phục được đâu nhé!')) return;
+    photos = [];
+    renderGrid();
+    saveData();
+    document.getElementById('admin-photo-count').textContent = 'Hiện có 0 ảnh';
+  }
+
+  // ===== UPLOAD =====
   const uploadArea = document.getElementById('upload-area');
-  const fileInput = document.getElementById('file-input');
 
   uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('drag-over'); });
   uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag-over'));
@@ -661,7 +753,12 @@
     uploadArea.classList.remove('drag-over');
     handleFiles(e.dataTransfer.files);
   });
-  fileInput.addEventListener('change', () => handleFiles(fileInput.files));
+
+  document.getElementById('file-input').addEventListener('change', function() { handleFiles(this.files); });
+  document.getElementById('file-input-admin').addEventListener('change', function() {
+    handleFiles(this.files);
+    closeAdminModal();
+  });
 
   function handleFiles(files) {
     [...files].forEach(file => {
@@ -676,24 +773,31 @@
     });
   }
 
+  // ===== GRID =====
   function renderGrid() {
     const grid = document.getElementById('photo-grid');
     const empty = document.getElementById('empty-state');
     grid.innerHTML = '';
-    empty.classList.toggle('show', photos.length === 0);
+    if (photos.length === 0) {
+      empty.classList.add('show');
+      empty.textContent = isAdmin
+        ? 'Chưa có ảnh nào — hãy upload ảnh cưới nhé! 📸'
+        : 'Ảnh cưới sẽ sớm được cập nhật — hãy đón chờ nhé! 🌸';
+      return;
+    }
+    empty.classList.remove('show');
     photos.forEach((p, i) => {
       const item = document.createElement('div');
       item.className = 'photo-item';
       item.innerHTML = `
         <img src="${p.src}" alt="Ảnh cưới ${i+1}" loading="lazy">
-        <div class="overlay">
-          <span class="overlay-text">📸 Ảnh ${i+1}</span>
-        </div>`;
+        <div class="overlay"><span class="overlay-text">📸 Ảnh ${i+1}</span></div>`;
       item.onclick = () => openLightbox(i);
       grid.appendChild(item);
     });
   }
 
+  // ===== LIGHTBOX =====
   function openLightbox(i) {
     currentIdx = i;
     document.getElementById('lightbox-img').src = photos[i].src;
@@ -718,7 +822,7 @@
     if (e.key === 'ArrowRight') changePhoto(1);
   });
 
-  // Messages
+  // ===== MESSAGES =====
   function addMessage() {
     const name = document.getElementById('msg-name').value.trim();
     const text = document.getElementById('msg-text').value.trim();
@@ -744,28 +848,7 @@
       </div>`).join('');
   }
 
-  // Modal
-  function openModal() {
-    document.getElementById('input-groom').value = currentGroom !== 'Anh' ? currentGroom : '';
-    document.getElementById('input-bride').value = currentBride !== 'Em' ? currentBride : '';
-    document.getElementById('input-date').value = document.getElementById('hero-date').textContent;
-    document.getElementById('input-subtitle').value = document.getElementById('hero-subtitle').textContent;
-    document.getElementById('modal').classList.add('active');
-  }
-  function closeModal() { document.getElementById('modal').classList.remove('active'); }
-  function saveInfo() {
-    const g = document.getElementById('input-groom').value.trim() || currentGroom;
-    const b = document.getElementById('input-bride').value.trim() || currentBride;
-    const d = document.getElementById('input-date').value.trim();
-    const s = document.getElementById('input-subtitle').value.trim();
-    updateNames(g, b);
-    if (d) document.getElementById('hero-date').textContent = d;
-    if (s) document.getElementById('hero-subtitle').textContent = s;
-    closeModal();
-    saveData();
-  }
-
-  renderMessages();
+  init();
 </script>
 </body>
 </html>
