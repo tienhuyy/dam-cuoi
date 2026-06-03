@@ -550,15 +550,6 @@
 <section class="gallery-section">
   <h2 class="section-title">Khoảnh Khắc Đáng Nhớ</h2>
 
-  <!-- Upload area: chỉ hiện khi admin -->
-  <div class="upload-area" id="upload-area" style="display:none">
-    <div class="upload-icon">📸</div>
-    <h3>Thêm ảnh cưới</h3>
-    <p>Kéo thả ảnh vào đây hoặc nhấn nút bên dưới</p>
-    <input type="file" id="file-input" multiple accept="image/*">
-    <button class="upload-btn" onclick="document.getElementById('file-input').click()">Chọn Ảnh</button>
-  </div>
-
   <div class="empty-state" id="empty-state">
     Ảnh cưới sẽ sớm được cập nhật — hãy đón chờ nhé! 🌸
   </div>
@@ -622,11 +613,6 @@
     <input type="text" id="input-date" placeholder="VD: 15 · 06 · 2025">
     <label>Câu tagline</label>
     <input type="text" id="input-subtitle" placeholder="VD: Chúng mình đã nên duyên vợ chồng 🌸">
-    <div style="margin:1rem 0;border-top:1px solid var(--rose);padding-top:1rem">
-      <label style="margin-bottom:0.6rem;display:block">Upload ảnh cưới</label>
-      <button class="upload-btn" style="margin:0" onclick="document.getElementById('file-input-admin').click()">📸 Chọn Ảnh</button>
-      <input type="file" id="file-input-admin" multiple accept="image/*" style="display:none">
-    </div>
     <div id="admin-photo-count" style="font-size:0.85rem;color:var(--text-light);margin-bottom:1rem"></div>
     <div class="modal-actions" style="flex-wrap:wrap;gap:0.5rem">
       <button class="btn-cancel" onclick="closeAdminModal()">Đóng</button>
@@ -638,59 +624,70 @@
 
 <script>
   const ADMIN_PASS = '12345678';
+  const GITHUB_USER = 'tienhuyy';
+  const GITHUB_REPO = 'dam-cuoi';
+  const GITHUB_BRANCH = 'main';
+  const PHOTOS_PATH = 'photos';
+  // Đường dẫn ảnh trực tiếp từ GitHub raw
+  const RAW_BASE = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${PHOTOS_PATH}/`;
+  // GitHub API để lấy danh sách file
+  const API_URL = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${PHOTOS_PATH}`;
+
   let isAdmin = false;
-  let photos = [];
+  let photos = []; // [{src, name}]
   let currentIdx = 0;
   let messages = [];
   let currentGroom = 'Huy', currentBride = 'Hoa';
 
-  // Kiểm tra URL có ?admin không
-  function checkAdminMode() {
-    if (window.location.search.includes('admin')) {
-      document.getElementById('admin-btn').style.display = 'block';
-      openLoginModal();
-    }
-  }
-
-  // Load data từ localStorage
+  // ===== INIT =====
   function init() {
+    // Load thông tin & lời chúc từ localStorage (nhẹ, không lưu ảnh)
     try {
-      const saved = JSON.parse(localStorage.getItem('wedding_data') || '{}');
-      if (saved.groom) { currentGroom = saved.groom; }
-      if (saved.bride) { currentBride = saved.bride; }
-      updateNames(currentGroom, currentBride);
+      const saved = JSON.parse(localStorage.getItem('wedding_info') || '{}');
+      if (saved.groom) currentGroom = saved.groom;
+      if (saved.bride) currentBride = saved.bride;
       if (saved.date) document.getElementById('hero-date').textContent = saved.date;
       if (saved.subtitle) document.getElementById('hero-subtitle').textContent = saved.subtitle;
-      if (saved.messages) { messages = saved.messages; }
-      if (saved.photos) { photos = saved.photos; }
+      if (saved.messages) messages = saved.messages;
     } catch(e) {}
+    updateNames(currentGroom, currentBride);
     renderMessages();
-    renderGrid();
+    loadPhotosFromGitHub();
     checkAdminMode();
   }
 
-  function saveData() {
+  function saveInfo_local() {
     try {
-      localStorage.setItem('wedding_data', JSON.stringify({
+      localStorage.setItem('wedding_info', JSON.stringify({
         groom: currentGroom, bride: currentBride,
         date: document.getElementById('hero-date').textContent,
         subtitle: document.getElementById('hero-subtitle').textContent,
-        messages, photos
+        messages
       }));
+    } catch(e) {}
+  }
+
+  // ===== LOAD ẢNH TỪ GITHUB =====
+  async function loadPhotosFromGitHub() {
+    const grid = document.getElementById('photo-grid');
+    const empty = document.getElementById('empty-state');
+    empty.textContent = '⏳ Đang tải ảnh...';
+    empty.classList.add('show');
+    grid.innerHTML = '';
+
+    try {
+      const res = await fetch(API_URL);
+      if (!res.ok) throw new Error('API error');
+      const files = await res.json();
+      // Lọc chỉ file ảnh, bỏ .gitkeep
+      const imageExts = ['jpg','jpeg','png','gif','webp','JPG','JPEG','PNG','GIF','WEBP'];
+      photos = files
+        .filter(f => f.type === 'file' && imageExts.some(ext => f.name.endsWith('.' + ext)))
+        .map(f => ({ src: RAW_BASE + encodeURIComponent(f.name), name: f.name }));
+      renderGrid();
     } catch(e) {
-      // localStorage đầy → tự xóa data cũ rồi thử lại
-      try {
-        localStorage.clear();
-        localStorage.setItem('wedding_data', JSON.stringify({
-          groom: currentGroom, bride: currentBride,
-          date: document.getElementById('hero-date').textContent,
-          subtitle: document.getElementById('hero-subtitle').textContent,
-          messages, photos
-        }));
-      } catch(e2) {
-        // Ảnh quá nặng không thể lưu localStorage — bỏ qua, không báo lỗi
-        console.warn('localStorage full, photos may not persist');
-      }
+      empty.textContent = 'Không tải được ảnh — vui lòng thử lại sau 🌸';
+      empty.classList.add('show');
     }
   }
 
@@ -698,6 +695,13 @@
     currentGroom = g; currentBride = b;
     document.getElementById('hero-names').innerHTML = `<em>${g}</em> &amp; <em>${b}</em>`;
     document.getElementById('footer-names').textContent = `${g} & ${b} — Mãi bên nhau`;
+  }
+
+  function checkAdminMode() {
+    if (window.location.search.includes('admin')) {
+      document.getElementById('admin-btn').style.display = 'block';
+      openLoginModal();
+    }
   }
 
   // ===== LOGIN =====
@@ -715,7 +719,6 @@
     if (pw === ADMIN_PASS) {
       isAdmin = true;
       closeLoginModal();
-      document.getElementById('upload-area').style.display = 'block';
       openAdminPanel();
     } else {
       document.getElementById('login-error').style.display = 'block';
@@ -731,7 +734,9 @@
     document.getElementById('input-bride').value = currentBride;
     document.getElementById('input-date').value = document.getElementById('hero-date').textContent;
     document.getElementById('input-subtitle').value = document.getElementById('hero-subtitle').textContent;
-    document.getElementById('admin-photo-count').textContent = `Hiện có ${photos.length} ảnh`;
+    document.getElementById('admin-photo-count').innerHTML =
+      `📸 Hiện có <strong>${photos.length}</strong> ảnh trong thư mục <code>photos/</code> trên GitHub.<br>
+      <small style="color:var(--text-light)">Để thêm ảnh: vào GitHub → thư mục photos → Add file → Upload files</small>`;
     document.getElementById('admin-modal').classList.add('active');
   }
   function closeAdminModal() { document.getElementById('admin-modal').classList.remove('active'); }
@@ -744,47 +749,13 @@
     updateNames(g, b);
     if (d) document.getElementById('hero-date').textContent = d;
     if (s) document.getElementById('hero-subtitle').textContent = s;
-    saveData();
+    saveInfo_local();
     closeAdminModal();
     alert('✅ Đã lưu thành công!');
   }
 
   function clearAllPhotos() {
-    if (!confirm('Xóa hết tất cả ảnh? Không khôi phục được đâu nhé!')) return;
-    photos = [];
-    renderGrid();
-    saveData();
-    document.getElementById('admin-photo-count').textContent = 'Hiện có 0 ảnh';
-  }
-
-  // ===== UPLOAD =====
-  const uploadArea = document.getElementById('upload-area');
-
-  uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('drag-over'); });
-  uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag-over'));
-  uploadArea.addEventListener('drop', e => {
-    e.preventDefault();
-    uploadArea.classList.remove('drag-over');
-    handleFiles(e.dataTransfer.files);
-  });
-
-  document.getElementById('file-input').addEventListener('change', function() { handleFiles(this.files); });
-  document.getElementById('file-input-admin').addEventListener('change', function() {
-    handleFiles(this.files);
-    closeAdminModal();
-  });
-
-  function handleFiles(files) {
-    [...files].forEach(file => {
-      if (!file.type.startsWith('image/')) return;
-      const reader = new FileReader();
-      reader.onload = e => {
-        photos.push({ src: e.target.result, name: file.name, time: Date.now() });
-        renderGrid();
-        saveData();
-      };
-      reader.readAsDataURL(file);
-    });
+    alert('Để xóa ảnh, vào thư mục photos/ trên GitHub và xóa file ảnh trực tiếp nhé!');
   }
 
   // ===== GRID =====
@@ -794,9 +765,7 @@
     grid.innerHTML = '';
     if (photos.length === 0) {
       empty.classList.add('show');
-      empty.textContent = isAdmin
-        ? 'Chưa có ảnh nào — hãy upload ảnh cưới nhé! 📸'
-        : 'Ảnh cưới sẽ sớm được cập nhật — hãy đón chờ nhé! 🌸';
+      empty.textContent = 'Ảnh cưới sẽ sớm được cập nhật — hãy đón chờ nhé! 🌸';
       return;
     }
     empty.classList.remove('show');
@@ -845,7 +814,7 @@
     document.getElementById('msg-name').value = '';
     document.getElementById('msg-text').value = '';
     renderMessages();
-    saveData();
+    saveInfo_local();
   }
 
   function renderMessages() {
