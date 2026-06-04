@@ -9,12 +9,10 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --ivory: #fdf0f0;
-    --cream: #f7e0e0;
-    --gold: #c0785a;
-    --gold-light: #e8b8a8;
-    --brown: #6b2d2d;
-    --brown-mid: #a05050;
+    --gold: #a07840;
+    --gold-light: #d6c9b0;
+    --brown: #5a3e28;
+    --brown-mid: #8a6a4a;
     --rose: #e89090;
     --deep-rose: #c0485a;
     --dark: #3a1515;
@@ -25,31 +23,36 @@
   body {
     background: linear-gradient(135deg, #fce8e8 0%, #f8d8d0 40%, #fce4d8 100%);
     color: var(--text);
-    font-family: 'Nunito', 'Hiragino Kaku Gothic Pro', sans-serif;
+    font-family: 'Nunito', sans-serif;
     font-weight: 300;
     min-height: 100vh;
   }
 
-  /* ===== COVER ===== */
+  /* SAKURA CANVAS — phủ lên toàn bộ, không chặn click */
+  #particle-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* COVER */
   .cover {
-    position: relative;
     min-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: transparent;
     padding: 2.5rem 1.5rem;
-    scroll-snap-align: start;
   }
-
   .cover-card {
     position: relative;
     width: min(400px, 90vw);
-    background: rgba(255,255,255,0.92);
+    background: rgba(255,255,255,0.93);
     border: 1.5px solid var(--gold-light);
     border-radius: 3px;
     padding: 2.2rem 2rem 2rem;
-    box-shadow: 0 8px 40px rgba(100,80,50,0.1);
+    box-shadow: 0 8px 40px rgba(100,60,60,0.13);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -64,9 +67,8 @@
     border-radius: 1px;
     pointer-events: none;
   }
-
   .cover-names {
-    font-family: 'Cormorant Garamond', 'Georgia', serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: clamp(1.3rem, 4vw, 1.7rem);
     font-weight: 400;
     letter-spacing: 0.25rem;
@@ -77,12 +79,7 @@
     gap: 0.7rem;
     margin-bottom: 1.4rem;
   }
-  .cover-rings {
-    width: 36px;
-    height: 36px;
-    flex-shrink: 0;
-  }
-
+  .cover-rings { width: 36px; height: 36px; flex-shrink: 0; }
   .cover-photo-wrap {
     width: 100%;
     aspect-ratio: 3/4;
@@ -90,37 +87,16 @@
     border: 2.5px solid var(--gold-light);
     border-radius: 2px;
     margin-bottom: 1.6rem;
-    background: var(--cream);
+    background: #f0ebe3;
   }
   .cover-photo-wrap img {
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
     object-fit: cover;
     object-position: center center;
     display: block;
-    transform-origin: center center;
-    transition: transform 0.3s ease, object-position 0.3s ease;
   }
-  /* Controls chỉnh ảnh bìa */
-  .cover-controls {
-    display: none;
-    flex-direction: column;
-    gap: 0.5rem;
-    width: 100%;
-    margin-top: 0.7rem;
-    padding: 0.7rem 0.8rem;
-    background: rgba(160,120,64,0.07);
-    border: 1px dashed #d6c9b0;
-    border-radius: 8px;
-  }
-  .cover-controls.show { display: flex; }
-  .cover-controls .ctrl-row { display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: #8a6a4a; }
-  .cover-controls .ctrl-row span:first-child { width: 3.5rem; flex-shrink: 0; }
-  .cover-controls input[type=range] { flex: 1; accent-color: #a07840; cursor: pointer; height: 4px; }
-  .cover-controls .ctrl-val { min-width: 2.8rem; text-align: right; font-size: 0.75rem; color: #a07840; }
   .cover-photo-placeholder {
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -130,9 +106,8 @@
     gap: 0.5rem;
   }
   .cover-photo-placeholder span { font-size: 2.2rem; }
-
   .cover-label {
-    font-family: 'Cormorant Garamond', 'Georgia', serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: clamp(1.5rem, 5vw, 2rem);
     font-weight: 600;
     letter-spacing: 0.35rem;
@@ -141,7 +116,6 @@
     line-height: 1.2;
     margin-bottom: 0.7rem;
   }
-
   .cover-divider-line {
     display: flex;
     align-items: center;
@@ -150,26 +124,17 @@
     margin: 0 auto 0.7rem;
   }
   .cover-divider-line::before,
-  .cover-divider-line::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--gold);
-  }
+  .cover-divider-line::after { content: ''; flex: 1; height: 1px; background: var(--gold); }
   .cover-divider-line span { color: var(--gold); font-size: 0.7rem; }
-
   .cover-date {
-    font-family: 'Cormorant Garamond', 'Georgia', serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 0.95rem;
     letter-spacing: 0.2rem;
     color: var(--brown-mid);
-    margin-bottom: 0.2rem;
   }
-
   .scroll-hint {
     position: absolute;
-    bottom: 1.5rem;
-    left: 50%;
+    bottom: 1.5rem; left: 50%;
     transform: translateX(-50%);
     display: flex;
     flex-direction: column;
@@ -183,42 +148,27 @@
   }
   .scroll-hint::after { content: '↓'; font-size: 1rem; }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes bounce {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(7px); }
-  }
-
-  /* ===== INTRO ===== */
+  /* INTRO */
   .intro {
     text-align: center;
     padding: 5rem 2rem 3rem;
     max-width: 600px;
     margin: 0 auto;
-    background: transparent;
   }
   .intro h2 {
-    font-family: 'Cormorant Garamond', 'Georgia', serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 2rem;
     font-weight: 400;
     color: var(--deep-rose);
     margin-bottom: 1rem;
   }
-  .intro p { color: var(--text-light); line-height: 1.9; font-size: 1rem; }
+  .intro p { color: var(--text-light); line-height: 1.9; }
 
-  /* ===== GALLERY ===== */
-  .gallery-section {
-    padding: 2rem 1.5rem 5rem;
-    max-width: 1100px;
-    margin: 0 auto;
-    background: transparent;
-  }
+  /* GALLERY */
+  .gallery-section { padding: 2rem 1.5rem 5rem; max-width: 1100px; margin: 0 auto; }
   .section-title {
     text-align: center;
-    font-family: 'Cormorant Garamond', 'Georgia', serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.6rem;
     font-weight: 400;
     color: var(--deep-rose);
@@ -227,12 +177,10 @@
   .section-title::after {
     content: '';
     display: block;
-    width: 60px;
-    height: 2px;
+    width: 60px; height: 2px;
     background: var(--gold);
     margin: 0.8rem auto 0;
   }
-
   .empty-state {
     text-align: center;
     padding: 3rem 1rem;
@@ -242,94 +190,53 @@
   }
   .empty-state.show { display: block; }
 
-  /* Fullscreen snap gallery — scroll on page */
-  .gallery-section {
-    padding: 0 !important;
-    max-width: 100% !important;
-  }
-
-  /* CSS snap — đơn giản, không dùng JS tính toán */
-  .photo-grid {
-    height: 100dvh;
-    overflow-y: scroll;
-    scroll-snap-type: y mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
-  .photo-grid::-webkit-scrollbar { display: none; }
+  .photo-grid { columns: 3; column-gap: 1rem; }
+  @media (max-width: 700px) { .photo-grid { columns: 2; } }
+  @media (max-width: 420px) { .photo-grid { columns: 1; } }
 
   .photo-item {
-    height: 100dvh;
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #fce8e8 0%, #f8d8d0 40%, #fce4d8 100%);
+    break-inside: avoid;
+    margin-bottom: 1rem;
+    border-radius: 10px;
     overflow: hidden;
+    cursor: zoom-in;
+    box-shadow: 0 4px 20px rgba(158,91,101,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
   }
+  .photo-item:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(158,91,101,0.2); }
+  .photo-item img { width: 100%; display: block; }
 
-  .photo-item img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    display: block;
-    cursor: pointer;
-  }
-
-  .photo-counter {
-    position: absolute;
-    bottom: 1.2rem;
-    right: 1.2rem;
-    background: rgba(180,80,80,0.3);
-    color: #fff;
-    font-size: 0.8rem;
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    backdrop-filter: blur(6px);
-    pointer-events: none;
-  }
-
-  /* ===== LIGHTBOX ===== */
+  /* LIGHTBOX — chỉ xem 1 ảnh, click ngoài để đóng */
   .lightbox {
     display: none;
-    position: fixed;
-    inset: 0;
+    position: fixed; inset: 0;
     background: rgba(20,10,10,0.92);
     z-index: 1000;
     align-items: center;
     justify-content: center;
-    padding: 1rem;
+    padding: 1.5rem;
+    cursor: zoom-out;
   }
   .lightbox.active { display: flex; }
   .lightbox img {
-    max-width: 90vw; max-height: 90vh;
+    max-width: 92vw;
+    max-height: 92vh;
     border-radius: 6px;
     object-fit: contain;
     box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    cursor: default;
   }
   .lightbox-close {
-    position: absolute; top: 1.5rem; right: 1.5rem;
-    color: #fff; font-size: 2rem; cursor: pointer;
-    background: none; border: none; opacity: 0.8;
-    font-family: 'Nunito', sans-serif;
+    position: absolute; top: 1.2rem; right: 1.5rem;
+    color: #fff; font-size: 2.2rem;
+    background: none; border: none;
+    cursor: pointer; opacity: 0.8;
     transition: opacity 0.2s;
+    line-height: 1;
   }
   .lightbox-close:hover { opacity: 1; }
-  .lightbox-nav {
-    position: absolute; top: 50%; transform: translateY(-50%);
-    background: rgba(255,255,255,0.15); border: none; color: #fff;
-    font-size: 1.8rem; width: 3rem; height: 3rem;
-    border-radius: 50%; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: background 0.2s;
-  }
-  .lightbox-nav:hover { background: rgba(255,255,255,0.3); }
-  .lightbox-prev { left: 1rem; }
-  .lightbox-next { right: 1rem; }
 
-  /* ===== FOOTER ===== */
+  /* FOOTER */
   footer {
     text-align: center;
     padding: 3rem 2rem;
@@ -339,7 +246,7 @@
   }
   footer .footer-heart { display: block; font-size: 1.5rem; margin-bottom: 0.8rem; }
 
-  /* ===== ADMIN ===== */
+  /* ADMIN */
   .edit-btn {
     position: fixed; bottom: 2rem; right: 2rem;
     background: var(--gold); color: #fff;
@@ -347,7 +254,7 @@
     padding: 0.7rem 1.4rem;
     font-family: 'Nunito', sans-serif; font-size: 0.85rem;
     cursor: pointer; box-shadow: 0 4px 16px rgba(160,120,64,0.3);
-    z-index: 100; transition: all 0.3s;
+    z-index: 100; transition: all 0.3s; display: none;
   }
   .edit-btn:hover { transform: translateY(-2px); }
 
@@ -358,16 +265,17 @@
   }
   .modal-overlay.active { display: flex; }
   .modal {
-    background: var(--ivory); border-radius: 16px;
+    background: #faf7f2; border-radius: 16px;
     padding: 2.5rem; width: min(400px, 90vw);
     box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    max-height: 90vh; overflow-y: auto;
   }
   .modal h3 {
-    font-family: 'Cormorant Garamond', 'Georgia', serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
     font-size: 1.4rem; color: var(--deep-rose);
     margin-bottom: 1.2rem; font-weight: 400;
   }
-  .modal label { display: block; font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.3rem; letter-spacing: 0.05rem; }
+  .modal label { display: block; font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.3rem; }
   .modal input {
     width: 100%; padding: 0.7rem 1rem;
     border: 1px solid var(--rose); border-radius: 8px;
@@ -375,41 +283,41 @@
     color: var(--text); margin-bottom: 1rem; background: #fff;
   }
   .modal input:focus { outline: none; border-color: var(--deep-rose); }
-  .modal-actions { display: flex; gap: 0.8rem; justify-content: flex-end; flex-wrap: wrap; }
+  .modal-actions { display: flex; gap: 0.8rem; justify-content: flex-end; }
   .modal-actions button {
     padding: 0.6rem 1.5rem; border-radius: 50px;
     font-family: 'Nunito', sans-serif; font-size: 0.9rem;
-    cursor: pointer; transition: all 0.2s; border: none;
+    cursor: pointer; border: none; transition: all 0.2s;
   }
   .btn-cancel { background: transparent; color: var(--text-light); border: 1px solid var(--rose) !important; }
   .btn-save { background: var(--deep-rose); color: #fff; }
   .btn-save:hover { background: var(--dark); }
 
-  /* ===== PARTICLES ===== */
-  #particle-canvas {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 0;
+  .admin-info {
+    font-size: 0.82rem; color: var(--text-light);
+    background: #f5f0e8; border-radius: 8px;
+    padding: 0.8rem; margin-bottom: 1rem; line-height: 1.7;
   }
-  .cover, .intro, .gallery-section, footer {
-    position: relative;
-    z-index: 1;
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(7px); }
   }
 </style>
 </head>
 <body>
+
 <canvas id="particle-canvas"></canvas>
 
-<!-- COVER PAGE -->
+<!-- COVER -->
 <section class="cover">
   <div class="cover-card">
-
-    <!-- Tên đôi -->
     <div class="cover-names">
       <span id="cover-groom">HUY</span>
-      <!-- icon nhẫn SVG -->
       <svg class="cover-rings" viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="22" cy="22" r="13" stroke="#a07840" stroke-width="2.2" fill="none"/>
         <circle cx="38" cy="22" r="13" stroke="#a07840" stroke-width="2.2" fill="none"/>
@@ -419,57 +327,41 @@
       <span id="cover-bride">HOA</span>
     </div>
 
-    <!-- Ảnh bìa -->
-    <div class="cover-photo-wrap" id="cover-photo-wrap">
+    <div class="cover-photo-wrap">
       <div class="cover-photo-placeholder" id="cover-placeholder">
         <span>🌸</span>
-        <p>Upload file <code>cover.jpg</code><br>lên GitHub repo</p>
+        <p>Upload <code>cover.jpg</code><br>lên GitHub repo</p>
       </div>
-      <img id="cover-img" src="cover.jpg" alt="Ảnh bìa cưới"
-        onload="document.getElementById('cover-placeholder').style.display='none';this.style.display='block';"
+      <img id="cover-img" src="cover.jpg" alt="Ảnh bìa"
+        onload="this.style.display='block';document.getElementById('cover-placeholder').style.display='none';"
         onerror="this.style.display='none';document.getElementById('cover-placeholder').style.display='flex';"
         style="display:none">
     </div>
-    <!-- Controls chỉnh ảnh bìa, chỉ admin thấy -->
-    <div class="cover-controls" id="cover-controls">
-      <div class="ctrl-row">
-        <span>🔍 Zoom</span>
-        <input type="range" id="ctrl-zoom" min="100" max="300" value="100" step="5" oninput="applyImageStyle()">
-        <span class="ctrl-val" id="val-zoom">100%</span>
-      </div>
-      <div class="ctrl-row">
-        <span>↔ Ngang</span>
-        <input type="range" id="ctrl-x" min="0" max="100" value="50" step="2" oninput="applyImageStyle()">
-        <span class="ctrl-val" id="val-x">50%</span>
-      </div>
-      <div class="ctrl-row">
-        <span>↕ Dọc</span>
-        <input type="range" id="ctrl-y" min="0" max="100" value="50" step="2" oninput="applyImageStyle()">
-        <span class="ctrl-val" id="val-y">50%</span>
-      </div>
-    </div>
 
-    <!-- WEDDING MOMENT -->
     <div class="cover-label">Wedding<br>Moment</div>
     <div class="cover-divider-line"><span>◆</span></div>
     <div class="cover-date" id="cover-date">Sắp được công bố</div>
-
   </div>
   <span class="scroll-hint">Cuộn xuống</span>
 </section>
 
+<!-- INTRO -->
+<section class="intro">
+  <h2>Album Ảnh Cưới</h2>
+  <p>Những khoảnh khắc đẹp nhất trong ngày trọng đại của chúng mình. Mời bạn cùng lưu giữ những kỷ niệm không thể nào quên này. 🌹</p>
+</section>
+
 <!-- GALLERY -->
 <section class="gallery-section">
+  <h2 class="section-title">Khoảnh Khắc Đáng Nhớ</h2>
   <div class="empty-state" id="empty-state">Ảnh cưới sẽ sớm được cập nhật — hãy đón chờ nhé! 🌸</div>
   <div class="photo-grid" id="photo-grid"></div>
 </section>
 
 <!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox">
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <button class="lightbox-close" onclick="closeLightbox()">×</button>
-  <button class="lightbox-nav lightbox-prev" onclick="changePhoto(-1)">‹</button>
-  <img id="lightbox-img" src="" alt="Wedding photo">
-  <button class="lightbox-nav lightbox-next" onclick="changePhoto(1)">›</button>
+  <img id="lightbox-img" src="" alt="Ảnh cưới" onclick="event.stopPropagation()">
 </div>
 
 <!-- FOOTER -->
@@ -478,16 +370,18 @@
   <span id="footer-names">Huy &amp; Hoa — Mãi bên nhau</span>
 </footer>
 
-<!-- ADMIN BTN -->
-<button class="edit-btn" id="admin-btn" style="display:none" onclick="openAdminPanel()">⚙️ Admin</button>
+<!-- ADMIN -->
+<button class="edit-btn" id="admin-btn" onclick="openAdminPanel()">⚙️ Admin</button>
 
-<!-- LOGIN MODAL -->
 <div class="modal-overlay" id="login-modal">
   <div class="modal">
     <h3>🔐 Đăng nhập Admin</h3>
     <label>Mật khẩu</label>
-    <input type="password" id="input-password" placeholder="Nhập mật khẩu..." onkeydown="if(event.key==='Enter')doLogin()">
-    <div id="login-error" style="color:#c0392b;font-size:0.85rem;margin-top:-0.5rem;margin-bottom:0.8rem;display:none">Sai mật khẩu rồi! 🔒</div>
+    <input type="password" id="input-password" placeholder="Nhập mật khẩu..."
+      onkeydown="if(event.key==='Enter')doLogin()">
+    <div id="login-error" style="color:#c0392b;font-size:0.85rem;margin-top:-0.5rem;margin-bottom:0.8rem;display:none">
+      Sai mật khẩu! 🔒
+    </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeLoginModal()">Hủy</button>
       <button class="btn-save" onclick="doLogin()">Đăng nhập</button>
@@ -495,9 +389,8 @@
   </div>
 </div>
 
-<!-- ADMIN MODAL -->
 <div class="modal-overlay" id="admin-modal">
-  <div class="modal" style="max-height:90vh;overflow-y:auto">
+  <div class="modal">
     <h3>⚙️ Quản lý Album Cưới</h3>
     <label>Tên chú rể</label>
     <input type="text" id="input-groom" placeholder="Tên chú rể">
@@ -505,7 +398,7 @@
     <input type="text" id="input-bride" placeholder="Tên cô dâu">
     <label>Ngày cưới</label>
     <input type="text" id="input-date" placeholder="VD: 15.06.2025">
-    <div id="admin-photo-count" style="font-size:0.85rem;color:var(--text-light);margin-bottom:1rem;padding:0.8rem;background:#f5f0e8;border-radius:8px;line-height:1.6"></div>
+    <div class="admin-info" id="admin-info"></div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeAdminModal()">Đóng</button>
       <button class="btn-save" onclick="saveInfo()">💾 Lưu</button>
@@ -523,53 +416,21 @@
 
   let isAdmin = false;
   let photos = [];
-  let currentIdx = 0;
   let currentGroom = 'Huy', currentBride = 'Hoa';
 
   function init() {
     try {
-      const saved = JSON.parse(localStorage.getItem('wedding_info') || '{}');
-      if (saved.groom) currentGroom = saved.groom;
-      if (saved.bride) currentBride = saved.bride;
-      if (saved.date) {
-        document.getElementById('cover-date').textContent = saved.date;
-      }
+      const s = JSON.parse(localStorage.getItem('wedding_info') || '{}');
+      if (s.groom) currentGroom = s.groom;
+      if (s.bride) currentBride = s.bride;
+      if (s.date) document.getElementById('cover-date').textContent = s.date;
     } catch(e) {}
     updateNames(currentGroom, currentBride);
-    loadCoverStyle();
-    loadPhotosFromGitHub();
+    loadPhotos();
     if (window.location.search.includes('admin')) {
       document.getElementById('admin-btn').style.display = 'block';
       openLoginModal();
     }
-  }
-
-  function applyImageStyle() {
-    const zoom = document.getElementById('ctrl-zoom').value;
-    const x = document.getElementById('ctrl-x').value;
-    const y = document.getElementById('ctrl-y').value;
-    document.getElementById('val-zoom').textContent = zoom + '%';
-    document.getElementById('val-x').textContent = x + '%';
-    document.getElementById('val-y').textContent = y + '%';
-    const img = document.getElementById('cover-img');
-    img.style.transform = `scale(${zoom/100})`;
-    img.style.objectPosition = `${x}% ${y}%`;
-    // lưu vào localStorage
-    try {
-      localStorage.setItem('cover_style', JSON.stringify({ zoom, x, y }));
-    } catch(e) {}
-  }
-
-  function loadCoverStyle() {
-    try {
-      const s = JSON.parse(localStorage.getItem('cover_style') || '{}');
-      if (s.zoom) {
-        document.getElementById('ctrl-zoom').value = s.zoom;
-        document.getElementById('ctrl-x').value = s.x;
-        document.getElementById('ctrl-y').value = s.y;
-        applyImageStyle();
-      }
-    } catch(e) {}
   }
 
   function updateNames(g, b) {
@@ -579,7 +440,7 @@
     document.getElementById('footer-names').textContent = `${g} & ${b} — Mãi bên nhau`;
   }
 
-  function saveInfo_local() {
+  function saveLocal() {
     try {
       localStorage.setItem('wedding_info', JSON.stringify({
         groom: currentGroom, bride: currentBride,
@@ -588,8 +449,7 @@
     } catch(e) {}
   }
 
-  // Load ảnh từ GitHub API
-  async function loadPhotosFromGitHub() {
+  async function loadPhotos() {
     const empty = document.getElementById('empty-state');
     empty.textContent = '⏳ Đang tải ảnh...';
     empty.classList.add('show');
@@ -600,51 +460,31 @@
       const exts = ['jpg','jpeg','png','gif','webp','JPG','JPEG','PNG','GIF','WEBP'];
       photos = files
         .filter(f => f.type === 'file' && exts.some(e => f.name.endsWith('.' + e)))
-        .map(f => ({ src: RAW_BASE + encodeURIComponent(f.name), name: f.name }));
+        .map(f => ({ src: RAW_BASE + encodeURIComponent(f.name) }));
       renderGrid();
     } catch(e) {
       empty.textContent = 'Không tải được ảnh — thử lại sau nhé 🌸';
     }
   }
 
-  let currentPhoto = 0;
-
   function renderGrid() {
     const grid = document.getElementById('photo-grid');
     const empty = document.getElementById('empty-state');
     grid.innerHTML = '';
-    if (photos.length === 0) {
-      empty.classList.add('show');
-      empty.textContent = 'Ảnh cưới sẽ sớm được cập nhật — hãy đón chờ nhé! 🌸';
-      return;
-    }
+    if (!photos.length) { empty.classList.add('show'); return; }
     empty.classList.remove('show');
     photos.forEach((p, i) => {
       const item = document.createElement('div');
       item.className = 'photo-item';
-      const img = document.createElement('img');
-      img.src = p.src;
-      img.alt = 'Ảnh cưới ' + (i+1);
-      img.loading = i === 0 ? 'eager' : 'lazy';
-      img.onclick = () => openLightbox(i);
-      const counter = document.createElement('div');
-      counter.className = 'photo-counter';
-      counter.textContent = (i+1) + ' / ' + photos.length;
-      item.appendChild(img);
-      item.appendChild(counter);
+      item.innerHTML = `<img src="${p.src}" alt="Ảnh ${i+1}" loading="lazy">`;
+      item.onclick = () => openLightbox(p.src);
       grid.appendChild(item);
     });
-
-    // track scroll để cập nhật currentPhoto cho lightbox
-    grid.addEventListener('scroll', () => {
-      const idx = Math.round(grid.scrollTop / grid.clientHeight);
-      currentPhoto = idx;
-    }, { passive: true });
   }
 
-  function openLightbox(i) {
-    currentIdx = i;
-    document.getElementById('lightbox-img').src = photos[i].src;
+  // Lightbox — chỉ xem ảnh, click ngoài là đóng
+  function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
     document.getElementById('lightbox').classList.add('active');
     document.body.style.overflow = 'hidden';
   }
@@ -652,18 +492,8 @@
     document.getElementById('lightbox').classList.remove('active');
     document.body.style.overflow = '';
   }
-  function changePhoto(dir) {
-    currentIdx = (currentIdx + dir + photos.length) % photos.length;
-    document.getElementById('lightbox-img').src = photos[currentIdx].src;
-  }
-  document.getElementById('lightbox').addEventListener('click', function(e) {
-    if (e.target === this) closeLightbox();
-  });
   document.addEventListener('keydown', e => {
-    if (!document.getElementById('lightbox').classList.contains('active')) return;
     if (e.key === 'Escape') closeLightbox();
-    if (e.key === 'ArrowLeft') changePhoto(-1);
-    if (e.key === 'ArrowRight') changePhoto(1);
   });
 
   // Admin
@@ -691,11 +521,10 @@
     document.getElementById('input-groom').value = currentGroom;
     document.getElementById('input-bride').value = currentBride;
     document.getElementById('input-date').value = document.getElementById('cover-date').textContent;
-    document.getElementById('admin-photo-count').innerHTML =
-      `📸 Có <strong>${photos.length}</strong> ảnh trong thư mục <code>photos/</code><br>
-       🖼️ Ảnh bìa: upload file <code>cover.jpg</code> vào thư mục gốc repo<br>
-       <small style="color:#aaa">Thêm ảnh: GitHub → photos → Add file → Upload</small>`;
-    document.getElementById('cover-controls').classList.add('show');
+    document.getElementById('admin-info').innerHTML =
+      `📸 <strong>${photos.length}</strong> ảnh trong <code>photos/</code><br>
+       🖼️ Ảnh bìa: upload <code>cover.jpg</code> vào thư mục gốc<br>
+       ➕ Thêm ảnh: GitHub → photos → Add file → Upload`;
     document.getElementById('admin-modal').classList.add('active');
   }
   function closeAdminModal() { document.getElementById('admin-modal').classList.remove('active'); }
@@ -705,98 +534,98 @@
     const d = document.getElementById('input-date').value.trim();
     updateNames(g, b);
     if (d) document.getElementById('cover-date').textContent = d;
-    saveInfo_local();
+    saveLocal();
     closeAdminModal();
     alert('✅ Đã lưu!');
   }
 
-  init();
-
-  // ===== SAKURA PETALS =====
+  // Hoa anh đào rơi
   (function() {
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
     let W, H;
-    const COUNT = 28;
+    const COUNT = 38;
     const petals = [];
 
-    function resize() {
-      W = canvas.width = window.innerWidth;
-      H = canvas.height = window.innerHeight;
-    }
+    function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
     window.addEventListener('resize', resize);
     resize();
 
-    function newPetal(fromTop) {
-      const size = Math.random() * 7 + 5; // 5–12px
-      return {
-        x: Math.random() * (W + 100) - 50,
-        y: fromTop ? -size * 2 : Math.random() * H,
-        size,
-        rotation: Math.random() * Math.PI * 2,
-        rotSpeed: (Math.random() - 0.5) * 0.04,
-        vx: (Math.random() - 0.4) * 0.8,
-        vy: Math.random() * 0.8 + 0.4,
-        sway: Math.random() * Math.PI * 2,
-        swaySpeed: Math.random() * 0.015 + 0.005,
-        swayAmp: Math.random() * 1.2 + 0.3,
-        alpha: Math.random() * 0.35 + 0.25,
-        // hồng nhạt đến trắng hồng
-        hue: Math.floor(Math.random() * 20 + 340), // 340–360 = pink-red
-        sat: Math.floor(Math.random() * 30 + 55),
-        light: Math.floor(Math.random() * 15 + 78),
-      };
-    }
-
-    for (let i = 0; i < COUNT; i++) petals.push(newPetal(false));
-
-    function drawPetal(p) {
+    // Vẽ cánh hoa anh đào hình oval nghiêng
+    function drawPetal(x, y, size, angle, alpha, hue) {
       ctx.save();
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.rotation);
-      ctx.globalAlpha = p.alpha;
+      ctx.translate(x, y);
+      ctx.rotate(angle);
+      ctx.globalAlpha = alpha;
 
-      // hình cánh hoa oval nghiêng
+      // Gradient cánh hoa
+      const grd = ctx.createRadialGradient(0, 0, 0, 0, 0, size);
+      grd.addColorStop(0, `hsl(${hue}, 90%, 90%)`);
+      grd.addColorStop(0.5, `hsl(${hue}, 80%, 82%)`);
+      grd.addColorStop(1, `hsl(${hue}, 70%, 88%)`);
+
       ctx.beginPath();
-      ctx.ellipse(0, 0, p.size, p.size * 0.55, 0, 0, Math.PI * 2);
-
-      const grad = ctx.createRadialGradient(0, -p.size * 0.1, 0, 0, 0, p.size);
-      grad.addColorStop(0, `hsl(${p.hue},${p.sat}%,${p.light + 8}%)`);
-      grad.addColorStop(1, `hsl(${p.hue},${p.sat - 10}%,${p.light - 5}%)`);
-      ctx.fillStyle = grad;
+      ctx.ellipse(0, 0, size * 0.55, size, 0, 0, Math.PI * 2);
+      ctx.fillStyle = grd;
       ctx.fill();
 
-      // đường gân lá nhỏ
+      // Đường gân cánh nhẹ
       ctx.beginPath();
-      ctx.moveTo(0, -p.size * 0.45);
-      ctx.lineTo(0, p.size * 0.45);
-      ctx.strokeStyle = `hsla(${p.hue},${p.sat}%,${p.light - 20}%,0.18)`;
+      ctx.moveTo(0, -size * 0.85);
+      ctx.lineTo(0, size * 0.85);
+      ctx.strokeStyle = `hsla(${hue}, 60%, 75%, 0.3)`;
       ctx.lineWidth = 0.5;
       ctx.stroke();
 
       ctx.restore();
     }
 
-    function animate() {
-      ctx.clearRect(0, 0, W, H);
-      petals.forEach((p, i) => {
-        p.sway += p.swaySpeed;
-        p.x += p.vx + Math.sin(p.sway) * p.swayAmp;
-        p.y += p.vy;
-        p.rotation += p.rotSpeed;
-
-        // reset khi ra ngoài màn hình
-        if (p.y > H + 20 || p.x < -60 || p.x > W + 60) {
-          petals[i] = newPetal(true);
-        }
-        drawPetal(p);
-      });
-      requestAnimationFrame(animate);
+    function createPetal() {
+      const hue = 340 + Math.random() * 30; // 340-370 = hồng đào
+      return {
+        x: Math.random() * W,
+        y: -20 - Math.random() * 100,
+        size: Math.random() * 7 + 5,
+        angle: Math.random() * Math.PI * 2,
+        rotSpeed: (Math.random() - 0.5) * 0.03,
+        vx: (Math.random() - 0.5) * 1.2,
+        vy: Math.random() * 1.2 + 0.5,
+        swing: Math.random() * 0.8 + 0.3,
+        swingSpeed: Math.random() * 0.02 + 0.01,
+        swingPhase: Math.random() * Math.PI * 2,
+        alpha: Math.random() * 0.5 + 0.35,
+        hue,
+      };
     }
-    animate();
+
+    for (let i = 0; i < COUNT; i++) {
+      const p = createPetal();
+      p.y = Math.random() * H; // bắt đầu rải đều
+      petals.push(p);
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      const t = Date.now() / 1000;
+      petals.forEach(p => {
+        const swingX = Math.sin(t * p.swingSpeed * 60 + p.swingPhase) * p.swing;
+        drawPetal(p.x + swingX, p.y, p.size, p.angle, p.alpha, p.hue);
+        p.x += p.vx * 0.4;
+        p.y += p.vy;
+        p.angle += p.rotSpeed;
+        p.swingPhase += p.swingSpeed;
+
+        if (p.y > H + 20) {
+          const np = createPetal();
+          Object.assign(p, np);
+        }
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
   })();
 
+  init();
 </script>
 </body>
 </html>
-
