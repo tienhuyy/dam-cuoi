@@ -488,6 +488,8 @@
   let currentGroom = 'Tiến Huy', currentBride = 'Quỳnh Hoa';
 
   function init() {
+    // Xóa cache tên cũ nếu còn Huy/Hoa
+    try { const old = JSON.parse(localStorage.getItem('wedding_info')||'{}'); if(old.groom==='Huy') localStorage.removeItem('wedding_info'); } catch(e){}
     try {
       const s = JSON.parse(localStorage.getItem('wedding_info') || '{}');
       if (s.groom) currentGroom = s.groom;
