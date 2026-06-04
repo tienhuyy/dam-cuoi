@@ -6,429 +6,397 @@
 <title>Tiến Huy & Quỳnh Hoa</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Great+Vibes&family=Nunito:wght@300;400&display=swap" rel="stylesheet">
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --brown: #5a3e28; --brown-mid: #8a6a4a;
-  --gold: #c9a86c; --gold-light: #e8d8b8;
-  --rose: #e8a0a8; --deep-rose: #c05060;
-  --text: #5a2828; --text-light: #a06868; --dark: #3a1515;
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --brown:#5a3e28;--brown-mid:#8a6a4a;
+  --gold:#c9a86c;--gold-light:#e8d8b8;
+  --rose:#e8a0a8;--deep-rose:#c05060;
+  --text:#5a2828;--text-light:#a06868;--dark:#3a1515;
 }
-body {
-  font-family: 'Nunito', sans-serif; font-weight: 300;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #fce8e8 0%, #f8d8d0 50%, #fce4d8 100%);
-  color: var(--text);
-}
-#particle-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 9999; }
+body{font-family:'Nunito',sans-serif;font-weight:300;min-height:100vh;background:linear-gradient(135deg,#fce8e8 0%,#f8d8d0 50%,#fce4d8 100%);color:var(--text)}
+#pcanvas{position:fixed;inset:0;pointer-events:none;z-index:9999}
 
-/* ── COVER ── */
-.cover {
-  min-height: 100vh; display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 2rem 1.2rem; position: relative; z-index: 1;
-}
-.cover-card {
-  width: min(360px, 92vw);
-  background: rgba(255,255,255,0.93);
-  border: 1.5px solid var(--gold-light); border-radius: 4px;
-  padding: 2.2rem 1.6rem 2rem;
-  box-shadow: 0 12px 50px rgba(100,50,50,0.13);
-  display: flex; flex-direction: column; align-items: center; text-align: center;
-  position: relative; animation: fadeUp 1s ease both;
-}
-.cover-card::before {
-  content: ''; position: absolute; inset: 10px;
-  border: 1px solid var(--gold-light); border-radius: 2px; pointer-events: none;
-}
-.cover-card::after   { content: '✿'; position: absolute; top: 4px; left: 50%; transform: translateX(-50%); font-size: .75rem; color: var(--gold-light); background: rgba(255,255,255,.93); padding: 0 4px; }
-.bottom-flower       { position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); font-size: .75rem; color: var(--gold-light); background: rgba(255,255,255,.93); padding: 0 4px; z-index: 1; }
-.watermark           { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) rotate(-15deg); font-family: 'Great Vibes',cursive; font-size: 5rem; color: rgba(180,100,120,.09); white-space: nowrap; pointer-events: none; user-select: none; z-index: 0; }
+/* COVER */
+.cover{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.2rem;position:relative;z-index:1}
+.card{width:min(360px,92vw);background:rgba(255,255,255,.94);border:1.5px solid var(--gold-light);border-radius:4px;padding:2rem 1.6rem;box-shadow:0 12px 50px rgba(100,50,50,.13);display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;animation:fadeUp 1s ease both}
+.card::before{content:'';position:absolute;inset:10px;border:1px solid var(--gold-light);border-radius:2px;pointer-events:none}
+.card::after{content:'✿';position:absolute;top:4px;left:50%;transform:translateX(-50%);font-size:.75rem;color:var(--gold-light);background:rgba(255,255,255,.94);padding:0 4px}
+.bf{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);font-size:.75rem;color:var(--gold-light);background:rgba(255,255,255,.94);padding:0 4px;z-index:1}
+.wm{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-15deg);font-family:'Great Vibes',cursive;font-size:5rem;color:rgba(180,100,120,.08);white-space:nowrap;pointer-events:none;user-select:none}
 
-/* SAVE the DATE */
-.save-the-date { display: flex; align-items: baseline; justify-content: center; gap: .5rem; margin-bottom: .9rem; position: relative; z-index: 1; }
-.std-s, .std-d { font-family: 'Playfair Display',Georgia,serif; font-size: clamp(.8rem,2.5vw,1rem); font-weight: 700; letter-spacing: .3rem; color: var(--brown); text-transform: uppercase; }
-.std-t         { font-family: 'Great Vibes',cursive; font-size: clamp(1.3rem,4vw,1.6rem); color: var(--brown-mid); line-height: 1; }
+/* SAVE THE DATE */
+.std{display:flex;align-items:baseline;justify-content:center;gap:.5rem;margin-bottom:.9rem;position:relative;z-index:1}
+.std-s,.std-d{font-family:'Playfair Display',Georgia,serif;font-size:clamp(.8rem,2.5vw,1rem);font-weight:700;letter-spacing:.3rem;color:var(--brown);text-transform:uppercase}
+.std-t{font-family:'Great Vibes',cursive;font-size:clamp(1.3rem,4vw,1.6rem);color:var(--brown-mid);line-height:1}
 
-/* Arch */
-.arch-wrap { width: 100%; position: relative; z-index: 1; margin-bottom: 1.2rem; }
-.arch-frame {
-  width: 100%; padding-top: 125%; position: relative;
-  overflow: hidden;
-  border-radius: 50% 50% 6px 6px / 22% 22% 6px 6px;
-  border: 2px solid var(--gold-light); background: #f5efe8;
-}
-/* ảnh bìa — dùng background-image để dễ control vị trí/zoom */
-.arch-bg {
-  position: absolute; inset: 0;
-  background-size: cover;
-  background-position: center top;
-  background-repeat: no-repeat;
-  transition: background-position .1s, background-size .1s;
-}
-.arch-placeholder {
-  position: absolute; inset: 0; display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  color: #b0a090; font-size: .75rem; gap: .4rem;
-}
-.arch-placeholder span { font-size: 2rem; }
+/* ARCH */
+.arch{width:100%;position:relative;z-index:1;margin-bottom:1.2rem}
+.arch-frame{width:100%;padding-top:125%;position:relative;overflow:hidden;border-radius:50% 50% 6px 6px/22% 22% 6px 6px;border:2px solid var(--gold-light);background:#f5efe8}
+.arch-img{position:absolute;inset:0;background:no-repeat center 20%;background-size:cover}
+.arch-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#b0a090;font-size:.75rem;gap:.4rem}
+.arch-ph span{font-size:2rem}
 
-/* Tên */
-.cover-name { font-family: 'Great Vibes',cursive; font-size: clamp(1.6rem,5.5vw,2rem); color: var(--brown); margin-bottom: .4rem; white-space: nowrap; position: relative; z-index: 1; }
-.cover-date { font-family: 'Playfair Display',Georgia,serif; font-size: .85rem; letter-spacing: .15rem; color: var(--brown-mid); position: relative; z-index: 1; }
+/* NAME */
+.cname{font-family:'Great Vibes',cursive;font-size:clamp(1.6rem,5.5vw,2rem);color:var(--brown);margin-bottom:.4rem;white-space:nowrap;position:relative;z-index:1}
+.cdate{font-family:'Playfair Display',Georgia,serif;font-size:.85rem;letter-spacing:.15rem;color:var(--brown-mid);position:relative;z-index:1}
+.scroll-hint{margin-top:1.2rem;display:flex;flex-direction:column;align-items:center;gap:.3rem;color:var(--rose);font-size:.68rem;letter-spacing:.15rem;text-transform:uppercase;animation:bounce 2s infinite;position:relative;z-index:1}
+.scroll-hint::after{content:'↓';font-size:.9rem}
 
-.scroll-hint { margin-top: 1.2rem; display: flex; flex-direction: column; align-items: center; gap: .3rem; color: var(--rose); font-size: .68rem; letter-spacing: .15rem; text-transform: uppercase; animation: bounce 2s infinite; position: relative; z-index: 1; }
-.scroll-hint::after { content: '↓'; font-size: .9rem; }
+/* INTRO */
+.intro{text-align:center;padding:5rem 2rem 3rem;max-width:580px;margin:0 auto;position:relative;z-index:1}
+.intro h2{font-family:'Playfair Display',Georgia,serif;font-size:1.8rem;font-weight:400;color:var(--deep-rose);margin-bottom:.8rem}
+.intro p{color:var(--text-light);line-height:1.9}
 
-/* ── INTRO ── */
-.intro { text-align: center; padding: 5rem 2rem 3rem; max-width: 580px; margin: 0 auto; position: relative; z-index: 1; }
-.intro h2 { font-family: 'Playfair Display',Georgia,serif; font-size: 1.8rem; font-weight: 400; color: var(--deep-rose); margin-bottom: .8rem; }
-.intro p { color: var(--text-light); line-height: 1.9; }
+/* GALLERY */
+.gallery{padding:1rem 1.2rem 5rem;max-width:1100px;margin:0 auto;position:relative;z-index:1}
+.gtitle{text-align:center;font-family:'Playfair Display',Georgia,serif;font-size:1.5rem;font-weight:400;color:var(--deep-rose);margin-bottom:2rem}
+.gtitle::after{content:'';display:block;width:50px;height:2px;background:var(--gold);margin:.6rem auto 0}
+.empty{text-align:center;padding:3rem 1rem;color:var(--text-light);font-style:italic;display:none}
+.empty.show{display:block}
+.pgrid{columns:3;column-gap:.8rem}
+@media(max-width:700px){.pgrid{columns:2}}
+@media(max-width:400px){.pgrid{columns:1}}
+.pitem{break-inside:avoid;margin-bottom:.8rem;border-radius:8px;overflow:hidden;cursor:zoom-in;box-shadow:0 4px 16px rgba(150,80,80,.1);transition:transform .3s,box-shadow .3s}
+.pitem:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(150,80,80,.18)}
+.pitem img{width:100%;display:block}
 
-/* ── GALLERY ── */
-.gallery-section { padding: 1rem 1.2rem 5rem; max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
-.section-title { text-align: center; font-family: 'Playfair Display',Georgia,serif; font-size: 1.5rem; font-weight: 400; color: var(--deep-rose); margin-bottom: 2rem; }
-.section-title::after { content: ''; display: block; width: 50px; height: 2px; background: var(--gold); margin: .6rem auto 0; }
-.empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-light); font-style: italic; display: none; }
-.empty-state.show { display: block; }
-.photo-grid { columns: 3; column-gap: .8rem; }
-@media(max-width:700px){.photo-grid{columns:2}}
-@media(max-width:400px){.photo-grid{columns:1}}
-.photo-item { break-inside: avoid; margin-bottom: .8rem; border-radius: 8px; overflow: hidden; cursor: zoom-in; box-shadow: 0 4px 16px rgba(150,80,80,.1); transition: transform .3s,box-shadow .3s; }
-.photo-item:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(150,80,80,.18); }
-.photo-item img { width: 100%; display: block; }
+/* LIGHTBOX */
+.lb{display:none;position:fixed;inset:0;background:rgba(20,8,8,.92);z-index:1000;align-items:center;justify-content:center;padding:1rem;cursor:zoom-out}
+.lb.on{display:flex}
+.lb img{max-width:92vw;max-height:92vh;border-radius:6px;object-fit:contain;cursor:default}
+.lb-x{position:absolute;top:1.2rem;right:1.4rem;color:#fff;font-size:2.2rem;background:none;border:none;cursor:pointer;opacity:.8}
 
-/* ── LIGHTBOX ── */
-.lightbox { display: none; position: fixed; inset: 0; background: rgba(20,8,8,.92); z-index: 1000; align-items: center; justify-content: center; padding: 1rem; cursor: zoom-out; }
-.lightbox.active { display: flex; }
-.lightbox img { max-width: 92vw; max-height: 92vh; border-radius: 6px; object-fit: contain; box-shadow: 0 20px 60px rgba(0,0,0,.5); cursor: default; }
-.lb-close { position: absolute; top: 1.2rem; right: 1.4rem; color: #fff; font-size: 2.2rem; background: none; border: none; cursor: pointer; opacity: .8; }
-.lb-close:hover { opacity: 1; }
+/* FOOTER */
+footer{text-align:center;padding:3rem 2rem;background:var(--dark);color:rgba(255,255,255,.45);font-size:.82rem;position:relative;z-index:1}
+footer .fh{display:block;font-size:1.4rem;margin-bottom:.7rem}
 
-/* ── FOOTER ── */
-footer { text-align: center; padding: 3rem 2rem; background: var(--dark); color: rgba(255,255,255,.45); font-size: .82rem; position: relative; z-index: 1; }
-footer .fheart { display: block; font-size: 1.4rem; margin-bottom: .7rem; }
+/* ADMIN BTN */
+.abtn{position:fixed;bottom:1.8rem;right:1.8rem;background:var(--gold);color:#fff;border:none;border-radius:50px;padding:.65rem 1.3rem;font-family:'Nunito',sans-serif;font-size:.82rem;cursor:pointer;box-shadow:0 4px 14px rgba(180,140,60,.35);z-index:200;display:none;transition:all .25s}
 
-/* ── ADMIN ── */
-.admin-btn { position: fixed; bottom: 1.8rem; right: 1.8rem; background: var(--gold); color: #fff; border: none; border-radius: 50px; padding: .65rem 1.3rem; font-family: 'Nunito',sans-serif; font-size: .82rem; cursor: pointer; box-shadow: 0 4px 14px rgba(180,140,60,.35); z-index: 200; display: none; transition: all .25s; }
-.admin-btn:hover { transform: translateY(-2px); }
-.overlay { display: none; position: fixed; inset: 0; background: rgba(30,12,12,.55); z-index: 400; align-items: center; justify-content: center; }
-.overlay.active { display: flex; }
-.modal { background: #faf6f0; border-radius: 14px; padding: 2.2rem; width: min(380px,92vw); box-shadow: 0 20px 60px rgba(0,0,0,.28); max-height: 90vh; overflow-y: auto; }
-.modal h3 { font-family: 'Playfair Display',Georgia,serif; font-size: 1.3rem; color: var(--deep-rose); margin-bottom: 1.1rem; font-weight: 400; }
-.modal label { display: block; font-size: .82rem; color: var(--text-light); margin-bottom: .25rem; }
-.modal input { width: 100%; padding: .65rem .9rem; border: 1px solid var(--rose); border-radius: 8px; font-family: 'Nunito',sans-serif; font-size: .95rem; color: var(--text); margin-bottom: .9rem; background: #fff; }
-.modal input:focus { outline: none; border-color: var(--deep-rose); }
-.modal-btns { display: flex; gap: .7rem; justify-content: flex-end; }
-.modal-btns button { padding: .55rem 1.4rem; border-radius: 50px; font-family: 'Nunito',sans-serif; font-size: .88rem; cursor: pointer; border: none; transition: all .2s; }
-.btn-cancel { background: transparent; color: var(--text-light); border: 1px solid var(--rose) !important; }
-.btn-save { background: var(--deep-rose); color: #fff; }
-.btn-save:hover { background: var(--dark); }
-.admin-note { font-size: .8rem; color: var(--text-light); background: #f5ede0; border-radius: 8px; padding: .75rem; margin-bottom: .9rem; line-height: 1.7; }
+/* OVERLAY & MODAL */
+.ov{display:none;position:fixed;inset:0;background:rgba(30,12,12,.55);z-index:400;align-items:center;justify-content:center}
+.ov.on{display:flex}
+.modal{background:#faf6f0;border-radius:14px;padding:2.2rem;width:min(390px,92vw);box-shadow:0 20px 60px rgba(0,0,0,.28);max-height:90vh;overflow-y:auto}
+.modal h3{font-family:'Playfair Display',Georgia,serif;font-size:1.3rem;color:var(--deep-rose);margin-bottom:1.1rem;font-weight:400}
+.modal label{display:block;font-size:.82rem;color:var(--text-light);margin-bottom:.25rem}
+.modal input[type=text],.modal input[type=password]{width:100%;padding:.65rem .9rem;border:1px solid var(--rose);border-radius:8px;font-family:'Nunito',sans-serif;font-size:.95rem;color:var(--text);margin-bottom:.9rem;background:#fff}
+.modal input:focus{outline:none;border-color:var(--deep-rose)}
+.mbtns{display:flex;gap:.7rem;justify-content:flex-end;margin-top:.5rem}
+.mbtns button{padding:.55rem 1.4rem;border-radius:50px;font-family:'Nunito',sans-serif;font-size:.88rem;cursor:pointer;border:none;transition:all .2s}
+.bc{background:transparent;color:var(--text-light);border:1px solid var(--rose)!important}
+.bs{background:var(--deep-rose);color:#fff}
+.bs:hover{background:var(--dark)}
 
+/* SLIDERS */
+.sliders{background:#f5ede0;border-radius:10px;padding:.9rem;margin-bottom:.9rem}
+.sliders p{font-size:.8rem;color:var(--brown-mid);margin-bottom:.7rem;font-weight:400}
+.srow{display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem;font-size:.8rem;color:var(--text-light)}
+.srow label{width:3.5rem;flex-shrink:0}
+.srow input[type=range]{flex:1;accent-color:var(--gold);cursor:pointer}
+.srow .sv{width:3rem;text-align:right;color:var(--gold);font-size:.75rem}
 
+.anote{font-size:.8rem;color:var(--text-light);background:#ede8e0;border-radius:8px;padding:.75rem;margin-bottom:.9rem;line-height:1.7}
 
-
-@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
-
-  /* Slider controls */
-  .img-ctrl { padding: 0.7rem 0 0.9rem; }
-  .img-ctrl p { font-size: 0.8rem; color: var(--text-light); margin-bottom: 0.6rem; }
-  .ctrl-row { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; font-size: 0.8rem; color: var(--text-light); }
-  .ctrl-row label { width: 3.2rem; flex-shrink: 0; }
-  .ctrl-row input[type=range] { flex: 1; accent-color: var(--gold); cursor: pointer; }
-  .ctrl-row .val { width: 2.8rem; text-align: right; color: var(--gold); font-size: 0.75rem; }
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 </style>
 </head>
 <body>
+<canvas id="pcanvas"></canvas>
 
-<canvas id="particle-canvas"></canvas>
-
+<!-- COVER -->
 <section class="cover">
-  <div class="cover-card">
-    <div class="bottom-flower">✿</div>
-    <div class="watermark">Love</div>
-
-    <div class="save-the-date">
+  <div class="card">
+    <div class="bf">✿</div>
+    <div class="wm">Love</div>
+    <div class="std">
       <span class="std-s">Save</span>
       <span class="std-t">the</span>
       <span class="std-d">Date</span>
     </div>
-
-    <div class="arch-wrap">
+    <div class="arch">
       <div class="arch-frame" id="arch-frame">
-        <div class="arch-bg" id="arch-bg"></div>
-        <div class="arch-placeholder" id="arch-placeholder">
+        <div class="arch-img" id="arch-img"></div>
+        <div class="arch-ph" id="arch-ph">
           <span>🌸</span>
           <p>Upload <code>cover.jpg</code><br>lên GitHub repo</p>
         </div>
       </div>
     </div>
-
-    <div class="cover-name" id="cover-name">Tiến Huy &amp; Quỳnh Hoa</div>
-    <div class="cover-date" id="cover-date">Sắp được công bố</div>
+    <div class="cname" id="cname">Tiến Huy &amp; Quỳnh Hoa</div>
+    <div class="cdate" id="cdate">Sắp được công bố</div>
   </div>
   <div class="scroll-hint">Cuộn xuống</div>
 </section>
 
+<!-- INTRO -->
 <section class="intro">
   <h2>Album Ảnh Cưới</h2>
-  <p>Những khoảnh khắc đẹp nhất trong ngày trọng đại của chúng mình. Mời bạn cùng lưu giữ những kỷ niệm không thể nào quên này 🌹</p>
+  <p>Những khoảnh khắc đẹp nhất trong ngày trọng đại của chúng mình 🌹</p>
 </section>
 
-<section class="gallery-section">
-  <h2 class="section-title">Khoảnh Khắc Đáng Nhớ</h2>
-  <div class="empty-state" id="empty-state">Ảnh cưới sẽ sớm được cập nhật 🌸</div>
-  <div class="photo-grid" id="photo-grid"></div>
+<!-- GALLERY -->
+<section class="gallery">
+  <h2 class="gtitle">Khoảnh Khắc Đáng Nhớ</h2>
+  <div class="empty" id="empty">Ảnh cưới sẽ sớm được cập nhật 🌸</div>
+  <div class="pgrid" id="pgrid"></div>
 </section>
 
-<div class="lightbox" id="lightbox" onclick="closeLB()">
-  <button class="lb-close" onclick="closeLB()">×</button>
+<!-- LIGHTBOX -->
+<div class="lb" id="lb" onclick="closeLB()">
+  <button class="lb-x" onclick="closeLB()">×</button>
   <img id="lb-img" src="" alt="" onclick="event.stopPropagation()">
 </div>
 
+<!-- FOOTER -->
 <footer>
-  <span class="fheart">💕</span>
-  <span id="footer-name">Tiến Huy &amp; Quỳnh Hoa — Mãi bên nhau</span>
+  <span class="fh">💕</span>
+  <span id="fname">Tiến Huy &amp; Quỳnh Hoa — Mãi bên nhau</span>
 </footer>
 
-<button class="admin-btn" id="admin-btn" onclick="openAdmin()">⚙️ Admin</button>
+<!-- ADMIN BTN -->
+<button class="abtn" id="abtn" onclick="openAdmin()">⚙️ Admin</button>
 
-<!-- Login -->
-<div class="overlay" id="login-ov">
+<!-- LOGIN -->
+<div class="ov" id="lov">
   <div class="modal">
-    <h3>🔐 Đăng nhập Admin</h3>
+    <h3>🔐 Đăng nhập</h3>
     <label>Mật khẩu</label>
-    <input type="password" id="pw" placeholder="Nhập mật khẩu..." onkeydown="if(event.key==='Enter')doLogin()">
-    <div id="pw-err" style="color:#c0392b;font-size:.82rem;margin-top:-.5rem;margin-bottom:.8rem;display:none">Sai mật khẩu! 🔒</div>
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="closeLogin()">Hủy</button>
-      <button class="btn-save" onclick="doLogin()">Đăng nhập</button>
+    <input type="password" id="pw" placeholder="Mật khẩu..." onkeydown="if(event.key==='Enter')doLogin()">
+    <div id="pwerr" style="color:#c0392b;font-size:.82rem;margin-top:-.5rem;margin-bottom:.8rem;display:none">Sai mật khẩu!</div>
+    <div class="mbtns">
+      <button class="bc" onclick="closeLov()">Hủy</button>
+      <button class="bs" onclick="doLogin()">Đăng nhập</button>
     </div>
   </div>
 </div>
 
-<!-- Admin panel -->
-<div class="overlay" id="admin-ov">
+<!-- ADMIN PANEL -->
+<div class="ov" id="aov">
   <div class="modal">
-    <h3>⚙️ Quản lý Album</h3>
+    <h3>⚙️ Quản lý</h3>
     <label>Tên chú rể</label>
-    <input type="text" id="in-groom" placeholder="Tên chú rể">
+    <input type="text" id="ig" placeholder="Tên chú rể">
     <label>Tên cô dâu</label>
-    <input type="text" id="in-bride" placeholder="Tên cô dâu">
+    <input type="text" id="ib" placeholder="Tên cô dâu">
     <label>Ngày cưới</label>
-    <input type="text" id="in-date" placeholder="VD: 15.06.2025">
-    <div class="img-ctrl">
-      <p>🖼️ Điều chỉnh ảnh bìa</p>
-      <div class="ctrl-row">
-        <label>🔍 Zoom</label>
-        <input type="range" id="s-zoom" min="50" max="300" value="100" step="5"
-          oninput="updateSlider()">
-        <span class="val" id="v-zoom">100%</span>
-      </div>
-      <div class="ctrl-row">
-        <label>↔ Ngang</label>
-        <input type="range" id="s-x" min="-100" max="100" value="0" step="2"
-          oninput="updateSlider()">
-        <span class="val" id="v-x">0</span>
-      </div>
-      <div class="ctrl-row">
-        <label>↕ Dọc</label>
-        <input type="range" id="s-y" min="-100" max="100" value="0" step="2"
-          oninput="updateSlider()">
-        <span class="val" id="v-y">0</span>
-      </div>
-    </div>
-    <div class="admin-note" id="admin-note"></div>
-    <div class="modal-btns">
-      <button class="btn-cancel" onclick="closeAdmin()">Đóng</button>
-      <button class="btn-save" onclick="saveAdmin()">💾 Lưu</button>
-    </div>
-  </div>
-</div>
+    <input type="text" id="id" placeholder="VD: 15.06.2025">
 
-  <div class="te-frame" id="te-frame">
-    <div class="te-bg" id="te-bg"></div>
-  </div>
-  <div class="te-hint">👆 Kéo để di chuyển &nbsp;|&nbsp; 🤏 Chụm/banh 2 ngón để zoom</div>
-  <div class="te-btns">
-    <button class="teb-reset" onclick="resetEditor()">↺ Reset</button>
-    <button class="teb-cancel" onclick="closeEditor()">Hủy</button>
-    <button class="teb-save" onclick="saveEditor()">💾 Lưu</button>
+    <!-- SLIDERS -->
+    <div class="sliders">
+      <p>🖼️ Điều chỉnh ảnh bìa (kéo thanh → xem trực tiếp)</p>
+      <div class="srow">
+        <label>🔍 Zoom</label>
+        <input type="range" id="szoom" min="50" max="300" value="100" step="5" oninput="onSlider()">
+        <span class="sv" id="vzoom">100%</span>
+      </div>
+      <div class="srow">
+        <label>↔ Ngang</label>
+        <input type="range" id="sx" min="-50" max="50" value="0" step="1" oninput="onSlider()">
+        <span class="sv" id="vx">0%</span>
+      </div>
+      <div class="srow">
+        <label>↕ Dọc</label>
+        <input type="range" id="sy" min="-50" max="50" value="0" step="1" oninput="onSlider()">
+        <span class="sv" id="vy">0%</span>
+      </div>
+    </div>
+
+    <div class="anote" id="anote"></div>
+    <div class="mbtns">
+      <button class="bc" onclick="closeAov()">Đóng</button>
+      <button class="bs" onclick="saveAdmin()">💾 Lưu</button>
+    </div>
   </div>
 </div>
 
 <script>
-const PASS      = '1';
-const GH_USER   = 'tienhuyy';
-const GH_REPO   = 'dam-cuoi';
-const GH_BRANCH = 'main';
-const RAW_BASE  = `https://raw.githubusercontent.com/${GH_USER}/${GH_REPO}/${GH_BRANCH}/photos/`;
-const API_URL   = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/photos`;
-const COVER_URL = `https://raw.githubusercontent.com/${GH_USER}/${GH_REPO}/${GH_BRANCH}/cover.jpg`;
-const IMG_EXTS  = ['jpg','jpeg','png','gif','webp','JPG','JPEG','PNG','GIF','WEBP'];
+const PASS    = '1';
+const GH      = 'tienhuyy';
+const REPO    = 'dam-cuoi';
+const BRANCH  = 'main';
+const RAW     = `https://raw.githubusercontent.com/${GH}/${REPO}/${BRANCH}`;
+const COVER   = `${RAW}/cover.jpg`;
+const API     = `https://api.github.com/repos/${GH}/${REPO}/contents/photos`;
+const EXTS    = ['jpg','jpeg','png','gif','webp','JPG','JPEG','PNG','GIF','WEBP'];
 
 let isAdmin = false;
 let photos  = [];
 let groom   = 'Tiến Huy';
 let bride   = 'Quỳnh Hoa';
+// img: zoom(%), x(%), y(%) — tất cả dạng % để không phụ thuộc kích thước màn hình
+let img = { zoom: 100, x: 50, y: 20 };
 
-// imgState lưu: bgSize (vd "150%"), bgPosX (vd "50%"), bgPosY (vd "30%")
-let imgState = { scale: 1, ox: 0, oy: -0.1 }; // scale, offset tỉ lệ ngang/dọc
-
-// ── Init ──────────────────────────────────────────────────────────────────
+/* ── INIT ── */
 function init() {
   try {
-    const s = JSON.parse(localStorage.getItem('winfo') || '{}');
+    const s = JSON.parse(localStorage.getItem('wdata') || '{}');
     if (s.groom) groom = s.groom;
     if (s.bride) bride = s.bride;
-    if (s.date)  document.getElementById('cover-date').textContent = s.date;
-    if (s.img)   imgState = s.img;
+    if (s.date)  document.getElementById('cdate').textContent = s.date;
+    if (s.img)   img = s.img;
   } catch(e) {}
   setNames(groom, bride);
-  applyCoverImg();   // áp dụng ảnh bìa
+  loadCover();
   loadPhotos();
   if (location.search.includes('admin')) {
-    document.getElementById('admin-btn').style.display = 'block';
-    openLogin();
+    document.getElementById('abtn').style.display = 'block';
+    openLov();
   }
 }
 
 function setNames(g, b) {
   groom = g; bride = b;
-  document.getElementById('cover-name').innerHTML  = `${g} &amp; ${b}`;
-  document.getElementById('footer-name').innerHTML = `${g} &amp; ${b} — Mãi bên nhau`;
+  document.getElementById('cname').innerHTML = `${g} &amp; ${b}`;
+  document.getElementById('fname').innerHTML = `${g} &amp; ${b} — Mãi bên nhau`;
 }
 
-function saveLocal() {
+function save() {
   try {
-    localStorage.setItem('winfo', JSON.stringify({
+    localStorage.setItem('wdata', JSON.stringify({
       groom, bride,
-      date: document.getElementById('cover-date').textContent,
-      img: imgState
+      date: document.getElementById('cdate').textContent,
+      img
     }));
   } catch(e) {}
 }
 
-// ── Cover image dùng background-image ────────────────────────────────────
-function applyCoverImg() {
-  const ph  = document.getElementById('arch-placeholder');
-  const img = new Image();
-  img.onload = () => {
-    if (imgState && imgState.scale) {
-      applyBgToElement('arch-bg', 'arch-frame');
-    } else {
-      // Mặc định
-      const bg = document.getElementById('arch-bg');
-      bg.style.backgroundImage    = `url('${COVER_URL}')`;
-      bg.style.backgroundSize     = 'cover';
-      bg.style.backgroundPosition = '50% 20%';
-      bg.style.backgroundRepeat   = 'no-repeat';
-    }
+/* ── COVER IMAGE ── */
+// Dùng background-position bằng % → đơn giản, không phụ thuộc pixel
+function loadCover() {
+  const el = document.getElementById('arch-img');
+  const ph = document.getElementById('arch-ph');
+  const tImg = new Image();
+  tImg.onload = () => {
+    applyCover();
     ph.style.display = 'none';
   };
-  img.onerror = () => { ph.style.display = 'flex'; };
-  img.src = COVER_URL + '?t=' + Date.now();
+  tImg.onerror = () => { ph.style.display = 'flex'; };
+  tImg.src = COVER + '?cb=' + Date.now();
 }
 
-// ── Photos ────────────────────────────────────────────────────────────────
+function applyCover() {
+  const el = document.getElementById('arch-img');
+  el.style.backgroundImage    = `url('${COVER}?cb=${Date.now()}')`;
+  el.style.backgroundSize     = `${img.zoom}%`;
+  el.style.backgroundPosition = `${img.x}% ${img.y}%`;
+  el.style.backgroundRepeat   = 'no-repeat';
+}
+
+/* ── SLIDERS ── */
+function onSlider() {
+  const zoom = +document.getElementById('szoom').value;
+  const x    = +document.getElementById('sx').value;
+  const y    = +document.getElementById('sy').value;
+  document.getElementById('vzoom').textContent = zoom + '%';
+  document.getElementById('vx').textContent    = x + '%';
+  document.getElementById('vy').textContent    = y + '%';
+  // x,y slider: -50..50 → map sang 0..100 cho background-position
+  img = { zoom, x: x + 50, y: y + 50 };
+  applyCover();
+}
+
+function syncSliders() {
+  document.getElementById('szoom').value = img.zoom;
+  document.getElementById('sx').value   = img.x - 50;
+  document.getElementById('sy').value   = img.y - 50;
+  document.getElementById('vzoom').textContent = img.zoom + '%';
+  document.getElementById('vx').textContent    = (img.x - 50) + '%';
+  document.getElementById('vy').textContent    = (img.y - 50) + '%';
+}
+
+/* ── PHOTOS ── */
 async function loadPhotos() {
-  const empty = document.getElementById('empty-state');
+  const empty = document.getElementById('empty');
   empty.textContent = '⏳ Đang tải ảnh...'; empty.classList.add('show');
   try {
-    const res = await fetch(API_URL);
-    if (!res.ok) throw new Error();
+    const res = await fetch(API);
+    if (!res.ok) throw 0;
     const files = await res.json();
     photos = files
-      .filter(f => f.type === 'file' && IMG_EXTS.some(e => f.name.endsWith('.'+e)))
-      .map(f => RAW_BASE + encodeURIComponent(f.name));
+      .filter(f => f.type==='file' && EXTS.some(e => f.name.endsWith('.'+e)))
+      .map(f => `${RAW}/photos/${encodeURIComponent(f.name)}`);
     renderGrid();
   } catch(e) {
-    empty.textContent = 'Không tải được ảnh — thử lại sau 🌸';
+    empty.textContent = 'Không tải được ảnh 🌸';
   }
 }
 
 function renderGrid() {
-  const grid = document.getElementById('photo-grid');
-  const empty = document.getElementById('empty-state');
+  const grid = document.getElementById('pgrid');
+  const empty = document.getElementById('empty');
   grid.innerHTML = '';
   if (!photos.length) { empty.classList.add('show'); empty.textContent='Ảnh cưới sẽ sớm được cập nhật 🌸'; return; }
   empty.classList.remove('show');
   photos.forEach(src => {
     const d = document.createElement('div');
-    d.className = 'photo-item';
+    d.className = 'pitem';
     d.innerHTML = `<img src="${src}" loading="lazy" alt="">`;
     d.onclick = () => openLB(src);
     grid.appendChild(d);
   });
 }
 
-// ── Lightbox ──────────────────────────────────────────────────────────────
-function openLB(src) { document.getElementById('lb-img').src=src; document.getElementById('lightbox').classList.add('active'); document.body.style.overflow='hidden'; }
-function closeLB()   { document.getElementById('lightbox').classList.remove('active'); document.body.style.overflow=''; }
-document.addEventListener('keydown', e => { if(e.key==='Escape'){closeLB();closeEditor();} });
+/* ── LIGHTBOX ── */
+function openLB(src) { document.getElementById('lb-img').src=src; document.getElementById('lb').classList.add('on'); document.body.style.overflow='hidden'; }
+function closeLB()   { document.getElementById('lb').classList.remove('on'); document.body.style.overflow=''; }
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeLB(); });
 
-// ── Admin ─────────────────────────────────────────────────────────────────
-function openLogin()  { document.getElementById('login-ov').classList.add('active'); setTimeout(()=>document.getElementById('pw').focus(),100); }
-function closeLogin() { document.getElementById('login-ov').classList.remove('active'); document.getElementById('pw').value=''; document.getElementById('pw-err').style.display='none'; }
-function doLogin() {
-  if (document.getElementById('pw').value === PASS) {
-    isAdmin=true; closeLogin(); openAdmin();
+/* ── LOGIN ── */
+function openLov()  { document.getElementById('lov').classList.add('on'); setTimeout(()=>document.getElementById('pw').focus(),100); }
+function closeLov() { document.getElementById('lov').classList.remove('on'); document.getElementById('pw').value=''; document.getElementById('pwerr').style.display='none'; }
+function doLogin()  {
+  if (document.getElementById('pw').value===PASS) {
+    isAdmin=true; closeLov(); openAdmin();
   } else {
-    document.getElementById('pw-err').style.display='block';
+    document.getElementById('pwerr').style.display='block';
     document.getElementById('pw').value='';
   }
 }
+
+/* ── ADMIN ── */
 function openAdmin() {
-  if (!isAdmin) { openLogin(); return; }
-  document.getElementById('in-groom').value = groom;
-  document.getElementById('in-bride').value = bride;
-  document.getElementById('in-date').value  = document.getElementById('cover-date').textContent;
-  syncSlidersFromState();
-  document.getElementById('admin-note').innerHTML =
+  if (!isAdmin) { openLov(); return; }
+  document.getElementById('ig').value = groom;
+  document.getElementById('ib').value = bride;
+  document.getElementById('id').value = document.getElementById('cdate').textContent;
+  syncSliders();
+  document.getElementById('anote').innerHTML =
     `📸 <strong>${photos.length}</strong> ảnh trong <code>photos/</code><br>
-     🖼️ Ảnh bìa: upload <code>cover.jpg</code> vào thư mục gốc<br>
-     ➕ Thêm ảnh: GitHub → photos → Add file → Upload`;
-  document.getElementById('admin-ov').classList.add('active');
+     🖼️ Ảnh bìa: upload <code>cover.jpg</code> vào thư mục gốc`;
+  document.getElementById('aov').classList.add('on');
 }
-function closeAdmin() { document.getElementById('admin-ov').classList.remove('active'); }
+function closeAov() { document.getElementById('aov').classList.remove('on'); }
 function saveAdmin() {
-  const g = document.getElementById('in-groom').value.trim() || groom;
-  const b = document.getElementById('in-bride').value.trim() || bride;
-  const d = document.getElementById('in-date').value.trim();
-  setNames(g,b);
-  if(d) document.getElementById('cover-date').textContent = d;
-  saveLocal(); closeAdmin(); alert('✅ Đã lưu!');
+  const g = document.getElementById('ig').value.trim() || groom;
+  const b = document.getElementById('ib').value.trim() || bride;
+  const d = document.getElementById('id').value.trim();
+  setNames(g, b);
+  if (d) document.getElementById('cdate').textContent = d;
+  save();
+  closeAov();
+  alert('✅ Đã lưu!');
 }
 
-// ── Sakura ────────────────────────────────────────────────────────────────
+/* ── SAKURA ── */
 (function(){
-  const canvas = document.getElementById('particle-canvas');
-  const ctx    = canvas.getContext('2d');
-  let W, H;
-  const COUNT = 35, petals = [];
-  function resize(){ W=canvas.width=innerWidth; H=canvas.height=innerHeight; }
-  addEventListener('resize', resize); resize();
-  function newPetal(randY){
-    return { x:Math.random()*W, y:randY?Math.random()*H:-20-Math.random()*80,
-      size:Math.random()*7+5, angle:Math.random()*Math.PI*2, rot:(Math.random()-.5)*.03,
-      vx:(Math.random()-.5)*.8, vy:Math.random()*1+.5,
-      swing:Math.random()*.6+.2, swS:Math.random()*.015+.008, swP:Math.random()*Math.PI*2,
-      alpha:Math.random()*.45+.3, hue:340+Math.random()*25 };
-  }
-  for(let i=0;i<COUNT;i++) petals.push(newPetal(true));
+  const c=document.getElementById('pcanvas'), ctx=c.getContext('2d');
+  let W,H; const N=35,ps=[];
+  function rsz(){W=c.width=innerWidth;H=c.height=innerHeight;}
+  addEventListener('resize',rsz);rsz();
+  function np(ry){return{x:Math.random()*W,y:ry?Math.random()*H:-20-Math.random()*80,sz:Math.random()*7+5,ang:Math.random()*Math.PI*2,rot:(Math.random()-.5)*.03,vx:(Math.random()-.5)*.8,vy:Math.random()*1+.5,sw:Math.random()*.6+.2,swS:Math.random()*.015+.008,swP:Math.random()*Math.PI*2,al:Math.random()*.45+.3,hue:340+Math.random()*25};}
+  for(let i=0;i<N;i++)ps.push(np(true));
   function loop(){
     ctx.clearRect(0,0,W,H);
     const t=Date.now()/1000;
-    petals.forEach(p=>{
-      const sx=Math.sin(t*p.swS*60+p.swP)*p.swing;
-      ctx.save(); ctx.translate(p.x+sx,p.y); ctx.rotate(p.angle); ctx.globalAlpha=p.alpha;
-      const g=ctx.createRadialGradient(0,0,0,0,0,p.size);
-      g.addColorStop(0,`hsl(${p.hue},90%,88%)`); g.addColorStop(1,`hsl(${p.hue},75%,82%)`);
-      ctx.beginPath(); ctx.ellipse(0,0,p.size*.5,p.size,0,0,Math.PI*2);
-      ctx.fillStyle=g; ctx.fill(); ctx.restore();
-      p.y+=p.vy; p.x+=p.vx*.3; p.angle+=p.rot;
-      if(p.y>H+20) Object.assign(p,newPetal(false));
+    ps.forEach(p=>{
+      const sx=Math.sin(t*p.swS*60+p.swP)*p.sw;
+      ctx.save();ctx.translate(p.x+sx,p.y);ctx.rotate(p.ang);ctx.globalAlpha=p.al;
+      const g=ctx.createRadialGradient(0,0,0,0,0,p.sz);
+      g.addColorStop(0,`hsl(${p.hue},90%,88%)`);g.addColorStop(1,`hsl(${p.hue},75%,82%)`);
+      ctx.beginPath();ctx.ellipse(0,0,p.sz*.5,p.sz,0,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();ctx.restore();
+      p.y+=p.vy;p.x+=p.vx*.3;p.ang+=p.rot;
+      if(p.y>H+20)Object.assign(p,np(false));
     });
     requestAnimationFrame(loop);
   }
