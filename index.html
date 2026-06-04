@@ -3,364 +3,358 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>💍 Đám Cưới Của Chúng Mình</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Nunito:wght@300;400&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<title>Tiến Huy & Quỳnh Hoa</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Great+Vibes&family=Nunito:wght@300;400&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --gold: #a07840;
-    --gold-light: #d6c9b0;
-    --brown: #5a3e28;
-    --brown-mid: #8a6a4a;
-    --rose: #e89090;
-    --deep-rose: #c0485a;
-    --dark: #3a1515;
-    --text: #5a2828;
-    --text-light: #a06868;
-  }
+:root {
+  --brown:     #5a3e28;
+  --brown-mid: #8a6a4a;
+  --gold:      #c9a86c;
+  --gold-light:#e8d8b8;
+  --rose:      #e8a0a8;
+  --deep-rose: #c05060;
+  --text:      #5a2828;
+  --text-light:#a06868;
+  --dark:      #3a1515;
+}
 
-  body {
-    background: linear-gradient(135deg, #fce8e8 0%, #f8d8d0 40%, #fce4d8 100%);
-    color: var(--text);
-    font-family: 'Nunito', sans-serif;
-    font-weight: 300;
-    min-height: 100vh;
-  }
+body {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 300;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #fce8e8 0%, #f8d8d0 50%, #fce4d8 100%);
+  color: var(--text);
+}
 
-  /* SAKURA CANVAS — phủ lên toàn bộ, không chặn click */
-  #particle-canvas {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    pointer-events: none;
-    z-index: 9999;
-  }
+/* PARTICLES */
+#particle-canvas {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
 
-  /* COVER */
-  .cover {
-    min-height: 100vh;
+/* ═══════════════════════════════
+   COVER
+═══════════════════════════════ */
+.cover {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.2rem;
+  position: relative; z-index: 1;
+}
+
+.cover-card {
+  width: min(380px, 94vw);
+  background: rgba(255,255,255,0.93);
+  border: 1.5px solid var(--gold-light);
+  border-radius: 4px;
+  padding: 2.8rem 1.6rem 2rem;
+  box-shadow: 0 12px 50px rgba(100,50,50,0.13);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  animation: fadeUp 1s ease both;
+}
+
+/* viền kép bên trong */
+.cover-card::before {
+  content: '';
+  position: absolute;
+  inset: 10px;
+  border: 1px solid var(--gold-light);
+  border-radius: 2px;
+  pointer-events: none;
+}
+/* hoa nhỏ giữa viền trên/dưới */
+.cover-card::after {
+  content: '✿';
+  position: absolute;
+  top: 4px; left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  color: var(--gold-light);
+  background: rgba(255,255,255,0.93);
+  padding: 0 4px;
+  line-height: 1;
+}
+.cover-bottom-flower {
+  position: absolute;
+  bottom: 4px; left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  color: var(--gold-light);
+  background: rgba(255,255,255,0.93);
+  padding: 0 4px;
+  line-height: 1;
+  z-index: 1;
+}
+
+/* Watermark */
+.cover-watermark {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(-15deg);
+  font-family: 'Great Vibes', cursive;
+  font-size: 5rem;
+  color: rgba(180,100,120,0.1);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+/* Layout: ảnh arch + chữ dọc */
+.arch-row {
+  width: 100%;
+  margin-bottom: 1.2rem;
+  position: relative; z-index: 1;
+}
+
+/* Ảnh vòm */
+.arch-frame {
+  width: 100%;
+  position: relative;
+  padding-top: 125%;
+  overflow: hidden;
+  border-radius: 50% 50% 6px 6px / 22% 22% 6px 6px;
+  border: 2px solid var(--gold-light);
+  background: #f5efe8;
+}
+.arch-frame img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+.arch-placeholder {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  color: #b0a090; font-size: 0.75rem; gap: 0.4rem;
+}
+.arch-placeholder span { font-size: 2rem; }
+
+/* Chữ dọc SAVE the DATE */
+
+
+/* Tên đôi */
+.cover-name {
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(1.5rem, 5.5vw, 2rem);
+  color: var(--brown);
+  margin-bottom: 0.4rem;
+  white-space: nowrap;
+  position: relative; z-index: 1;
+}
+.cover-date {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.15rem;
+  color: var(--brown-mid);
+  position: relative; z-index: 1;
+}
+
+/* Scroll hint */
+.scroll-hint {
+  margin-top: 1.2rem;
+  display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
+  color: var(--rose); font-size: 0.68rem;
+  letter-spacing: 0.15rem; text-transform: uppercase;
+  animation: bounce 2s infinite;
+  position: relative; z-index: 1;
+}
+.scroll-hint::after { content: '↓'; font-size: 0.9rem; }
+
+/* ═══════════════════════════════
+   INTRO
+═══════════════════════════════ */
+.intro {
+  text-align: center;
+  padding: 5rem 2rem 3rem;
+  max-width: 580px;
+  margin: 0 auto;
+  position: relative; z-index: 1;
+}
+.intro h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.8rem; font-weight: 400;
+  color: var(--deep-rose); margin-bottom: 0.8rem;
+}
+.intro p { color: var(--text-light); line-height: 1.9; }
+
+/* ═══════════════════════════════
+   GALLERY
+═══════════════════════════════ */
+.gallery-section {
+  padding: 1rem 1.2rem 5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  position: relative; z-index: 1;
+}
+.section-title {
+  text-align: center;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.5rem; font-weight: 400;
+  color: var(--deep-rose);
+  margin-bottom: 2rem;
+}
+.section-title::after {
+  content: ''; display: block;
+  width: 50px; height: 2px;
+  background: var(--gold);
+  margin: 0.6rem auto 0;
+}
+.empty-state {
+  text-align: center; padding: 3rem 1rem;
+  color: var(--text-light); font-style: italic; display: none;
+}
+.empty-state.show { display: block; }
+
+.photo-grid { columns: 3; column-gap: 0.8rem; }
+@media (max-width: 700px) { .photo-grid { columns: 2; } }
+@media (max-width: 400px) { .photo-grid { columns: 1; } }
+
+.photo-item {
+  break-inside: avoid;
+  margin-bottom: 0.8rem;
+  border-radius: 8px; overflow: hidden;
+  cursor: zoom-in;
+  box-shadow: 0 4px 16px rgba(150,80,80,0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.photo-item:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(150,80,80,0.18); }
+.photo-item img { width: 100%; display: block; }
+
+/* ═══════════════════════════════
+   LIGHTBOX
+═══════════════════════════════ */
+.lightbox {
+  display: none; position: fixed; inset: 0;
+  background: rgba(20,8,8,0.92);
+  z-index: 1000;
+  align-items: center; justify-content: center;
+  padding: 1rem; cursor: zoom-out;
+}
+.lightbox.active { display: flex; }
+.lightbox img {
+  max-width: 92vw; max-height: 92vh;
+  border-radius: 6px; object-fit: contain;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  cursor: default;
+}
+.lb-close {
+  position: absolute; top: 1.2rem; right: 1.4rem;
+  color: #fff; font-size: 2.2rem;
+  background: none; border: none; cursor: pointer;
+  opacity: 0.8; transition: opacity 0.2s;
+}
+.lb-close:hover { opacity: 1; }
+
+/* ═══════════════════════════════
+   FOOTER
+═══════════════════════════════ */
+footer {
+  text-align: center; padding: 3rem 2rem;
+  background: var(--dark);
+  color: rgba(255,255,255,0.45); font-size: 0.82rem;
+  position: relative; z-index: 1;
+}
+footer .fheart { display: block; font-size: 1.4rem; margin-bottom: 0.7rem; }
+
+/* ═══════════════════════════════
+   ADMIN
+═══════════════════════════════ */
+.admin-btn {
+  position: fixed; bottom: 1.8rem; right: 1.8rem;
+  background: var(--gold); color: #fff;
+  border: none; border-radius: 50px;
+  padding: 0.65rem 1.3rem;
+  font-family: 'Nunito', sans-serif; font-size: 0.82rem;
+  cursor: pointer; box-shadow: 0 4px 14px rgba(180,140,60,0.35);
+  z-index: 200; display: none; transition: all 0.25s;
+}
+.admin-btn:hover { transform: translateY(-2px); }
+
+.overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(30,12,12,0.55);
+  z-index: 400; align-items: center; justify-content: center;
+}
+.overlay.active { display: flex; }
+.modal {
+  background: #faf6f0; border-radius: 14px;
+  padding: 2.2rem; width: min(380px, 92vw);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.28);
+  max-height: 90vh; overflow-y: auto;
+}
+.modal h3 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.3rem; color: var(--deep-rose);
+  margin-bottom: 1.1rem; font-weight: 400;
+}
+.modal label { display: block; font-size: 0.82rem; color: var(--text-light); margin-bottom: 0.25rem; }
+.modal input {
+  width: 100%; padding: 0.65rem 0.9rem;
+  border: 1px solid var(--rose); border-radius: 8px;
+  font-family: 'Nunito', sans-serif; font-size: 0.95rem;
+  color: var(--text); margin-bottom: 0.9rem; background: #fff;
+}
+.modal input:focus { outline: none; border-color: var(--deep-rose); }
+.modal-btns { display: flex; gap: 0.7rem; justify-content: flex-end; }
+.modal-btns button {
+  padding: 0.55rem 1.4rem; border-radius: 50px;
+  font-family: 'Nunito', sans-serif; font-size: 0.88rem;
+  cursor: pointer; border: none; transition: all 0.2s;
+}
+.btn-cancel { background: transparent; color: var(--text-light); border: 1px solid var(--rose) !important; }
+.btn-save { background: var(--deep-rose); color: #fff; }
+.btn-save:hover { background: var(--dark); }
+.admin-note {
+  font-size: 0.8rem; color: var(--text-light);
+  background: #f5ede0; border-radius: 8px;
+  padding: 0.75rem; margin-bottom: 0.9rem; line-height: 1.7;
+}
+
+/* Animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes bounce {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(6px); }
+}
+
+  /* SAVE the DATE phía trên vòm */
+  .save-the-date {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    align-items: baseline;
     justify-content: center;
-    padding: 2rem 1.5rem 0;
-  }
-
-  .cover-card {
-    position: relative;
-    width: min(420px, 92vw);
-    background: rgba(255,255,255,0.88);
-    border-radius: 4px;
-    padding: 2.8rem 2.2rem 2.4rem;
-    box-shadow: 0 12px 50px rgba(100,60,60,0.12);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    animation: fadeUp 1s ease both;
-  }
-
-  /* SAVE the DATE */
-  /* Chữ SAVE the DATE dọc bên phải vòm */
-  .cover-vertical-text {
-    position: absolute;
-    right: -3.2rem;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.1rem;
-    z-index: 3;
-    pointer-events: none;
-  }
-  .cover-vertical-text .vt-save,
-  .cover-vertical-text .vt-date {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 1.2rem;
-    font-weight: 700;
-    letter-spacing: 0.06rem;
-    color: #5a3e28;
-    writing-mode: vertical-rl;
-    text-orientation: mixed;
-    text-transform: uppercase;
-  }
-  .cover-vertical-text .vt-the {
-    font-family: 'Great Vibes', cursive;
-    font-size: 1.9rem;
-    color: #8a6a4a;
-    writing-mode: vertical-rl;
-    line-height: 1;
-  }
-
-  /* Ảnh vòm arch */
-  .cover-arch-wrap {
-    width: 78%;
-    position: relative;
-    margin: 0 auto 1.6rem;
-  }
-  .cover-arch-frame {
-    width: 100%;
-    padding-top: 138%; /* tỉ lệ dọc */
-    position: relative;
-    overflow: hidden;
-    border-radius: 50% 50% 4px 4px / 28% 28% 4px 4px;
-    border: 2px solid var(--gold-light);
-    background: #f0ebe3;
-    box-shadow: 0 4px 20px rgba(100,60,60,0.1);
-  }
-  .cover-arch-frame img {
-    position: absolute;
-    inset: 0;
-    width: 100%; height: 100%;
-    object-fit: cover;
-    object-position: center top;
-    display: block;
-  }
-  .cover-photo-placeholder {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    color: #b0a090; font-size: 0.8rem; gap: 0.5rem;
-  }
-  .cover-photo-placeholder span { font-size: 2.2rem; }
-
-  /* Tên đôi chữ viết tay */
-  .cover-couple-name {
-    font-family: 'Great Vibes', cursive;
-    font-size: clamp(1.3rem, 4.5vw, 1.8rem);
-    font-weight: 400;
-    color: var(--brown);
-    line-height: 1.2;
-    margin-bottom: 0.5rem;
-    white-space: nowrap;
-  }
-
-  .cover-date {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 0.9rem;
-    letter-spacing: 0.18rem;
-    color: var(--brown-mid);
-  }
-  .scroll-hint {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.3rem;
-    color: var(--rose);
-    font-size: 0.7rem;
-    letter-spacing: 0.15rem;
-    text-transform: uppercase;
-    padding: 1.2rem 0 0.5rem;
-    animation: bounce 2s infinite;
+    gap: 0.5rem;
+    margin-bottom: 0.8rem;
     position: relative; z-index: 1;
   }
-  .scroll-hint::after { content: '↓'; font-size: 1rem; }
-
-  /* INTRO */
-  .intro {
-    text-align: center;
-    padding: 5rem 2rem 3rem;
-    max-width: 600px;
-    margin: 0 auto;
-  }
-  .intro h2 {
+  .std-save, .std-date {
     font-family: 'Playfair Display', Georgia, serif;
-    font-size: 2rem;
-    font-weight: 400;
-    color: var(--deep-rose);
-    margin-bottom: 1rem;
+    font-size: clamp(0.85rem, 2.8vw, 1.1rem);
+    font-weight: 700;
+    letter-spacing: 0.3rem;
+    color: #5a3e28;
+    text-transform: uppercase;
   }
-  .intro p { color: var(--text-light); line-height: 1.9; }
-
-  /* GALLERY */
-  .gallery-section { padding: 2rem 1.5rem 5rem; max-width: 1100px; margin: 0 auto; }
-  .section-title {
-    text-align: center;
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 1.6rem;
-    font-weight: 400;
-    color: var(--deep-rose);
-    margin-bottom: 2.5rem;
-  }
-  .section-title::after {
-    content: '';
-    display: block;
-    width: 60px; height: 2px;
-    background: var(--gold);
-    margin: 0.8rem auto 0;
-  }
-  .empty-state {
-    text-align: center;
-    padding: 3rem 1rem;
-    color: var(--text-light);
-    font-style: italic;
-    display: none;
-  }
-  .empty-state.show { display: block; }
-
-  .photo-grid { columns: 3; column-gap: 1rem; }
-  @media (max-width: 700px) { .photo-grid { columns: 2; } }
-  @media (max-width: 420px) { .photo-grid { columns: 1; } }
-
-  .photo-item {
-    break-inside: avoid;
-    margin-bottom: 1rem;
-    border-radius: 10px;
-    overflow: hidden;
-    cursor: zoom-in;
-    box-shadow: 0 4px 20px rgba(158,91,101,0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-  }
-  .photo-item:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(158,91,101,0.2); }
-  .photo-item img { width: 100%; display: block; }
-
-  /* LIGHTBOX — chỉ xem 1 ảnh, click ngoài để đóng */
-  .lightbox {
-    display: none;
-    position: fixed; inset: 0;
-    background: rgba(20,10,10,0.92);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-    padding: 1.5rem;
-    cursor: zoom-out;
-  }
-  .lightbox.active { display: flex; }
-  .lightbox img {
-    max-width: 92vw;
-    max-height: 92vh;
-    border-radius: 6px;
-    object-fit: contain;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-    cursor: default;
-  }
-  .lightbox-close {
-    position: absolute; top: 1.2rem; right: 1.5rem;
-    color: #fff; font-size: 2.2rem;
-    background: none; border: none;
-    cursor: pointer; opacity: 0.8;
-    transition: opacity 0.2s;
-    line-height: 1;
-  }
-  .lightbox-close:hover { opacity: 1; }
-
-  /* FOOTER */
-  footer {
-    text-align: center;
-    padding: 3rem 2rem;
-    background: var(--dark);
-    color: rgba(255,255,255,0.5);
-    font-size: 0.85rem;
-  }
-  footer .footer-heart { display: block; font-size: 1.5rem; margin-bottom: 0.8rem; }
-
-  /* ADMIN */
-  .edit-btn {
-    position: fixed; bottom: 2rem; right: 2rem;
-    background: var(--gold); color: #fff;
-    border: none; border-radius: 50px;
-    padding: 0.7rem 1.4rem;
-    font-family: 'Nunito', sans-serif; font-size: 0.85rem;
-    cursor: pointer; box-shadow: 0 4px 16px rgba(160,120,64,0.3);
-    z-index: 100; transition: all 0.3s; display: none;
-  }
-  .edit-btn:hover { transform: translateY(-2px); }
-
-  .modal-overlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(30,15,15,0.6);
-    z-index: 500; align-items: center; justify-content: center;
-  }
-  .modal-overlay.active { display: flex; }
-  .modal {
-    background: #faf7f2; border-radius: 16px;
-    padding: 2.5rem; width: min(400px, 90vw);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    max-height: 90vh; overflow-y: auto;
-  }
-  .modal h3 {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 1.4rem; color: var(--deep-rose);
-    margin-bottom: 1.2rem; font-weight: 400;
-  }
-  .modal label { display: block; font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.3rem; }
-  .modal input {
-    width: 100%; padding: 0.7rem 1rem;
-    border: 1px solid var(--rose); border-radius: 8px;
-    font-family: 'Nunito', sans-serif; font-size: 1rem;
-    color: var(--text); margin-bottom: 1rem; background: #fff;
-  }
-  .modal input:focus { outline: none; border-color: var(--deep-rose); }
-  .modal-actions { display: flex; gap: 0.8rem; justify-content: flex-end; }
-  .modal-actions button {
-    padding: 0.6rem 1.5rem; border-radius: 50px;
-    font-family: 'Nunito', sans-serif; font-size: 0.9rem;
-    cursor: pointer; border: none; transition: all 0.2s;
-  }
-  .btn-cancel { background: transparent; color: var(--text-light); border: 1px solid var(--rose) !important; }
-  .btn-save { background: var(--deep-rose); color: #fff; }
-  .btn-save:hover { background: var(--dark); }
-
-  .admin-info {
-    font-size: 0.82rem; color: var(--text-light);
-    background: #f5f0e8; border-radius: 8px;
-    padding: 0.8rem; margin-bottom: 1rem; line-height: 1.7;
-  }
-
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes bounce {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(7px); }
-  }
-
-  /* 1. Viền trang trí bên trong card */
-  .cover-card::after {
-    content: '';
-    position: absolute;
-    inset: 12px;
-    border: 1px solid var(--gold-light);
-    border-radius: 2px;
-    pointer-events: none;
-    z-index: 0;
-  }
-  /* Góc hoa trang trí bằng CSS */
-  .cover-inner-border {
-    position: absolute;
-    inset: 12px;
-    pointer-events: none;
-    z-index: 1;
-  }
-  .cover-inner-border::before,
-  .cover-inner-border::after {
-    content: '✿';
-    position: absolute;
-    font-size: 0.9rem;
-    color: var(--gold-light);
-    line-height: 1;
-  }
-  .cover-inner-border::before { top: -8px; left: 50%; transform: translateX(-50%); }
-  .cover-inner-border::after  { bottom: -8px; left: 50%; transform: translateX(-50%); }
-
-  /* 3. Watermark chữ mờ phía sau ảnh vòm */
-  .cover-watermark {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-15deg);
+  .std-the {
     font-family: 'Great Vibes', cursive;
-    font-size: 6.5rem;
-    color: rgba(180,100,120,0.22);
-    white-space: nowrap;
-    pointer-events: none;
-    z-index: 0;
-    user-select: none;
-    letter-spacing: 0.1rem;
+    font-size: clamp(1.3rem, 4vw, 1.7rem);
+    color: #8a6a4a;
+    line-height: 1;
   }
 </style>
 </head>
@@ -368,37 +362,26 @@
 
 <canvas id="particle-canvas"></canvas>
 
-<!-- COVER -->
+<!-- ═══ COVER ═══ -->
 <section class="cover">
   <div class="cover-card">
-    <!-- Viền góc hoa -->
-    <div class="cover-inner-border"></div>
-    <!-- Watermark -->
+    <div class="cover-bottom-flower">✿</div>
     <div class="cover-watermark">Love</div>
 
-    <!-- Hoa trang trí góc -->
-        <!-- Ảnh vòm arch -->
-    <div class="cover-arch-wrap" style="position:relative;width:82%;margin:0 auto 1.4rem;">
+    <!-- SAVE the DATE -->
+    <div class="save-the-date">
+      <span class="std-save">Save</span>
+      <span class="std-the">the</span>
+      <span class="std-date">Date</span>
+    </div>
 
-      <!-- Chữ SAVE the DATE dọc bên phải -->
-      <div class="cover-vertical-text">
-        <span class="vt-save">S</span>
-        <span class="vt-save">A</span>
-        <span class="vt-save">V</span>
-        <span class="vt-save">E</span>
-        <span style="height:0.4rem;display:block"></span>
-        <span class="vt-the">the</span>
-        <span style="height:0.4rem;display:block"></span>
-        <span class="vt-date">D</span>
-        <span class="vt-date">A</span>
-        <span class="vt-date">T</span>
-        <span class="vt-date">E</span>
-      </div>
+    <!-- Arch -->
+    <div class="arch-row" style="position:relative;width:100%;margin-bottom:1.2rem;">
 
-      <div class="cover-arch-frame">
-        <div class="cover-photo-placeholder" id="cover-placeholder">
+      <div class="arch-frame" id="arch-frame">
+        <div class="arch-placeholder" id="cover-placeholder">
           <span>🌸</span>
-          <p>Upload <code>cover.jpg</code><br>lên GitHub repo</p>
+          <p>Upload <code>cover.jpg</code><br>lên GitHub</p>
         </div>
         <img id="cover-img" src="cover.jpg" alt="Ảnh bìa"
           onload="this.style.display='block';document.getElementById('cover-placeholder').style.display='none';"
@@ -407,293 +390,264 @@
       </div>
     </div>
 
-    <!-- Tên đôi chữ viết tay -->
-    <div class="cover-couple-name" id="cover-couple-name">Tiến Huy &amp; Quỳnh Hoa</div>
+    <div class="cover-name" id="cover-name">Tiến Huy &amp; Quỳnh Hoa</div>
     <div class="cover-date" id="cover-date">Sắp được công bố</div>
   </div>
+  <div class="scroll-hint">Cuộn xuống</div>
 </section>
-<span class="scroll-hint">Cuộn xuống</span>
 
-<!-- INTRO -->
+<!-- ═══ INTRO ═══ -->
 <section class="intro">
   <h2>Album Ảnh Cưới</h2>
-  <p>Những khoảnh khắc đẹp nhất trong ngày trọng đại của chúng mình. Mời bạn cùng lưu giữ những kỷ niệm không thể nào quên này. 🌹</p>
+  <p>Những khoảnh khắc đẹp nhất trong ngày trọng đại của chúng mình. Mời bạn cùng lưu giữ những kỷ niệm không thể nào quên này 🌹</p>
 </section>
 
-<!-- GALLERY -->
+<!-- ═══ GALLERY ═══ -->
 <section class="gallery-section">
   <h2 class="section-title">Khoảnh Khắc Đáng Nhớ</h2>
-  <div class="empty-state" id="empty-state">Ảnh cưới sẽ sớm được cập nhật — hãy đón chờ nhé! 🌸</div>
+  <div class="empty-state" id="empty-state">Ảnh cưới sẽ sớm được cập nhật 🌸</div>
   <div class="photo-grid" id="photo-grid"></div>
 </section>
 
-<!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <button class="lightbox-close" onclick="closeLightbox()">×</button>
-  <img id="lightbox-img" src="" alt="Ảnh cưới" onclick="event.stopPropagation()">
+<!-- ═══ LIGHTBOX ═══ -->
+<div class="lightbox" id="lightbox" onclick="closeLB()">
+  <button class="lb-close" onclick="closeLB()">×</button>
+  <img id="lb-img" src="" alt="" onclick="event.stopPropagation()">
 </div>
 
-<!-- FOOTER -->
+<!-- ═══ FOOTER ═══ -->
 <footer>
-  <span class="footer-heart">💕</span>
-  <span id="footer-names">Tiến Huy &amp; Quỳnh Hoa — Mãi bên nhau</span>
+  <span class="fheart">💕</span>
+  <span id="footer-name">Tiến Huy &amp; Quỳnh Hoa — Mãi bên nhau</span>
 </footer>
 
-<!-- ADMIN -->
-<button class="edit-btn" id="admin-btn" onclick="openAdminPanel()">⚙️ Admin</button>
+<!-- ═══ ADMIN ═══ -->
+<button class="admin-btn" id="admin-btn" onclick="openAdmin()">⚙️ Admin</button>
 
-<div class="modal-overlay" id="login-modal">
+<div class="overlay" id="login-overlay">
   <div class="modal">
     <h3>🔐 Đăng nhập Admin</h3>
     <label>Mật khẩu</label>
-    <input type="password" id="input-password" placeholder="Nhập mật khẩu..."
+    <input type="password" id="pw" placeholder="Nhập mật khẩu..."
       onkeydown="if(event.key==='Enter')doLogin()">
-    <div id="login-error" style="color:#c0392b;font-size:0.85rem;margin-top:-0.5rem;margin-bottom:0.8rem;display:none">
+    <div id="pw-err" style="color:#c0392b;font-size:0.82rem;margin-top:-0.5rem;margin-bottom:0.8rem;display:none">
       Sai mật khẩu! 🔒
     </div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeLoginModal()">Hủy</button>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeLogin()">Hủy</button>
       <button class="btn-save" onclick="doLogin()">Đăng nhập</button>
     </div>
   </div>
 </div>
 
-<div class="modal-overlay" id="admin-modal">
+<div class="overlay" id="admin-overlay">
   <div class="modal">
-    <h3>⚙️ Quản lý Album Cưới</h3>
+    <h3>⚙️ Quản lý Album</h3>
     <label>Tên chú rể</label>
-    <input type="text" id="input-groom" placeholder="Tên chú rể">
+    <input type="text" id="in-groom" placeholder="Tên chú rể">
     <label>Tên cô dâu</label>
-    <input type="text" id="input-bride" placeholder="Tên cô dâu">
+    <input type="text" id="in-bride" placeholder="Tên cô dâu">
     <label>Ngày cưới</label>
-    <input type="text" id="input-date" placeholder="VD: 15.06.2025">
-    <div class="admin-info" id="admin-info"></div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeAdminModal()">Đóng</button>
-      <button class="btn-save" onclick="saveInfo()">💾 Lưu</button>
+    <input type="text" id="in-date" placeholder="VD: 15.06.2025">
+    <div class="admin-note" id="admin-note"></div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeAdmin()">Đóng</button>
+      <button class="btn-save" onclick="saveAdmin()">💾 Lưu</button>
     </div>
   </div>
 </div>
 
 <script>
-  const ADMIN_PASS = '12345678';
-  const GITHUB_USER = 'tienhuyy';
-  const GITHUB_REPO = 'dam-cuoi';
-  const GITHUB_BRANCH = 'main';
-  const RAW_BASE = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/photos/`;
-  const API_URL = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/photos`;
+  // ── Config ──────────────────────────────────────────────────────────────
+  const PASS        = '12345678';
+  const GH_USER     = 'tienhuyy';
+  const GH_REPO     = 'dam-cuoi';
+  const GH_BRANCH   = 'main';
+  const RAW_BASE    = `https://raw.githubusercontent.com/${GH_USER}/${GH_REPO}/${GH_BRANCH}/photos/`;
+  const API_URL     = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/photos`;
+  const IMG_EXTS    = ['jpg','jpeg','png','gif','webp','JPG','JPEG','PNG','GIF','WEBP'];
 
   let isAdmin = false;
-  let photos = [];
-  let currentGroom = 'Tiến Huy', currentBride = 'Quỳnh Hoa';
+  let photos  = [];
+  let groom   = 'Tiến Huy';
+  let bride   = 'Quỳnh Hoa';
 
+
+  // ── Init ────────────────────────────────────────────────────────────────
   function init() {
-    // Xóa cache tên cũ nếu còn Huy/Hoa
-    try { const old = JSON.parse(localStorage.getItem('wedding_info')||'{}'); if(old.groom==='Huy') localStorage.removeItem('wedding_info'); } catch(e){}
     try {
-      const s = JSON.parse(localStorage.getItem('wedding_info') || '{}');
-      if (s.groom) currentGroom = s.groom;
-      if (s.bride) currentBride = s.bride;
-      if (s.date) document.getElementById('cover-date').textContent = s.date;
+      const s = JSON.parse(localStorage.getItem('winfo') || '{}');
+      if (s.groom) groom = s.groom;
+      if (s.bride) bride = s.bride;
+      if (s.date)  document.getElementById('cover-date').textContent = s.date;
     } catch(e) {}
-    updateNames(currentGroom, currentBride);
+    setNames(groom, bride);
     loadPhotos();
-    if (window.location.search.includes('admin')) {
+    if (location.search.includes('admin')) {
       document.getElementById('admin-btn').style.display = 'block';
-      openLoginModal();
+      openLogin();
     }
   }
 
-  function updateNames(g, b) {
-    currentGroom = g; currentBride = b;
-    const cn = document.getElementById('cover-couple-name');
-    if (cn) cn.innerHTML = `${g} &amp; ${b}`;
-    document.getElementById('footer-names').textContent = `${g} & ${b} — Mãi bên nhau`;
+  function setNames(g, b) {
+    groom = g; bride = b;
+    document.getElementById('cover-name').innerHTML  = `${g} &amp; ${b}`;
+    document.getElementById('footer-name').innerHTML = `${g} &amp; ${b} — Mãi bên nhau`;
   }
 
   function saveLocal() {
     try {
-      localStorage.setItem('wedding_info', JSON.stringify({
-        groom: currentGroom, bride: currentBride,
+      localStorage.setItem('winfo', JSON.stringify({
+        groom, bride,
         date: document.getElementById('cover-date').textContent
       }));
     } catch(e) {}
   }
 
+  // ── Photos ──────────────────────────────────────────────────────────────
   async function loadPhotos() {
     const empty = document.getElementById('empty-state');
     empty.textContent = '⏳ Đang tải ảnh...';
     empty.classList.add('show');
     try {
-      const res = await fetch(API_URL);
+      const res   = await fetch(API_URL);
       if (!res.ok) throw new Error();
       const files = await res.json();
-      const exts = ['jpg','jpeg','png','gif','webp','JPG','JPEG','PNG','GIF','WEBP'];
       photos = files
-        .filter(f => f.type === 'file' && exts.some(e => f.name.endsWith('.' + e)))
-        .map(f => ({ src: RAW_BASE + encodeURIComponent(f.name) }));
+        .filter(f => f.type === 'file' && IMG_EXTS.some(e => f.name.endsWith('.'+e)))
+        .map(f => RAW_BASE + encodeURIComponent(f.name));
       renderGrid();
     } catch(e) {
-      empty.textContent = 'Không tải được ảnh — thử lại sau nhé 🌸';
+      empty.textContent = 'Không tải được ảnh — thử lại sau 🌸';
     }
   }
 
   function renderGrid() {
-    const grid = document.getElementById('photo-grid');
+    const grid  = document.getElementById('photo-grid');
     const empty = document.getElementById('empty-state');
     grid.innerHTML = '';
-    if (!photos.length) { empty.classList.add('show'); return; }
+    if (!photos.length) { empty.classList.add('show'); empty.textContent = 'Ảnh cưới sẽ sớm được cập nhật 🌸'; return; }
     empty.classList.remove('show');
-    photos.forEach((p, i) => {
-      const item = document.createElement('div');
-      item.className = 'photo-item';
-      item.innerHTML = `<img src="${p.src}" alt="Ảnh ${i+1}" loading="lazy">`;
-      item.onclick = () => openLightbox(p.src);
-      grid.appendChild(item);
+    photos.forEach(src => {
+      const d = document.createElement('div');
+      d.className = 'photo-item';
+      d.innerHTML = `<img src="${src}" loading="lazy" alt="">`;
+      d.onclick   = () => openLB(src);
+      grid.appendChild(d);
     });
   }
 
-  // Lightbox — chỉ xem ảnh, click ngoài là đóng
-  function openLightbox(src) {
-    document.getElementById('lightbox-img').src = src;
+  // ── Lightbox ─────────────────────────────────────────────────────────────
+  function openLB(src) {
+    document.getElementById('lb-img').src = src;
     document.getElementById('lightbox').classList.add('active');
     document.body.style.overflow = 'hidden';
   }
-  function closeLightbox() {
+  function closeLB() {
     document.getElementById('lightbox').classList.remove('active');
     document.body.style.overflow = '';
   }
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeLightbox();
-  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLB(); });
 
-  // Admin
-  function openLoginModal() {
-    document.getElementById('login-modal').classList.add('active');
-    setTimeout(() => document.getElementById('input-password').focus(), 100);
+  // ── Admin ────────────────────────────────────────────────────────────────
+  function openLogin() {
+    document.getElementById('login-overlay').classList.add('active');
+    setTimeout(() => document.getElementById('pw').focus(), 100);
   }
-  function closeLoginModal() {
-    document.getElementById('login-modal').classList.remove('active');
-    document.getElementById('input-password').value = '';
-    document.getElementById('login-error').style.display = 'none';
+  function closeLogin() {
+    document.getElementById('login-overlay').classList.remove('active');
+    document.getElementById('pw').value = '';
+    document.getElementById('pw-err').style.display = 'none';
   }
   function doLogin() {
-    if (document.getElementById('input-password').value === ADMIN_PASS) {
-      isAdmin = true;
-      closeLoginModal();
-      openAdminPanel();
+    if (document.getElementById('pw').value === PASS) {
+      isAdmin = true; closeLogin(); openAdmin();
     } else {
-      document.getElementById('login-error').style.display = 'block';
-      document.getElementById('input-password').value = '';
+      document.getElementById('pw-err').style.display = 'block';
+      document.getElementById('pw').value = '';
     }
   }
-  function openAdminPanel() {
-    if (!isAdmin) { openLoginModal(); return; }
-    document.getElementById('input-groom').value = currentGroom;
-    document.getElementById('input-bride').value = currentBride;
-    document.getElementById('input-date').value = document.getElementById('cover-date').textContent;
-    document.getElementById('admin-info').innerHTML =
+  function openAdmin() {
+    if (!isAdmin) { openLogin(); return; }
+    document.getElementById('in-groom').value = groom;
+    document.getElementById('in-bride').value = bride;
+    document.getElementById('in-date').value  = document.getElementById('cover-date').textContent;
+    document.getElementById('admin-note').innerHTML =
       `📸 <strong>${photos.length}</strong> ảnh trong <code>photos/</code><br>
        🖼️ Ảnh bìa: upload <code>cover.jpg</code> vào thư mục gốc<br>
        ➕ Thêm ảnh: GitHub → photos → Add file → Upload`;
-    document.getElementById('admin-modal').classList.add('active');
+    document.getElementById('admin-overlay').classList.add('active');
   }
-  function closeAdminModal() { document.getElementById('admin-modal').classList.remove('active'); }
-  function saveInfo() {
-    const g = document.getElementById('input-groom').value.trim() || currentGroom;
-    const b = document.getElementById('input-bride').value.trim() || currentBride;
-    const d = document.getElementById('input-date').value.trim();
-    updateNames(g, b);
+  function closeAdmin() { document.getElementById('admin-overlay').classList.remove('active'); }
+  function saveAdmin() {
+    const g = document.getElementById('in-groom').value.trim() || groom;
+    const b = document.getElementById('in-bride').value.trim() || bride;
+    const d = document.getElementById('in-date').value.trim();
+    setNames(g, b);
     if (d) document.getElementById('cover-date').textContent = d;
     saveLocal();
-    closeAdminModal();
+    closeAdmin();
     alert('✅ Đã lưu!');
   }
 
-  // Hoa anh đào rơi
+  // ── Sakura Particles ─────────────────────────────────────────────────────
   (function() {
     const canvas = document.getElementById('particle-canvas');
-    const ctx = canvas.getContext('2d');
+    const ctx    = canvas.getContext('2d');
     let W, H;
-    const COUNT = 38;
+    const COUNT  = 35;
     const petals = [];
 
     function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
     window.addEventListener('resize', resize);
     resize();
 
-    // Vẽ cánh hoa anh đào hình oval nghiêng
-    function drawPetal(x, y, size, angle, alpha, hue) {
-      ctx.save();
-      ctx.translate(x, y);
-      ctx.rotate(angle);
-      ctx.globalAlpha = alpha;
-
-      // Gradient cánh hoa
-      const grd = ctx.createRadialGradient(0, 0, 0, 0, 0, size);
-      grd.addColorStop(0, `hsl(${hue}, 90%, 90%)`);
-      grd.addColorStop(0.5, `hsl(${hue}, 80%, 82%)`);
-      grd.addColorStop(1, `hsl(${hue}, 70%, 88%)`);
-
-      ctx.beginPath();
-      ctx.ellipse(0, 0, size * 0.55, size, 0, 0, Math.PI * 2);
-      ctx.fillStyle = grd;
-      ctx.fill();
-
-      // Đường gân cánh nhẹ
-      ctx.beginPath();
-      ctx.moveTo(0, -size * 0.85);
-      ctx.lineTo(0, size * 0.85);
-      ctx.strokeStyle = `hsla(${hue}, 60%, 75%, 0.3)`;
-      ctx.lineWidth = 0.5;
-      ctx.stroke();
-
-      ctx.restore();
-    }
-
-    function createPetal() {
-      const hue = 340 + Math.random() * 30; // 340-370 = hồng đào
+    function newPetal(randomY) {
       return {
         x: Math.random() * W,
-        y: -20 - Math.random() * 100,
+        y: randomY ? Math.random() * H : -20 - Math.random() * 80,
         size: Math.random() * 7 + 5,
         angle: Math.random() * Math.PI * 2,
-        rotSpeed: (Math.random() - 0.5) * 0.03,
-        vx: (Math.random() - 0.5) * 1.2,
-        vy: Math.random() * 1.2 + 0.5,
-        swing: Math.random() * 0.8 + 0.3,
-        swingSpeed: Math.random() * 0.02 + 0.01,
-        swingPhase: Math.random() * Math.PI * 2,
-        alpha: Math.random() * 0.5 + 0.35,
-        hue,
+        rot: (Math.random() - 0.5) * 0.03,
+        vx: (Math.random() - 0.5) * 0.8,
+        vy: Math.random() * 1.0 + 0.5,
+        swing: Math.random() * 0.6 + 0.2,
+        swingS: Math.random() * 0.015 + 0.008,
+        swingP: Math.random() * Math.PI * 2,
+        alpha: Math.random() * 0.45 + 0.3,
+        hue: 340 + Math.random() * 25,
       };
     }
 
-    for (let i = 0; i < COUNT; i++) {
-      const p = createPetal();
-      p.y = Math.random() * H; // bắt đầu rải đều
-      petals.push(p);
-    }
+    for (let i = 0; i < COUNT; i++) petals.push(newPetal(true));
 
-    function draw() {
-      ctx.clearRect(0, 0, W, H);
+    function drawPetal(p) {
       const t = Date.now() / 1000;
-      petals.forEach(p => {
-        const swingX = Math.sin(t * p.swingSpeed * 60 + p.swingPhase) * p.swing;
-        drawPetal(p.x + swingX, p.y, p.size, p.angle, p.alpha, p.hue);
-        p.x += p.vx * 0.4;
-        p.y += p.vy;
-        p.angle += p.rotSpeed;
-        p.swingPhase += p.swingSpeed;
-
-        if (p.y > H + 20) {
-          const np = createPetal();
-          Object.assign(p, np);
-        }
-      });
-      requestAnimationFrame(draw);
+      const sx = Math.sin(t * p.swingS * 60 + p.swingP) * p.swing;
+      ctx.save();
+      ctx.translate(p.x + sx, p.y);
+      ctx.rotate(p.angle);
+      ctx.globalAlpha = p.alpha;
+      const g = ctx.createRadialGradient(0,0,0,0,0,p.size);
+      g.addColorStop(0, `hsl(${p.hue},90%,88%)`);
+      g.addColorStop(1, `hsl(${p.hue},75%,82%)`);
+      ctx.beginPath();
+      ctx.ellipse(0, 0, p.size * 0.5, p.size, 0, 0, Math.PI * 2);
+      ctx.fillStyle = g;
+      ctx.fill();
+      ctx.restore();
     }
-    draw();
+
+    function loop() {
+      ctx.clearRect(0, 0, W, H);
+      petals.forEach(p => {
+        drawPetal(p);
+        p.y += p.vy; p.x += p.vx * 0.3; p.angle += p.rot;
+        if (p.y > H + 20) Object.assign(p, newPetal(false));
+      });
+      requestAnimationFrame(loop);
+    }
+    loop();
   })();
 
   init();
