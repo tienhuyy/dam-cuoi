@@ -95,10 +95,28 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center center;
     display: block;
-    transition: transform 0.6s ease;
+    transform-origin: center center;
+    transition: transform 0.3s ease, object-position 0.3s ease;
   }
-  .cover-photo-wrap:hover img { transform: scale(1.03); }
+  /* Controls chỉnh ảnh bìa */
+  .cover-controls {
+    display: none;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    margin-top: 0.7rem;
+    padding: 0.7rem 0.8rem;
+    background: rgba(160,120,64,0.07);
+    border: 1px dashed #d6c9b0;
+    border-radius: 8px;
+  }
+  .cover-controls.show { display: flex; }
+  .cover-controls .ctrl-row { display: flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; color: #8a6a4a; }
+  .cover-controls .ctrl-row span:first-child { width: 3.5rem; flex-shrink: 0; }
+  .cover-controls input[type=range] { flex: 1; accent-color: #a07840; cursor: pointer; height: 4px; }
+  .cover-controls .ctrl-val { min-width: 2.8rem; text-align: right; font-size: 0.75rem; color: #a07840; }
   .cover-photo-placeholder {
     width: 100%;
     height: 100%;
@@ -362,6 +380,24 @@
         onerror="this.style.display='none';document.getElementById('cover-placeholder').style.display='flex';"
         style="display:none">
     </div>
+    <!-- Controls chỉnh ảnh bìa, chỉ admin thấy -->
+    <div class="cover-controls" id="cover-controls">
+      <div class="ctrl-row">
+        <span>🔍 Zoom</span>
+        <input type="range" id="ctrl-zoom" min="100" max="300" value="100" step="5" oninput="applyImageStyle()">
+        <span class="ctrl-val" id="val-zoom">100%</span>
+      </div>
+      <div class="ctrl-row">
+        <span>↔ Ngang</span>
+        <input type="range" id="ctrl-x" min="0" max="100" value="50" step="2" oninput="applyImageStyle()">
+        <span class="ctrl-val" id="val-x">50%</span>
+      </div>
+      <div class="ctrl-row">
+        <span>↕ Dọc</span>
+        <input type="range" id="ctrl-y" min="0" max="100" value="50" step="2" oninput="applyImageStyle()">
+        <span class="ctrl-val" id="val-y">50%</span>
+      </div>
+    </div>
 
     <!-- WEDDING MOMENT -->
     <div class="cover-label">Wedding<br>Moment</div>
@@ -457,11 +493,40 @@
       }
     } catch(e) {}
     updateNames(currentGroom, currentBride);
+    loadCoverStyle();
     loadPhotosFromGitHub();
     if (window.location.search.includes('admin')) {
       document.getElementById('admin-btn').style.display = 'block';
       openLoginModal();
     }
+  }
+
+  function applyImageStyle() {
+    const zoom = document.getElementById('ctrl-zoom').value;
+    const x = document.getElementById('ctrl-x').value;
+    const y = document.getElementById('ctrl-y').value;
+    document.getElementById('val-zoom').textContent = zoom + '%';
+    document.getElementById('val-x').textContent = x + '%';
+    document.getElementById('val-y').textContent = y + '%';
+    const img = document.getElementById('cover-img');
+    img.style.transform = `scale(${zoom/100})`;
+    img.style.objectPosition = `${x}% ${y}%`;
+    // lưu vào localStorage
+    try {
+      localStorage.setItem('cover_style', JSON.stringify({ zoom, x, y }));
+    } catch(e) {}
+  }
+
+  function loadCoverStyle() {
+    try {
+      const s = JSON.parse(localStorage.getItem('cover_style') || '{}');
+      if (s.zoom) {
+        document.getElementById('ctrl-zoom').value = s.zoom;
+        document.getElementById('ctrl-x').value = s.x;
+        document.getElementById('ctrl-y').value = s.y;
+        applyImageStyle();
+      }
+    } catch(e) {}
   }
 
   function updateNames(g, b) {
@@ -571,6 +636,7 @@
       `📸 Có <strong>${photos.length}</strong> ảnh trong thư mục <code>photos/</code><br>
        🖼️ Ảnh bìa: upload file <code>cover.jpg</code> vào thư mục gốc repo<br>
        <small style="color:#aaa">Thêm ảnh: GitHub → photos → Add file → Upload</small>`;
+    document.getElementById('cover-controls').classList.add('show');
     document.getElementById('admin-modal').classList.add('active');
   }
   function closeAdminModal() { document.getElementById('admin-modal').classList.remove('active'); }
