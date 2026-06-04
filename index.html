@@ -4,154 +4,173 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>💍 Đám Cưới Của Chúng Mình</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=EB+Garamond:ital,wght@0,400;1,400&family=Nunito:wght@300;400&display=swap" rel="stylesheet">
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Nunito:wght@300;400&display=swap');
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Nunito:wght@300;400&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --blush: #f5e6e8;
+    --ivory: #faf7f2;
+    --cream: #f5f0e8;
+    --gold: #a07840;
+    --gold-light: #d6c9b0;
+    --brown: #5a3e28;
+    --brown-mid: #8a6a4a;
     --rose: #d4a0a7;
     --deep-rose: #9e5b65;
-    --gold: #c9a84c;
-    --gold-light: #f0e0b0;
-    --ivory: #faf7f2;
     --dark: #2c1f1f;
     --text: #4a3030;
     --text-light: #8a6a6a;
   }
 
   body {
-    background-color: var(--ivory);
+    background: var(--ivory);
     color: var(--text);
     font-family: 'Nunito', 'Hiragino Kaku Gothic Pro', sans-serif;
     font-weight: 300;
     min-height: 100vh;
   }
 
-  /* ===== HERO ===== */
-  .hero {
+  /* ===== COVER ===== */
+  .cover {
     position: relative;
     min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ivory);
+    padding: 2.5rem 1.5rem;
+  }
+
+  .cover-card {
+    position: relative;
+    width: min(400px, 90vw);
+    background: #fff;
+    border: 1.5px solid var(--gold-light);
+    border-radius: 3px;
+    padding: 2.2rem 2rem 2rem;
+    box-shadow: 0 8px 40px rgba(100,80,50,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    animation: fadeUp 1s ease both;
+  }
+  .cover-card::before {
+    content: '';
+    position: absolute;
+    inset: 9px;
+    border: 1px solid var(--gold-light);
+    border-radius: 1px;
+    pointer-events: none;
+  }
+
+  .cover-names {
+    font-family: 'Cormorant Garamond', 'Georgia', serif;
+    font-size: clamp(1.3rem, 4vw, 1.7rem);
+    font-weight: 400;
+    letter-spacing: 0.25rem;
+    color: var(--brown);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 1.4rem;
+  }
+  .cover-rings {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+  }
+
+  .cover-photo-wrap {
+    width: 100%;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    border: 2.5px solid var(--gold-light);
+    border-radius: 2px;
+    margin-bottom: 1.6rem;
+    background: var(--cream);
+  }
+  .cover-photo-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease;
+  }
+  .cover-photo-wrap:hover img { transform: scale(1.03); }
+  .cover-photo-placeholder {
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    padding: 3rem 2rem;
-    background: linear-gradient(160deg, #fdf4f5 0%, #f5e6e8 40%, #faf0e8 100%);
-    overflow: hidden;
+    color: #b0a090;
+    font-size: 0.8rem;
+    gap: 0.5rem;
+  }
+  .cover-photo-placeholder span { font-size: 2.2rem; }
+
+  .cover-label {
+    font-family: 'Cormorant Garamond', 'Georgia', serif;
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    font-weight: 600;
+    letter-spacing: 0.35rem;
+    color: var(--brown);
+    text-transform: uppercase;
+    line-height: 1.2;
+    margin-bottom: 0.7rem;
   }
 
-  .hero::before {
-    content: '';
-    position: absolute;
-    top: -80px; left: -80px;
-    width: 350px; height: 350px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(212,160,167,0.18) 0%, transparent 70%);
-    pointer-events: none;
-  }
-  .hero::after {
-    content: '';
-    position: absolute;
-    bottom: -60px; right: -60px;
-    width: 280px; height: 280px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
-    pointer-events: none;
-  }
-
-  .hero-decoration {
-    font-size: 2rem;
-    letter-spacing: 0.5rem;
-    color: var(--gold);
-    margin-bottom: 1.5rem;
-    animation: fadeDown 1s ease both;
-  }
-
-  .hero h1 {
-    font-family: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
-    font-size: clamp(2.5rem, 7vw, 5rem);
-    font-weight: 400;
-    color: var(--deep-rose);
-    line-height: 1.15;
-    animation: fadeDown 1s 0.2s ease both;
-  }
-
-  .hero h1 em {
-    font-style: italic;
-    color: var(--gold);
-  }
-
-  .hero-divider {
+  .cover-divider-line {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    margin: 2rem auto;
-    width: min(320px, 80%);
-    animation: fadeDown 1s 0.4s ease both;
+    gap: 0.6rem;
+    width: 70%;
+    margin: 0 auto 0.7rem;
   }
-  .hero-divider::before,
-  .hero-divider::after {
+  .cover-divider-line::before,
+  .cover-divider-line::after {
     content: '';
     flex: 1;
     height: 1px;
-    background: linear-gradient(to right, transparent, var(--rose));
+    background: var(--gold);
   }
-  .hero-divider::after {
-    background: linear-gradient(to left, transparent, var(--rose));
-  }
-  .hero-divider span {
-    color: var(--rose);
-    font-size: 1.2rem;
-  }
+  .cover-divider-line span { color: var(--gold); font-size: 0.7rem; }
 
-  .hero-date {
-    font-family: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
-    font-size: 1.1rem;
-    letter-spacing: 0.25rem;
-    color: var(--text-light);
-    animation: fadeDown 1s 0.5s ease both;
-  }
-
-  .hero-subtitle {
-    margin-top: 1rem;
-    font-size: 1rem;
-    color: var(--text-light);
-    letter-spacing: 0.05rem;
-    animation: fadeDown 1s 0.6s ease both;
+  .cover-date {
+    font-family: 'Cormorant Garamond', 'Georgia', serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.2rem;
+    color: var(--brown-mid);
+    margin-bottom: 0.2rem;
   }
 
   .scroll-hint {
     position: absolute;
-    bottom: 2rem;
+    bottom: 1.5rem;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.3rem;
     color: var(--rose);
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     letter-spacing: 0.15rem;
     text-transform: uppercase;
     animation: bounce 2s infinite;
   }
-  .scroll-hint::after {
-    content: '↓';
-    font-size: 1.2rem;
-  }
+  .scroll-hint::after { content: '↓'; font-size: 1rem; }
 
-  @keyframes fadeDown {
-    from { opacity: 0; transform: translateY(-20px); }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
     to { opacity: 1; transform: translateY(0); }
   }
   @keyframes bounce {
     0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(8px); }
+    50% { transform: translateX(-50%) translateY(7px); }
   }
 
   /* ===== INTRO ===== */
@@ -162,17 +181,13 @@
     margin: 0 auto;
   }
   .intro h2 {
-    font-family: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
+    font-family: 'Cormorant Garamond', 'Georgia', serif;
     font-size: 2rem;
     font-weight: 400;
     color: var(--deep-rose);
     margin-bottom: 1rem;
   }
-  .intro p {
-    color: var(--text-light);
-    line-height: 1.9;
-    font-size: 1rem;
-  }
+  .intro p { color: var(--text-light); line-height: 1.9; font-size: 1rem; }
 
   /* ===== GALLERY ===== */
   .gallery-section {
@@ -180,15 +195,13 @@
     max-width: 1100px;
     margin: 0 auto;
   }
-
   .section-title {
     text-align: center;
-    font-family: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
+    font-family: 'Cormorant Garamond', 'Georgia', serif;
     font-size: 1.6rem;
     font-weight: 400;
     color: var(--deep-rose);
     margin-bottom: 2.5rem;
-    position: relative;
   }
   .section-title::after {
     content: '';
@@ -199,162 +212,6 @@
     margin: 0.8rem auto 0;
   }
 
-  /* Upload area */
-  .upload-area {
-    border: 2px dashed var(--rose);
-    border-radius: 16px;
-    padding: 3rem 2rem;
-    text-align: center;
-    margin-bottom: 2rem;
-    background: rgba(245,230,232,0.2);
-    cursor: pointer;
-    transition: all 0.3s;
-    position: relative;
-  }
-  .upload-area:hover {
-    border-color: var(--deep-rose);
-    background: rgba(245,230,232,0.4);
-  }
-  .upload-area.drag-over {
-    border-color: var(--gold);
-    background: rgba(240,224,176,0.2);
-    transform: scale(1.01);
-  }
-
-  .upload-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-  }
-  .upload-area h3 {
-    font-family: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
-    font-size: 1.3rem;
-    font-weight: 400;
-    color: var(--deep-rose);
-    margin-bottom: 0.5rem;
-  }
-  .upload-area p {
-    color: var(--text-light);
-    font-size: 0.9rem;
-  }
-  #file-input { display: none; }
-
-  .upload-btn {
-    display: inline-block;
-    margin-top: 1.2rem;
-    padding: 0.7rem 2rem;
-    background: var(--deep-rose);
-    color: #fff;
-    border-radius: 50px;
-    font-family: 'Nunito', sans-serif;
-    font-size: 0.9rem;
-    letter-spacing: 0.08rem;
-    cursor: pointer;
-    border: none;
-    transition: all 0.3s;
-  }
-  .upload-btn:hover {
-    background: var(--dark);
-    transform: translateY(-2px);
-  }
-
-  /* Photo Grid */
-  .photo-grid {
-    columns: 3;
-    column-gap: 1rem;
-  }
-  @media (max-width: 700px) { .photo-grid { columns: 2; } }
-  @media (max-width: 420px) { .photo-grid { columns: 1; } }
-
-  .photo-item {
-    break-inside: avoid;
-    margin-bottom: 1rem;
-    border-radius: 12px;
-    overflow: hidden;
-    position: relative;
-    cursor: pointer;
-    box-shadow: 0 4px 20px rgba(158,91,101,0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-  }
-  .photo-item:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(158,91,101,0.2);
-  }
-  .photo-item img {
-    width: 100%;
-    display: block;
-  }
-  .photo-item .overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(44,31,31,0.55) 0%, transparent 50%);
-    opacity: 0;
-    transition: opacity 0.3s;
-    display: flex;
-    align-items: flex-end;
-    padding: 0.8rem;
-  }
-  .photo-item:hover .overlay { opacity: 1; }
-  .photo-item .overlay-text {
-    color: #fff;
-    font-size: 0.8rem;
-    letter-spacing: 0.05rem;
-  }
-
-  /* Lightbox */
-  .lightbox {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(30,15,15,0.9);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-  }
-  .lightbox.active { display: flex; }
-  .lightbox img {
-    max-width: 90vw;
-    max-height: 90vh;
-    border-radius: 8px;
-    object-fit: contain;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-  }
-  .lightbox-close {
-    position: absolute;
-    top: 1.5rem; right: 1.5rem;
-    color: #fff;
-    font-size: 2rem;
-    cursor: pointer;
-    line-height: 1;
-    opacity: 0.8;
-    transition: opacity 0.2s;
-    background: none;
-    border: none;
-    font-family: 'Nunito', sans-serif;
-  }
-  .lightbox-close:hover { opacity: 1; }
-
-  .lightbox-nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(255,255,255,0.15);
-    border: none;
-    color: #fff;
-    font-size: 1.8rem;
-    width: 3rem; height: 3rem;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s;
-  }
-  .lightbox-nav:hover { background: rgba(255,255,255,0.3); }
-  .lightbox-prev { left: 1rem; }
-  .lightbox-next { right: 1rem; }
-
-  /* Empty state */
   .empty-state {
     text-align: center;
     padding: 3rem 1rem;
@@ -364,79 +221,59 @@
   }
   .empty-state.show { display: block; }
 
-  /* ===== MESSAGE BOARD ===== */
-  .message-section {
-    background: var(--blush);
-    padding: 4rem 2rem;
-  }
-  .message-inner {
-    max-width: 680px;
-    margin: 0 auto;
-  }
-  .message-section .section-title { color: var(--deep-rose); }
+  .photo-grid { columns: 3; column-gap: 1rem; }
+  @media (max-width: 700px) { .photo-grid { columns: 2; } }
+  @media (max-width: 420px) { .photo-grid { columns: 1; } }
 
-  .message-form {
-    display: flex;
-    flex-direction: column;
-    gap: 0.8rem;
-    margin-bottom: 2.5rem;
-  }
-  .message-form input,
-  .message-form textarea {
-    padding: 0.8rem 1.1rem;
-    border: 1px solid var(--rose);
+  .photo-item {
+    break-inside: avoid;
+    margin-bottom: 1rem;
     border-radius: 10px;
-    background: #fff;
-    font-family: 'Nunito', sans-serif;
-    font-size: 0.95rem;
-    color: var(--text);
-    transition: border 0.2s;
-    resize: none;
-  }
-  .message-form input:focus,
-  .message-form textarea:focus {
-    outline: none;
-    border-color: var(--deep-rose);
-  }
-  .message-form button {
-    align-self: flex-end;
-    padding: 0.7rem 2rem;
-    background: var(--deep-rose);
-    color: #fff;
-    border: none;
-    border-radius: 50px;
-    font-family: 'Nunito', sans-serif;
-    font-size: 0.9rem;
+    overflow: hidden;
     cursor: pointer;
-    transition: all 0.3s;
-    letter-spacing: 0.05rem;
+    box-shadow: 0 4px 20px rgba(158,91,101,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
   }
-  .message-form button:hover { background: var(--dark); transform: translateY(-2px); }
+  .photo-item:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(158,91,101,0.18); }
+  .photo-item img { width: 100%; display: block; }
 
-  .messages-list { display: flex; flex-direction: column; gap: 1rem; }
-
-  .message-card {
-    background: #fff;
-    border-radius: 12px;
-    padding: 1.1rem 1.3rem;
-    box-shadow: 0 2px 12px rgba(158,91,101,0.08);
+  /* ===== LIGHTBOX ===== */
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(20,10,10,0.92);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
   }
-  .message-card .sender {
-    font-weight: 400;
-    color: var(--deep-rose);
-    font-size: 0.95rem;
-    margin-bottom: 0.4rem;
+  .lightbox.active { display: flex; }
+  .lightbox img {
+    max-width: 90vw; max-height: 90vh;
+    border-radius: 6px;
+    object-fit: contain;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
   }
-  .message-card p {
-    color: var(--text);
-    line-height: 1.7;
-    font-size: 0.95rem;
+  .lightbox-close {
+    position: absolute; top: 1.5rem; right: 1.5rem;
+    color: #fff; font-size: 2rem; cursor: pointer;
+    background: none; border: none; opacity: 0.8;
+    font-family: 'Nunito', sans-serif;
+    transition: opacity 0.2s;
   }
-  .message-card .time {
-    font-size: 0.75rem;
-    color: var(--text-light);
-    margin-top: 0.5rem;
+  .lightbox-close:hover { opacity: 1; }
+  .lightbox-nav {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    background: rgba(255,255,255,0.15); border: none; color: #fff;
+    font-size: 1.8rem; width: 3rem; height: 3rem;
+    border-radius: 50%; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
   }
+  .lightbox-nav:hover { background: rgba(255,255,255,0.3); }
+  .lightbox-prev { left: 1rem; }
+  .lightbox-next { right: 1rem; }
 
   /* ===== FOOTER ===== */
   footer {
@@ -446,82 +283,49 @@
     color: rgba(255,255,255,0.5);
     font-size: 0.85rem;
   }
-  footer .footer-heart {
-    display: block;
-    font-size: 1.5rem;
-    margin-bottom: 0.8rem;
-  }
+  footer .footer-heart { display: block; font-size: 1.5rem; margin-bottom: 0.8rem; }
 
-  /* ===== EDIT NAMES MODAL ===== */
+  /* ===== ADMIN ===== */
   .edit-btn {
-    position: fixed;
-    bottom: 2rem; right: 2rem;
-    background: var(--gold);
-    color: var(--dark);
-    border: none;
-    border-radius: 50px;
+    position: fixed; bottom: 2rem; right: 2rem;
+    background: var(--gold); color: #fff;
+    border: none; border-radius: 50px;
     padding: 0.7rem 1.4rem;
-    font-family: 'Nunito', sans-serif;
-    font-size: 0.85rem;
-    cursor: pointer;
-    box-shadow: 0 4px 16px rgba(201,168,76,0.3);
-    z-index: 100;
-    transition: all 0.3s;
+    font-family: 'Nunito', sans-serif; font-size: 0.85rem;
+    cursor: pointer; box-shadow: 0 4px 16px rgba(160,120,64,0.3);
+    z-index: 100; transition: all 0.3s;
   }
-  .edit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,168,76,0.4); }
+  .edit-btn:hover { transform: translateY(-2px); }
 
   .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
+    display: none; position: fixed; inset: 0;
     background: rgba(30,15,15,0.6);
-    z-index: 500;
-    align-items: center;
-    justify-content: center;
+    z-index: 500; align-items: center; justify-content: center;
   }
   .modal-overlay.active { display: flex; }
   .modal {
-    background: var(--ivory);
-    border-radius: 16px;
-    padding: 2.5rem;
-    width: min(400px, 90vw);
+    background: var(--ivory); border-radius: 16px;
+    padding: 2.5rem; width: min(400px, 90vw);
     box-shadow: 0 20px 60px rgba(0,0,0,0.3);
   }
   .modal h3 {
-    font-family: 'Cormorant Garamond', 'Georgia', 'Times New Roman', serif;
-    font-size: 1.4rem;
-    color: var(--deep-rose);
-    margin-bottom: 1.2rem;
-    font-weight: 400;
+    font-family: 'Cormorant Garamond', 'Georgia', serif;
+    font-size: 1.4rem; color: var(--deep-rose);
+    margin-bottom: 1.2rem; font-weight: 400;
   }
-  .modal label {
-    display: block;
-    font-size: 0.85rem;
-    color: var(--text-light);
-    margin-bottom: 0.3rem;
-    letter-spacing: 0.05rem;
-  }
+  .modal label { display: block; font-size: 0.85rem; color: var(--text-light); margin-bottom: 0.3rem; letter-spacing: 0.05rem; }
   .modal input {
-    width: 100%;
-    padding: 0.7rem 1rem;
-    border: 1px solid var(--rose);
-    border-radius: 8px;
-    font-family: 'Nunito', sans-serif;
-    font-size: 1rem;
-    color: var(--text);
-    margin-bottom: 1rem;
-    background: #fff;
+    width: 100%; padding: 0.7rem 1rem;
+    border: 1px solid var(--rose); border-radius: 8px;
+    font-family: 'Nunito', sans-serif; font-size: 1rem;
+    color: var(--text); margin-bottom: 1rem; background: #fff;
   }
   .modal input:focus { outline: none; border-color: var(--deep-rose); }
-  .modal-actions { display: flex; gap: 0.8rem; justify-content: flex-end; }
+  .modal-actions { display: flex; gap: 0.8rem; justify-content: flex-end; flex-wrap: wrap; }
   .modal-actions button {
-    padding: 0.6rem 1.5rem;
-    border-radius: 50px;
-    font-family: 'Nunito', sans-serif;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: none;
+    padding: 0.6rem 1.5rem; border-radius: 50px;
+    font-family: 'Nunito', sans-serif; font-size: 0.9rem;
+    cursor: pointer; transition: all 0.2s; border: none;
   }
   .btn-cancel { background: transparent; color: var(--text-light); border: 1px solid var(--rose) !important; }
   .btn-save { background: var(--deep-rose); color: #fff; }
@@ -530,30 +334,54 @@
 </head>
 <body>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-decoration">✦ ✦ ✦</div>
-  <h1 id="hero-names"><em>Huy</em> &amp; <em>Hoa</em></h1>
-  <div class="hero-divider"><span>💍</span></div>
-  <div class="hero-date" id="hero-date">Sắp được công bố 🌸</div>
-  <div class="hero-subtitle" id="hero-subtitle">Chúng mình đã nên duyên vợ chồng 🌸</div>
+<!-- COVER PAGE -->
+<section class="cover">
+  <div class="cover-card">
+
+    <!-- Tên đôi -->
+    <div class="cover-names">
+      <span id="cover-groom">HUY</span>
+      <!-- icon nhẫn SVG -->
+      <svg class="cover-rings" viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="22" cy="22" r="13" stroke="#a07840" stroke-width="2.2" fill="none"/>
+        <circle cx="38" cy="22" r="13" stroke="#a07840" stroke-width="2.2" fill="none"/>
+        <path d="M18 8 L22 3 L26 8" stroke="#a07840" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="22" cy="3" r="1.5" fill="#a07840"/>
+      </svg>
+      <span id="cover-bride">HOA</span>
+    </div>
+
+    <!-- Ảnh bìa -->
+    <div class="cover-photo-wrap" id="cover-photo-wrap">
+      <div class="cover-photo-placeholder" id="cover-placeholder">
+        <span>🌸</span>
+        <p>Upload file <code>cover.jpg</code><br>lên GitHub repo</p>
+      </div>
+      <img id="cover-img" src="cover.jpg" alt="Ảnh bìa cưới"
+        onload="document.getElementById('cover-placeholder').style.display='none';this.style.display='block';"
+        onerror="this.style.display='none';document.getElementById('cover-placeholder').style.display='flex';"
+        style="display:none">
+    </div>
+
+    <!-- WEDDING MOMENT -->
+    <div class="cover-label">Wedding<br>Moment</div>
+    <div class="cover-divider-line"><span>◆</span></div>
+    <div class="cover-date" id="cover-date">Sắp được công bố</div>
+
+  </div>
   <span class="scroll-hint">Cuộn xuống</span>
 </section>
 
 <!-- INTRO -->
 <section class="intro">
   <h2>Album Ảnh Cưới</h2>
-  <p id="intro-text">Những khoảnh khắc đẹp nhất trong ngày trọng đại của chúng mình. Mời bạn cùng lưu giữ những kỷ niệm không thể nào quên này. 🌹</p>
+  <p>Những khoảnh khắc đẹp nhất trong ngày trọng đại của chúng mình. Mời bạn cùng lưu giữ những kỷ niệm không thể nào quên này. 🌹</p>
 </section>
 
 <!-- GALLERY -->
 <section class="gallery-section">
   <h2 class="section-title">Khoảnh Khắc Đáng Nhớ</h2>
-
-  <div class="empty-state" id="empty-state">
-    Ảnh cưới sẽ sớm được cập nhật — hãy đón chờ nhé! 🌸
-  </div>
-
+  <div class="empty-state" id="empty-state">Ảnh cưới sẽ sớm được cập nhật — hãy đón chờ nhé! 🌸</div>
   <div class="photo-grid" id="photo-grid"></div>
 </section>
 
@@ -571,10 +399,10 @@
   <span id="footer-names">Huy &amp; Hoa — Mãi bên nhau</span>
 </footer>
 
-<!-- ADMIN LOGIN BUTTON (luôn ẩn, vào bằng ?admin) -->
+<!-- ADMIN BTN -->
 <button class="edit-btn" id="admin-btn" style="display:none" onclick="openAdminPanel()">⚙️ Admin</button>
 
-<!-- ADMIN LOGIN MODAL -->
+<!-- LOGIN MODAL -->
 <div class="modal-overlay" id="login-modal">
   <div class="modal">
     <h3>🔐 Đăng nhập Admin</h3>
@@ -588,7 +416,7 @@
   </div>
 </div>
 
-<!-- ADMIN PANEL MODAL -->
+<!-- ADMIN MODAL -->
 <div class="modal-overlay" id="admin-modal">
   <div class="modal" style="max-height:90vh;overflow-y:auto">
     <h3>⚙️ Quản lý Album Cưới</h3>
@@ -597,13 +425,10 @@
     <label>Tên cô dâu</label>
     <input type="text" id="input-bride" placeholder="Tên cô dâu">
     <label>Ngày cưới</label>
-    <input type="text" id="input-date" placeholder="VD: 15 · 06 · 2025">
-    <label>Câu tagline</label>
-    <input type="text" id="input-subtitle" placeholder="VD: Chúng mình đã nên duyên vợ chồng 🌸">
-    <div id="admin-photo-count" style="font-size:0.85rem;color:var(--text-light);margin-bottom:1rem"></div>
-    <div class="modal-actions" style="flex-wrap:wrap;gap:0.5rem">
+    <input type="text" id="input-date" placeholder="VD: 15.06.2025">
+    <div id="admin-photo-count" style="font-size:0.85rem;color:var(--text-light);margin-bottom:1rem;padding:0.8rem;background:#f5f0e8;border-radius:8px;line-height:1.6"></div>
+    <div class="modal-actions">
       <button class="btn-cancel" onclick="closeAdminModal()">Đóng</button>
-      <button class="btn-cancel" style="color:#c0392b;border-color:#c0392b!important" onclick="clearAllPhotos()">🗑️ Xóa hết ảnh</button>
       <button class="btn-save" onclick="saveInfo()">💾 Lưu</button>
     </div>
   </div>
@@ -614,137 +439,66 @@
   const GITHUB_USER = 'tienhuyy';
   const GITHUB_REPO = 'dam-cuoi';
   const GITHUB_BRANCH = 'main';
-  const PHOTOS_PATH = 'photos';
-  // Đường dẫn ảnh trực tiếp từ GitHub raw
-  const RAW_BASE = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${PHOTOS_PATH}/`;
-  // GitHub API để lấy danh sách file
-  const API_URL = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${PHOTOS_PATH}`;
+  const RAW_BASE = `https://raw.githubusercontent.com/${GITHUB_USER}/${GITHUB_REPO}/${GITHUB_BRANCH}/photos/`;
+  const API_URL = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/photos`;
 
   let isAdmin = false;
-  let photos = []; // [{src, name}]
+  let photos = [];
   let currentIdx = 0;
-  let messages = [];
   let currentGroom = 'Huy', currentBride = 'Hoa';
 
-  // ===== INIT =====
   function init() {
-    // Load thông tin & lời chúc từ localStorage (nhẹ, không lưu ảnh)
     try {
       const saved = JSON.parse(localStorage.getItem('wedding_info') || '{}');
       if (saved.groom) currentGroom = saved.groom;
       if (saved.bride) currentBride = saved.bride;
-      if (saved.date) document.getElementById('hero-date').textContent = saved.date;
-      if (saved.subtitle) document.getElementById('hero-subtitle').textContent = saved.subtitle;
-      if (saved.messages) messages = saved.messages;
+      if (saved.date) {
+        document.getElementById('cover-date').textContent = saved.date;
+      }
     } catch(e) {}
     updateNames(currentGroom, currentBride);
     loadPhotosFromGitHub();
-    checkAdminMode();
-  }
-
-  function saveInfo_local() {
-    try {
-      localStorage.setItem('wedding_info', JSON.stringify({
-        groom: currentGroom, bride: currentBride,
-        date: document.getElementById('hero-date').textContent,
-        subtitle: document.getElementById('hero-subtitle').textContent,
-        messages
-      }));
-    } catch(e) {}
-  }
-
-  // ===== LOAD ẢNH TỪ GITHUB =====
-  async function loadPhotosFromGitHub() {
-    const grid = document.getElementById('photo-grid');
-    const empty = document.getElementById('empty-state');
-    empty.textContent = '⏳ Đang tải ảnh...';
-    empty.classList.add('show');
-    grid.innerHTML = '';
-
-    try {
-      const res = await fetch(API_URL);
-      if (!res.ok) throw new Error('API error');
-      const files = await res.json();
-      // Lọc chỉ file ảnh, bỏ .gitkeep
-      const imageExts = ['jpg','jpeg','png','gif','webp','JPG','JPEG','PNG','GIF','WEBP'];
-      photos = files
-        .filter(f => f.type === 'file' && imageExts.some(ext => f.name.endsWith('.' + ext)))
-        .map(f => ({ src: RAW_BASE + encodeURIComponent(f.name), name: f.name }));
-      renderGrid();
-    } catch(e) {
-      empty.textContent = 'Không tải được ảnh — vui lòng thử lại sau 🌸';
-      empty.classList.add('show');
-    }
-  }
-
-  function updateNames(g, b) {
-    currentGroom = g; currentBride = b;
-    document.getElementById('hero-names').innerHTML = `<em>${g}</em> &amp; <em>${b}</em>`;
-    document.getElementById('footer-names').textContent = `${g} & ${b} — Mãi bên nhau`;
-  }
-
-  function checkAdminMode() {
     if (window.location.search.includes('admin')) {
       document.getElementById('admin-btn').style.display = 'block';
       openLoginModal();
     }
   }
 
-  // ===== LOGIN =====
-  function openLoginModal() {
-    document.getElementById('login-modal').classList.add('active');
-    setTimeout(() => document.getElementById('input-password').focus(), 100);
+  function updateNames(g, b) {
+    currentGroom = g; currentBride = b;
+    document.getElementById('cover-groom').textContent = g.toUpperCase();
+    document.getElementById('cover-bride').textContent = b.toUpperCase();
+    document.getElementById('footer-names').textContent = `${g} & ${b} — Mãi bên nhau`;
   }
-  function closeLoginModal() {
-    document.getElementById('login-modal').classList.remove('active');
-    document.getElementById('input-password').value = '';
-    document.getElementById('login-error').style.display = 'none';
+
+  function saveInfo_local() {
+    try {
+      localStorage.setItem('wedding_info', JSON.stringify({
+        groom: currentGroom, bride: currentBride,
+        date: document.getElementById('cover-date').textContent
+      }));
+    } catch(e) {}
   }
-  function doLogin() {
-    const pw = document.getElementById('input-password').value;
-    if (pw === ADMIN_PASS) {
-      isAdmin = true;
-      closeLoginModal();
-      openAdminPanel();
-    } else {
-      document.getElementById('login-error').style.display = 'block';
-      document.getElementById('input-password').value = '';
-      document.getElementById('input-password').focus();
+
+  // Load ảnh từ GitHub API
+  async function loadPhotosFromGitHub() {
+    const empty = document.getElementById('empty-state');
+    empty.textContent = '⏳ Đang tải ảnh...';
+    empty.classList.add('show');
+    try {
+      const res = await fetch(API_URL);
+      if (!res.ok) throw new Error();
+      const files = await res.json();
+      const exts = ['jpg','jpeg','png','gif','webp','JPG','JPEG','PNG','GIF','WEBP'];
+      photos = files
+        .filter(f => f.type === 'file' && exts.some(e => f.name.endsWith('.' + e)))
+        .map(f => ({ src: RAW_BASE + encodeURIComponent(f.name), name: f.name }));
+      renderGrid();
+    } catch(e) {
+      empty.textContent = 'Không tải được ảnh — thử lại sau nhé 🌸';
     }
   }
 
-  // ===== ADMIN PANEL =====
-  function openAdminPanel() {
-    if (!isAdmin) { openLoginModal(); return; }
-    document.getElementById('input-groom').value = currentGroom;
-    document.getElementById('input-bride').value = currentBride;
-    document.getElementById('input-date').value = document.getElementById('hero-date').textContent;
-    document.getElementById('input-subtitle').value = document.getElementById('hero-subtitle').textContent;
-    document.getElementById('admin-photo-count').innerHTML =
-      `📸 Hiện có <strong>${photos.length}</strong> ảnh trong thư mục <code>photos/</code> trên GitHub.<br>
-      <small style="color:var(--text-light)">Để thêm ảnh: vào GitHub → thư mục photos → Add file → Upload files</small>`;
-    document.getElementById('admin-modal').classList.add('active');
-  }
-  function closeAdminModal() { document.getElementById('admin-modal').classList.remove('active'); }
-
-  function saveInfo() {
-    const g = document.getElementById('input-groom').value.trim() || currentGroom;
-    const b = document.getElementById('input-bride').value.trim() || currentBride;
-    const d = document.getElementById('input-date').value.trim();
-    const s = document.getElementById('input-subtitle').value.trim();
-    updateNames(g, b);
-    if (d) document.getElementById('hero-date').textContent = d;
-    if (s) document.getElementById('hero-subtitle').textContent = s;
-    saveInfo_local();
-    closeAdminModal();
-    alert('✅ Đã lưu thành công!');
-  }
-
-  function clearAllPhotos() {
-    alert('Để xóa ảnh, vào thư mục photos/ trên GitHub và xóa file ảnh trực tiếp nhé!');
-  }
-
-  // ===== GRID =====
   function renderGrid() {
     const grid = document.getElementById('photo-grid');
     const empty = document.getElementById('empty-state');
@@ -758,14 +512,12 @@
     photos.forEach((p, i) => {
       const item = document.createElement('div');
       item.className = 'photo-item';
-      item.innerHTML = `
-        <img src="${p.src}" alt="Ảnh cưới ${i+1}" loading="lazy">`;
+      item.innerHTML = `<img src="${p.src}" alt="Ảnh cưới ${i+1}" loading="lazy">`;
       item.onclick = () => openLightbox(i);
       grid.appendChild(item);
     });
   }
 
-  // ===== LIGHTBOX =====
   function openLightbox(i) {
     currentIdx = i;
     document.getElementById('lightbox-img').src = photos[i].src;
@@ -789,6 +541,49 @@
     if (e.key === 'ArrowLeft') changePhoto(-1);
     if (e.key === 'ArrowRight') changePhoto(1);
   });
+
+  // Admin
+  function openLoginModal() {
+    document.getElementById('login-modal').classList.add('active');
+    setTimeout(() => document.getElementById('input-password').focus(), 100);
+  }
+  function closeLoginModal() {
+    document.getElementById('login-modal').classList.remove('active');
+    document.getElementById('input-password').value = '';
+    document.getElementById('login-error').style.display = 'none';
+  }
+  function doLogin() {
+    if (document.getElementById('input-password').value === ADMIN_PASS) {
+      isAdmin = true;
+      closeLoginModal();
+      openAdminPanel();
+    } else {
+      document.getElementById('login-error').style.display = 'block';
+      document.getElementById('input-password').value = '';
+    }
+  }
+  function openAdminPanel() {
+    if (!isAdmin) { openLoginModal(); return; }
+    document.getElementById('input-groom').value = currentGroom;
+    document.getElementById('input-bride').value = currentBride;
+    document.getElementById('input-date').value = document.getElementById('cover-date').textContent;
+    document.getElementById('admin-photo-count').innerHTML =
+      `📸 Có <strong>${photos.length}</strong> ảnh trong thư mục <code>photos/</code><br>
+       🖼️ Ảnh bìa: upload file <code>cover.jpg</code> vào thư mục gốc repo<br>
+       <small style="color:#aaa">Thêm ảnh: GitHub → photos → Add file → Upload</small>`;
+    document.getElementById('admin-modal').classList.add('active');
+  }
+  function closeAdminModal() { document.getElementById('admin-modal').classList.remove('active'); }
+  function saveInfo() {
+    const g = document.getElementById('input-groom').value.trim() || currentGroom;
+    const b = document.getElementById('input-bride').value.trim() || currentBride;
+    const d = document.getElementById('input-date').value.trim();
+    updateNames(g, b);
+    if (d) document.getElementById('cover-date').textContent = d;
+    saveInfo_local();
+    closeAdminModal();
+    alert('✅ Đã lưu!');
+  }
 
   init();
 </script>
