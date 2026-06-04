@@ -16,38 +16,90 @@
 body{font-family:'Nunito',sans-serif;font-weight:300;min-height:100vh;background:linear-gradient(135deg,#fce8e8 0%,#f8d8d0 50%,#fce4d8 100%);color:var(--text)}
 #pcanvas{position:fixed;inset:0;pointer-events:none;z-index:9999}
 
-/* COVER */
-.cover{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.2rem;position:relative;z-index:1}
-.card{width:min(360px,92vw);background:rgba(255,255,255,.94);border:1.5px solid var(--gold-light);border-radius:4px;padding:2rem 1.6rem;box-shadow:0 12px 50px rgba(100,50,50,.13);display:flex;flex-direction:column;align-items:center;text-align:center;position:relative;animation:fadeUp 1s ease both}
-.card::before{content:'';position:absolute;inset:10px;border:1px solid var(--gold-light);border-radius:2px;pointer-events:none}
-.card::after{content:'✿';position:absolute;top:4px;left:50%;transform:translateX(-50%);font-size:.75rem;color:var(--gold-light);background:rgba(255,255,255,.94);padding:0 4px}
-.bf{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);font-size:.75rem;color:var(--gold-light);background:rgba(255,255,255,.94);padding:0 4px;z-index:1}
-.wm{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-15deg);font-family:'Great Vibes',cursive;font-size:5rem;color:rgba(180,100,120,.08);white-space:nowrap;pointer-events:none;user-select:none}
+/* ══ COVER ══ */
+.cover{
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:3rem 2rem 2rem;position:relative;z-index:1;
+}
 
-/* SAVE THE DATE */
-.std{display:flex;align-items:baseline;justify-content:center;gap:.5rem;margin-bottom:.9rem;position:relative;z-index:1}
-.std-s,.std-d{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1rem,3.5vw,1.3rem);font-weight:700;letter-spacing:.3rem;color:var(--brown);text-transform:uppercase}
-.std-t{font-family:'Great Vibes',cursive;font-size:clamp(1.7rem,5.5vw,2.1rem);color:var(--brown-mid);line-height:1}
+/* Wrapper: arch + chữ dọc ngang nhau */
+.arch-wrap{
+  position:relative;
+  width:min(320px,80vw);
+}
 
-/* ARCH */
-.arch{width:100%;position:relative;z-index:1;margin-bottom:1.2rem}
-.arch-frame{width:100%;padding-top:125%;position:relative;overflow:hidden;border-radius:50% 50% 6px 6px/22% 22% 6px 6px;border:2px solid var(--gold-light);background:#f5efe8}
-.arch-img{position:absolute;inset:0;background:no-repeat center 20%;background-size:cover}
-.arch-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#b0a090;font-size:.75rem;gap:.4rem}
+/* Vòm ảnh */
+.arch-frame{
+  flex:1;min-width:0;
+  position:relative;
+  aspect-ratio:3/4;
+  overflow:hidden;
+  border-radius:50% 50% 4px 4px / 20% 20% 4px 4px;
+  border:2px solid rgba(201,168,108,0.6);
+  box-shadow:0 8px 32px rgba(100,50,50,0.18);
+}
+.arch-img{
+  position:absolute;inset:0;
+  background:no-repeat center 20%;
+  background-size:cover;
+}
+.arch-ph{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  background:rgba(245,239,232,0.9);
+  color:#b0a090;font-size:.75rem;gap:.4rem;
+}
 .arch-ph span{font-size:2rem}
 
-/* NAME */
-.cname{font-family:'Great Vibes',cursive;font-size:clamp(1.6rem,5.5vw,2rem);color:var(--brown);margin-bottom:.4rem;white-space:nowrap;position:relative;z-index:1}
-.cdate{font-family:'Playfair Display',Georgia,serif;font-size:.85rem;letter-spacing:.15rem;color:var(--brown-mid);position:relative;z-index:1}
-.scroll-hint{margin-top:1.2rem;display:flex;flex-direction:column;align-items:center;gap:.3rem;color:var(--rose);font-size:.68rem;letter-spacing:.15rem;text-transform:uppercase;animation:bounce 2s infinite;position:relative;z-index:1}
+/* Chữ dọc SAVE the DATE */
+.vside{
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:0 0.6rem;gap:0.05rem;
+  flex-shrink:0;
+  align-self:center;
+}
+.vs{
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:1.05rem;font-weight:700;
+  color:var(--brown);writing-mode:vertical-rl;
+  text-transform:uppercase;letter-spacing:0.1rem;line-height:1.25;
+}
+.vt{
+  font-family:'Great Vibes',cursive;
+  font-size:1.8rem;color:var(--brown-mid);
+  writing-mode:vertical-rl;line-height:1;margin:0.3rem 0;
+}
+
+/* Tên đôi */
+.cname{
+  font-family:'Great Vibes',cursive;
+  font-size:clamp(1.8rem,6vw,2.4rem);
+  color:var(--brown);margin-top:1.4rem;
+  white-space:nowrap;
+  text-shadow:0 1px 8px rgba(255,255,255,0.6);
+}
+.cdate{
+  font-family:'Playfair Display',Georgia,serif;
+  font-size:.85rem;letter-spacing:.2rem;
+  color:var(--brown-mid);margin-top:.4rem;
+  text-shadow:0 1px 6px rgba(255,255,255,0.5);
+}
+.scroll-hint{
+  margin-top:1.5rem;display:flex;flex-direction:column;
+  align-items:center;gap:.3rem;color:var(--rose);
+  font-size:.68rem;letter-spacing:.15rem;text-transform:uppercase;
+  animation:bounce 2s infinite;
+}
 .scroll-hint::after{content:'↓';font-size:.9rem}
 
-/* INTRO */
+/* ══ INTRO ══ */
 .intro{text-align:center;padding:5rem 2rem 3rem;max-width:580px;margin:0 auto;position:relative;z-index:1}
 .intro h2{font-family:'Playfair Display',Georgia,serif;font-size:1.8rem;font-weight:400;color:var(--deep-rose);margin-bottom:.8rem}
 .intro p{color:var(--text-light);line-height:1.9}
 
-/* GALLERY */
+/* ══ GALLERY ══ */
 .gallery{padding:1rem 1.2rem 5rem;max-width:1100px;margin:0 auto;position:relative;z-index:1}
 .gtitle{text-align:center;font-family:'Playfair Display',Georgia,serif;font-size:1.5rem;font-weight:400;color:var(--deep-rose);margin-bottom:2rem}
 .gtitle::after{content:'';display:block;width:50px;height:2px;background:var(--gold);margin:.6rem auto 0}
@@ -60,20 +112,19 @@ body{font-family:'Nunito',sans-serif;font-weight:300;min-height:100vh;background
 .pitem:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(150,80,80,.18)}
 .pitem img{width:100%;display:block}
 
-/* LIGHTBOX */
+/* ══ LIGHTBOX ══ */
 .lb{display:none;position:fixed;inset:0;background:rgba(20,8,8,.92);z-index:1000;align-items:center;justify-content:center;padding:1rem;cursor:zoom-out}
 .lb.on{display:flex}
 .lb img{max-width:92vw;max-height:92vh;border-radius:6px;object-fit:contain;cursor:default}
 .lb-x{position:absolute;top:1.2rem;right:1.4rem;color:#fff;font-size:2.2rem;background:none;border:none;cursor:pointer;opacity:.8}
 
-/* FOOTER */
+/* ══ FOOTER ══ */
 footer{text-align:center;padding:3rem 2rem;background:var(--dark);color:rgba(255,255,255,.45);font-size:.82rem;position:relative;z-index:1}
 footer .fh{display:block;font-size:1.4rem;margin-bottom:.7rem}
 
-/* ADMIN BTN */
+/* ══ ADMIN ══ */
 .abtn{position:fixed;bottom:1.8rem;right:1.8rem;background:var(--gold);color:#fff;border:none;border-radius:50px;padding:.65rem 1.3rem;font-family:'Nunito',sans-serif;font-size:.82rem;cursor:pointer;box-shadow:0 4px 14px rgba(180,140,60,.35);z-index:200;display:none;transition:all .25s}
-
-/* OVERLAY & MODAL */
+.abtn:hover{transform:translateY(-2px)}
 .ov{display:none;position:fixed;inset:0;background:rgba(30,12,12,.55);z-index:400;align-items:center;justify-content:center}
 .ov.on{display:flex}
 .modal{background:#faf6f0;border-radius:14px;padding:2.2rem;width:min(390px,92vw);box-shadow:0 20px 60px rgba(0,0,0,.28);max-height:90vh;overflow-y:auto}
@@ -86,45 +137,24 @@ footer .fh{display:block;font-size:1.4rem;margin-bottom:.7rem}
 .bc{background:transparent;color:var(--text-light);border:1px solid var(--rose)!important}
 .bs{background:var(--deep-rose);color:#fff}
 .bs:hover{background:var(--dark)}
+.anote{font-size:.8rem;color:var(--text-light);background:#ede8e0;border-radius:8px;padding:.75rem;margin-bottom:.9rem;line-height:1.7}
 
-/* SLIDERS */
-.sliders{background:#f5ede0;border-radius:10px;padding:.9rem;margin-bottom:.9rem}
-.sliders p{font-size:.8rem;color:var(--brown-mid);margin-bottom:.7rem;font-weight:400}
-.srow{display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem;font-size:.8rem;color:var(--text-light)}
-.srow label{width:3.5rem;flex-shrink:0}
+/* ══ FLOATING SLIDERS ══ */
+.fctrl{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.97);border-top:1.5px solid var(--gold-light);box-shadow:0 -4px 20px rgba(100,50,50,.12);padding:.8rem 1.2rem 1rem;z-index:300;backdrop-filter:blur(6px)}
+.fctrl.show{display:block}
+.fctrl .fctop{display:flex;align-items:center;justify-content:space-between;font-size:.78rem;color:var(--brown-mid);margin-bottom:.6rem}
+.fctrl .fctop button{background:none;border:none;color:var(--text-light);cursor:pointer;font-size:.8rem}
+.srow{display:flex;align-items:center;gap:.6rem;margin-bottom:.45rem;font-size:.8rem;color:var(--text-light)}
+.srow label{width:3.2rem;flex-shrink:0}
 .srow input[type=range]{flex:1;accent-color:var(--gold);cursor:pointer}
 .srow .sv{width:3rem;text-align:right;color:var(--gold);font-size:.75rem}
-
-.anote{font-size:.8rem;color:var(--text-light);background:#ede8e0;border-radius:8px;padding:.75rem;margin-bottom:.9rem;line-height:1.7}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 
-/* FLOATING SLIDER PANEL */
-.float-ctrl {
-  display: none;
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  background: rgba(255,255,255,0.97);
-  border-top: 1.5px solid var(--gold-light);
-  box-shadow: 0 -4px 20px rgba(100,50,50,0.12);
-  padding: 0.8rem 1.2rem 1rem;
-  z-index: 300;
-  backdrop-filter: blur(6px);
-}
-.float-ctrl.show { display: block; }
-.float-ctrl .fc-title {
-  font-size: 0.78rem; color: var(--brown-mid);
-  margin-bottom: 0.6rem; display: flex;
-  align-items: center; justify-content: space-between;
-}
-.float-ctrl .fc-title span { font-weight: 400; }
-.float-ctrl .fc-title button {
-  font-size: 0.75rem; background: none; border: none;
-  color: var(--text-light); cursor: pointer; padding: 0;
-}
-.float-ctrl .srow { margin-bottom: 0.4rem; }
-.float-ctrl .srow label { width: 3rem; }
+.std{display:flex;align-items:baseline;justify-content:center;gap:0.6rem;margin-bottom:1rem;}
+.std-s,.std-d{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1rem,3.5vw,1.3rem);font-weight:700;letter-spacing:0.3rem;color:var(--brown);text-transform:uppercase;}
+.std-t{font-family:'Great Vibes',cursive;font-size:clamp(1.7rem,5vw,2.1rem);color:var(--brown-mid);line-height:1;}
 </style>
 </head>
 <body>
@@ -132,26 +162,23 @@ footer .fh{display:block;font-size:1.4rem;margin-bottom:.7rem}
 
 <!-- COVER -->
 <section class="cover">
-  <div class="card">
-    <div class="bf">✿</div>
-    <div class="wm">Love</div>
-    <div class="std">
-      <span class="std-s">Save</span>
-      <span class="std-t">the</span>
-      <span class="std-d">Date</span>
-    </div>
-    <div class="arch">
-      <div class="arch-frame" id="arch-frame">
-        <div class="arch-img" id="arch-img"></div>
-        <div class="arch-ph" id="arch-ph">
-          <span>🌸</span>
-          <p>Upload <code>cover.jpg</code><br>lên GitHub repo</p>
-        </div>
+  <div class="std">
+    <span class="std-s">Save</span>
+    <span class="std-t">the</span>
+    <span class="std-d">Date</span>
+  </div>
+  <div class="arch-wrap">
+    <div class="arch-frame" id="arch-frame">
+      <div class="arch-img" id="arch-img"></div>
+      <div class="arch-ph" id="arch-ph">
+        <span>🌸</span>
+        <p>Upload <code>cover.jpg</code><br>lên GitHub repo</p>
       </div>
     </div>
-    <div class="cname" id="cname">Tiến Huy &amp; Quỳnh Hoa</div>
-    <div class="cdate" id="cdate">Sắp được công bố</div>
   </div>
+
+  <div class="cname" id="cname">Tiến Huy &amp; Quỳnh Hoa</div>
+  <div class="cdate" id="cdate">Sắp được công bố</div>
   <div class="scroll-hint">Cuộn xuống</div>
 </section>
 
@@ -180,7 +207,6 @@ footer .fh{display:block;font-size:1.4rem;margin-bottom:.7rem}
   <span id="fname">Tiến Huy &amp; Quỳnh Hoa — Mãi bên nhau</span>
 </footer>
 
-<!-- ADMIN BTN -->
 <button class="abtn" id="abtn" onclick="openAdmin()">⚙️ Admin</button>
 
 <!-- LOGIN -->
@@ -197,7 +223,7 @@ footer .fh{display:block;font-size:1.4rem;margin-bottom:.7rem}
   </div>
 </div>
 
-<!-- ADMIN PANEL -->
+<!-- ADMIN -->
 <div class="ov" id="aov">
   <div class="modal">
     <h3>⚙️ Quản lý</h3>
@@ -207,7 +233,6 @@ footer .fh{display:block;font-size:1.4rem;margin-bottom:.7rem}
     <input type="text" id="ib" placeholder="Tên cô dâu">
     <label>Ngày cưới</label>
     <input type="text" id="id" placeholder="VD: 15.06.2025">
-
     <div class="anote" id="anote"></div>
     <div class="mbtns">
       <button class="bc" onclick="closeAov()">Đóng</button>
@@ -217,193 +242,147 @@ footer .fh{display:block;font-size:1.4rem;margin-bottom:.7rem}
   </div>
 </div>
 
+<!-- FLOATING SLIDERS -->
+<div class="fctrl" id="fctrl">
+  <div class="fctop">
+    <span>🖼️ Kéo thanh — ảnh thay đổi ngay</span>
+    <button onclick="hideFloat()">✕ Xong</button>
+  </div>
+  <div class="srow"><label>🔍 Zoom</label><input type="range" id="fz" min="50" max="300" value="100" step="5" oninput="onFloat()"><span class="sv" id="fvz">100%</span></div>
+  <div class="srow"><label>↔ Ngang</label><input type="range" id="fx" min="-50" max="50" value="0" step="1" oninput="onFloat()"><span class="sv" id="fvx">0%</span></div>
+  <div class="srow"><label>↕ Dọc</label><input type="range" id="fy" min="-50" max="50" value="0" step="1" oninput="onFloat()"><span class="sv" id="fvy">0%</span></div>
+</div>
+
 <script>
-const PASS    = '1';
-const GH      = 'tienhuyy';
-const REPO    = 'dam-cuoi';
-const BRANCH  = 'main';
-const RAW     = `https://raw.githubusercontent.com/${GH}/${REPO}/${BRANCH}`;
-const COVER   = `${RAW}/cover.jpg`;
-const API     = `https://api.github.com/repos/${GH}/${REPO}/contents/photos`;
-const EXTS    = ['jpg','jpeg','png','gif','webp','JPG','JPEG','PNG','GIF','WEBP'];
+const PASS='1',GH='tienhuyy',REPO='dam-cuoi',BRANCH='main';
+const RAW=`https://raw.githubusercontent.com/${GH}/${REPO}/${BRANCH}`;
+const COVER=`${RAW}/cover.jpg`;
+const API=`https://api.github.com/repos/${GH}/${REPO}/contents/photos`;
+const EXTS=['jpg','jpeg','png','gif','webp','JPG','JPEG','PNG','GIF','WEBP'];
 
-let isAdmin = false;
-let photos  = [];
-let groom   = 'Tiến Huy';
-let bride   = 'Quỳnh Hoa';
-// img: zoom(%), x(%), y(%) — tất cả dạng % để không phụ thuộc kích thước màn hình
-let img = { zoom: 100, x: 50, y: 20 };
+let isAdmin=false, photos=[], groom='Tiến Huy', bride='Quỳnh Hoa';
+let img={zoom:100,x:50,y:20};
 
-/* ── INIT ── */
-function init() {
-  try {
-    const s = JSON.parse(localStorage.getItem('wdata') || '{}');
-    if (s.groom) groom = s.groom;
-    if (s.bride) bride = s.bride;
-    if (s.date)  document.getElementById('cdate').textContent = s.date;
-    if (s.img)   img = s.img;
-  } catch(e) {}
-  setNames(groom, bride);
+function init(){
+  try{
+    const s=JSON.parse(localStorage.getItem('wdata')||'{}');
+    if(s.groom)groom=s.groom; if(s.bride)bride=s.bride;
+    if(s.date)document.getElementById('cdate').textContent=s.date;
+    if(s.img)img=s.img;
+  }catch(e){}
+  setNames(groom,bride);
   loadCover();
   loadPhotos();
-  if (location.search.includes('admin')) {
-    document.getElementById('abtn').style.display = 'block';
-    openLov();
-  }
+  if(location.search.includes('admin')){document.getElementById('abtn').style.display='block';openLov();}
 }
 
-function setNames(g, b) {
-  groom = g; bride = b;
-  document.getElementById('cname').innerHTML = `${g} &amp; ${b}`;
-  document.getElementById('fname').innerHTML = `${g} &amp; ${b} — Mãi bên nhau`;
+function setNames(g,b){
+  groom=g;bride=b;
+  document.getElementById('cname').innerHTML=`${g} &amp; ${b}`;
+  document.getElementById('fname').innerHTML=`${g} &amp; ${b} — Mãi bên nhau`;
 }
 
-function save() {
-  try {
-    localStorage.setItem('wdata', JSON.stringify({
-      groom, bride,
-      date: document.getElementById('cdate').textContent,
-      img
-    }));
-  } catch(e) {}
+function save(){
+  try{localStorage.setItem('wdata',JSON.stringify({groom,bride,date:document.getElementById('cdate').textContent,img}));}catch(e){}
 }
 
-/* ── COVER IMAGE ── */
-// Dùng background-position bằng % → đơn giản, không phụ thuộc pixel
-function loadCover() {
-  const el = document.getElementById('arch-img');
-  const ph = document.getElementById('arch-ph');
-  const tImg = new Image();
-  tImg.onload = () => {
-    applyCover();
-    ph.style.display = 'none';
-  };
-  tImg.onerror = () => { ph.style.display = 'flex'; };
-  tImg.src = COVER + '?cb=' + Date.now();
+function applyCover(){
+  const el=document.getElementById('arch-img');
+  el.style.backgroundImage=`url('${COVER}?cb=${Date.now()}')`;
+  el.style.backgroundSize=`${img.zoom}%`;
+  el.style.backgroundPosition=`${img.x}% ${img.y}%`;
+  el.style.backgroundRepeat='no-repeat';
 }
 
-function applyCover() {
-  const el = document.getElementById('arch-img');
-  el.style.backgroundImage    = `url('${COVER}?cb=${Date.now()}')`;
-  el.style.backgroundSize     = `${img.zoom}%`;
-  el.style.backgroundPosition = `${img.x}% ${img.y}%`;
-  el.style.backgroundRepeat   = 'no-repeat';
+function loadCover(){
+  const t=new Image();
+  t.onload=()=>{applyCover();document.getElementById('arch-ph').style.display='none';};
+  t.onerror=()=>{document.getElementById('arch-ph').style.display='flex';};
+  t.src=COVER+'?cb='+Date.now();
 }
 
-
-/* ── FLOATING SLIDER ── */
-function openFloat() {
-  closeAov();
-  // Sync giá trị từ img state
-  document.getElementById('fzoom').value = img.zoom;
-  document.getElementById('fx').value    = img.x - 50;
-  document.getElementById('fy').value    = img.y - 50;
-  document.getElementById('fvzoom').textContent = img.zoom + '%';
-  document.getElementById('fvx').textContent    = (img.x - 50) + '%';
-  document.getElementById('fvy').textContent    = (img.y - 50) + '%';
-  document.getElementById('float-ctrl').classList.add('show');
-}
-
-function hideFloat() {
-  document.getElementById('float-ctrl').classList.remove('show');
-  save(); // tự động lưu khi đóng
-}
-
-function onFloat() {
-  const zoom = +document.getElementById('fzoom').value;
-  const x    = +document.getElementById('fx').value;
-  const y    = +document.getElementById('fy').value;
-  document.getElementById('fvzoom').textContent = zoom + '%';
-  document.getElementById('fvx').textContent    = x + '%';
-  document.getElementById('fvy').textContent    = y + '%';
-  img = { zoom, x: x + 50, y: y + 50 };
-  applyCover();
-}
-
-
-/* ── PHOTOS ── */
-async function loadPhotos() {
-  const empty = document.getElementById('empty');
-  empty.textContent = '⏳ Đang tải ảnh...'; empty.classList.add('show');
-  try {
-    const res = await fetch(API);
-    if (!res.ok) throw 0;
-    const files = await res.json();
-    photos = files
-      .filter(f => f.type==='file' && EXTS.some(e => f.name.endsWith('.'+e)))
-      .map(f => `${RAW}/photos/${encodeURIComponent(f.name)}`);
+async function loadPhotos(){
+  const e=document.getElementById('empty');
+  e.textContent='⏳ Đang tải ảnh...';e.classList.add('show');
+  try{
+    const r=await fetch(API);if(!r.ok)throw 0;
+    const f=await r.json();
+    photos=f.filter(f=>f.type==='file'&&EXTS.some(e=>f.name.endsWith('.'+e))).map(f=>`${RAW}/photos/${encodeURIComponent(f.name)}`);
     renderGrid();
-  } catch(e) {
-    empty.textContent = 'Không tải được ảnh 🌸';
-  }
+  }catch(e){e.textContent='Không tải được ảnh 🌸';}
 }
 
-function renderGrid() {
-  const grid = document.getElementById('pgrid');
-  const empty = document.getElementById('empty');
-  grid.innerHTML = '';
-  if (!photos.length) { empty.classList.add('show'); empty.textContent='Ảnh cưới sẽ sớm được cập nhật 🌸'; return; }
-  empty.classList.remove('show');
-  photos.forEach(src => {
-    const d = document.createElement('div');
-    d.className = 'pitem';
-    d.innerHTML = `<img src="${src}" loading="lazy" alt="">`;
-    d.onclick = () => openLB(src);
-    grid.appendChild(d);
+function renderGrid(){
+  const g=document.getElementById('pgrid'),e=document.getElementById('empty');
+  g.innerHTML='';
+  if(!photos.length){e.classList.add('show');e.textContent='Ảnh cưới sẽ sớm được cập nhật 🌸';return;}
+  e.classList.remove('show');
+  photos.forEach(src=>{
+    const d=document.createElement('div');d.className='pitem';
+    d.innerHTML=`<img src="${src}" loading="lazy" alt="">`;
+    d.onclick=()=>openLB(src);g.appendChild(d);
   });
 }
 
-/* ── LIGHTBOX ── */
-function openLB(src) { document.getElementById('lb-img').src=src; document.getElementById('lb').classList.add('on'); document.body.style.overflow='hidden'; }
-function closeLB()   { document.getElementById('lb').classList.remove('on'); document.body.style.overflow=''; }
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeLB(); });
+function openLB(src){document.getElementById('lb-img').src=src;document.getElementById('lb').classList.add('on');document.body.style.overflow='hidden';}
+function closeLB(){document.getElementById('lb').classList.remove('on');document.body.style.overflow='';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLB();});
 
-/* ── LOGIN ── */
-function openLov()  { document.getElementById('lov').classList.add('on'); setTimeout(()=>document.getElementById('pw').focus(),100); }
-function closeLov() { document.getElementById('lov').classList.remove('on'); document.getElementById('pw').value=''; document.getElementById('pwerr').style.display='none'; }
-function doLogin()  {
-  if (document.getElementById('pw').value===PASS) {
-    isAdmin=true; closeLov(); openAdmin();
-  } else {
-    document.getElementById('pwerr').style.display='block';
-    document.getElementById('pw').value='';
-  }
+function openLov(){document.getElementById('lov').classList.add('on');setTimeout(()=>document.getElementById('pw').focus(),100);}
+function closeLov(){document.getElementById('lov').classList.remove('on');document.getElementById('pw').value='';document.getElementById('pwerr').style.display='none';}
+function doLogin(){
+  if(document.getElementById('pw').value===PASS){isAdmin=true;closeLov();openAdmin();}
+  else{document.getElementById('pwerr').style.display='block';document.getElementById('pw').value='';}
 }
-
-/* ── ADMIN ── */
-function openAdmin() {
-  if (!isAdmin) { openLov(); return; }
-  document.getElementById('ig').value = groom;
-  document.getElementById('ib').value = bride;
-  document.getElementById('id').value = document.getElementById('cdate').textContent;
-  document.getElementById('anote').innerHTML =
-    `📸 <strong>${photos.length}</strong> ảnh trong <code>photos/</code><br>
-     🖼️ Ảnh bìa: upload <code>cover.jpg</code> vào thư mục gốc`;
+function openAdmin(){
+  if(!isAdmin){openLov();return;}
+  document.getElementById('ig').value=groom;
+  document.getElementById('ib').value=bride;
+  document.getElementById('id').value=document.getElementById('cdate').textContent;
+  document.getElementById('anote').innerHTML=`📸 <strong>${photos.length}</strong> ảnh trong <code>photos/</code><br>🖼️ Ảnh bìa: upload <code>cover.jpg</code> vào thư mục gốc`;
   document.getElementById('aov').classList.add('on');
 }
-function closeAov() { document.getElementById('aov').classList.remove('on'); }
-function saveAdmin() {
-  const g = document.getElementById('ig').value.trim() || groom;
-  const b = document.getElementById('ib').value.trim() || bride;
-  const d = document.getElementById('id').value.trim();
-  setNames(g, b);
-  if (d) document.getElementById('cdate').textContent = d;
-  save();
-  closeAov();
-  alert('✅ Đã lưu!');
+function closeAov(){document.getElementById('aov').classList.remove('on');}
+function saveAdmin(){
+  const g=document.getElementById('ig').value.trim()||groom;
+  const b=document.getElementById('ib').value.trim()||bride;
+  const d=document.getElementById('id').value.trim();
+  setNames(g,b);if(d)document.getElementById('cdate').textContent=d;
+  save();closeAov();alert('✅ Đã lưu!');
 }
 
-/* ── SAKURA ── */
+function openFloat(){
+  closeAov();
+  document.getElementById('fz').value=img.zoom;
+  document.getElementById('fx').value=img.x-50;
+  document.getElementById('fy').value=img.y-50;
+  document.getElementById('fvz').textContent=img.zoom+'%';
+  document.getElementById('fvx').textContent=(img.x-50)+'%';
+  document.getElementById('fvy').textContent=(img.y-50)+'%';
+  document.getElementById('fctrl').classList.add('show');
+}
+function hideFloat(){document.getElementById('fctrl').classList.remove('show');save();}
+function onFloat(){
+  const z=+document.getElementById('fz').value;
+  const x=+document.getElementById('fx').value;
+  const y=+document.getElementById('fy').value;
+  document.getElementById('fvz').textContent=z+'%';
+  document.getElementById('fvx').textContent=x+'%';
+  document.getElementById('fvy').textContent=y+'%';
+  img={zoom:z,x:x+50,y:y+50};
+  applyCover();
+}
+
+// SAKURA
 (function(){
-  const c=document.getElementById('pcanvas'), ctx=c.getContext('2d');
-  let W,H; const N=35,ps=[];
+  const c=document.getElementById('pcanvas'),ctx=c.getContext('2d');
+  let W,H;const N=35,ps=[];
   function rsz(){W=c.width=innerWidth;H=c.height=innerHeight;}
   addEventListener('resize',rsz);rsz();
   function np(ry){return{x:Math.random()*W,y:ry?Math.random()*H:-20-Math.random()*80,sz:Math.random()*7+5,ang:Math.random()*Math.PI*2,rot:(Math.random()-.5)*.03,vx:(Math.random()-.5)*.8,vy:Math.random()*1+.5,sw:Math.random()*.6+.2,swS:Math.random()*.015+.008,swP:Math.random()*Math.PI*2,al:Math.random()*.45+.3,hue:340+Math.random()*25};}
   for(let i=0;i<N;i++)ps.push(np(true));
   function loop(){
-    ctx.clearRect(0,0,W,H);
-    const t=Date.now()/1000;
+    ctx.clearRect(0,0,W,H);const t=Date.now()/1000;
     ps.forEach(p=>{
       const sx=Math.sin(t*p.swS*60+p.swP)*p.sw;
       ctx.save();ctx.translate(p.x+sx,p.y);ctx.rotate(p.ang);ctx.globalAlpha=p.al;
@@ -420,29 +399,5 @@ function saveAdmin() {
 
 init();
 </script>
-
-<!-- FLOATING SLIDER -->
-<div class="float-ctrl" id="float-ctrl">
-  <div class="fc-title">
-    <span>🖼️ Chỉnh ảnh bìa — kéo thanh để xem trực tiếp</span>
-    <button onclick="hideFloat()">✕ Đóng</button>
-  </div>
-  <div class="srow">
-    <label>🔍 Zoom</label>
-    <input type="range" id="fzoom" min="50" max="300" value="100" step="5" oninput="onFloat()">
-    <span class="sv" id="fvzoom">100%</span>
-  </div>
-  <div class="srow">
-    <label>↔ Ngang</label>
-    <input type="range" id="fx" min="-50" max="50" value="0" step="1" oninput="onFloat()">
-    <span class="sv" id="fvx">0%</span>
-  </div>
-  <div class="srow">
-    <label>↕ Dọc</label>
-    <input type="range" id="fy" min="-50" max="50" value="0" step="1" oninput="onFloat()">
-    <span class="sv" id="fvy">0%</span>
-  </div>
-</div>
-
 </body>
 </html>
