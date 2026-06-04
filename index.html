@@ -125,29 +125,19 @@ footer .fheart { display: block; font-size: 1.4rem; margin-bottom: .7rem; }
 .btn-save:hover { background: var(--dark); }
 .admin-note { font-size: .8rem; color: var(--text-light); background: #f5ede0; border-radius: 8px; padding: .75rem; margin-bottom: .9rem; line-height: 1.7; }
 
-/* ── TOUCH EDITOR ── */
-.te-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.88); z-index: 2000; flex-direction: column; align-items: center; justify-content: center; padding: 1rem; }
-.te-overlay.active { display: flex; }
-.te-title { color: #fff; font-family: 'Playfair Display',serif; font-size: 1rem; margin-bottom: .8rem; opacity: .9; letter-spacing: .1rem; }
-.te-frame {
-  width: min(300px,80vw); aspect-ratio: 4/5;
-  overflow: hidden; position: relative;
-  border-radius: 50% 50% 6px 6px / 22% 22% 6px 6px;
-  border: 2px solid rgba(255,255,255,.4);
-  touch-action: none; cursor: grab;
-}
-.te-frame.grabbing { cursor: grabbing; }
-/* ảnh trong editor cũng dùng background-image */
-.te-bg { position: absolute; inset: 0; background-repeat: no-repeat; }
-.te-hint { color: rgba(255,255,255,.6); font-size: .78rem; margin-top: .7rem; text-align: center; line-height: 1.6; }
-.te-btns { display: flex; gap: .7rem; margin-top: 1rem; }
-.te-btns button { padding: .6rem 1.4rem; border-radius: 50px; font-family: 'Nunito',sans-serif; font-size: .88rem; border: none; cursor: pointer; }
-.teb-reset  { background: rgba(255,255,255,.12); color: #fff; }
-.teb-cancel { background: rgba(255,255,255,.2); color: #fff; }
-.teb-save   { background: var(--gold); color: #fff; }
+
+
 
 @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
 @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+
+  /* Slider controls */
+  .img-ctrl { padding: 0.7rem 0 0.9rem; }
+  .img-ctrl p { font-size: 0.8rem; color: var(--text-light); margin-bottom: 0.6rem; }
+  .ctrl-row { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; font-size: 0.8rem; color: var(--text-light); }
+  .ctrl-row label { width: 3.2rem; flex-shrink: 0; }
+  .ctrl-row input[type=range] { flex: 1; accent-color: var(--gold); cursor: pointer; }
+  .ctrl-row .val { width: 2.8rem; text-align: right; color: var(--gold); font-size: 0.75rem; }
 </style>
 </head>
 <body>
@@ -228,18 +218,35 @@ footer .fheart { display: block; font-size: 1.4rem; margin-bottom: .7rem; }
     <input type="text" id="in-bride" placeholder="Tên cô dâu">
     <label>Ngày cưới</label>
     <input type="text" id="in-date" placeholder="VD: 15.06.2025">
+    <div class="img-ctrl">
+      <p>🖼️ Điều chỉnh ảnh bìa</p>
+      <div class="ctrl-row">
+        <label>🔍 Zoom</label>
+        <input type="range" id="s-zoom" min="50" max="300" value="100" step="5"
+          oninput="updateSlider()">
+        <span class="val" id="v-zoom">100%</span>
+      </div>
+      <div class="ctrl-row">
+        <label>↔ Ngang</label>
+        <input type="range" id="s-x" min="-100" max="100" value="0" step="2"
+          oninput="updateSlider()">
+        <span class="val" id="v-x">0</span>
+      </div>
+      <div class="ctrl-row">
+        <label>↕ Dọc</label>
+        <input type="range" id="s-y" min="-100" max="100" value="0" step="2"
+          oninput="updateSlider()">
+        <span class="val" id="v-y">0</span>
+      </div>
+    </div>
     <div class="admin-note" id="admin-note"></div>
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeAdmin()">Đóng</button>
-      <button class="teb-reset" onclick="openTouchEditor()" style="background:var(--gold-light);color:var(--brown)">🖼️ Chỉnh ảnh bìa</button>
       <button class="btn-save" onclick="saveAdmin()">💾 Lưu</button>
     </div>
   </div>
 </div>
 
-<!-- Touch Editor -->
-<div class="te-overlay" id="te-ov">
-  <div class="te-title">✦ Chỉnh ảnh bìa ✦</div>
   <div class="te-frame" id="te-frame">
     <div class="te-bg" id="te-bg"></div>
   </div>
@@ -377,6 +384,7 @@ function openAdmin() {
   document.getElementById('in-groom').value = groom;
   document.getElementById('in-bride').value = bride;
   document.getElementById('in-date').value  = document.getElementById('cover-date').textContent;
+  syncSlidersFromState();
   document.getElementById('admin-note').innerHTML =
     `📸 <strong>${photos.length}</strong> ảnh trong <code>photos/</code><br>
      🖼️ Ảnh bìa: upload <code>cover.jpg</code> vào thư mục gốc<br>
@@ -392,143 +400,6 @@ function saveAdmin() {
   if(d) document.getElementById('cover-date').textContent = d;
   saveLocal(); closeAdmin(); alert('✅ Đã lưu!');
 }
-
-// ── Touch Editor ──────────────────────────────────────────────────────────
-// State riêng cho editor (pixel trên te-frame)
-let te = { x: 0, y: 0, scale: 1 };
-let teDrag = null, tePinch = null;
-
-function openTouchEditor() {
-  closeAdmin();
-  const bg = document.getElementById('te-bg');
-  bg.style.backgroundImage  = `url('${COVER_URL}?t=${Date.now()}')`;
-  bg.style.backgroundRepeat = 'no-repeat';
-
-  const frame = document.getElementById('te-frame');
-  const fw = frame.offsetWidth;
-  const fh = frame.offsetHeight;
-
-  // Sync từ imgState (tỉ lệ) → pixel cho editor
-  if (imgState && imgState.scale) {
-    te.scale = imgState.scale;
-    te.x = (imgState.ox || 0) * fw;
-    te.y = (imgState.oy || 0) * fh;
-  } else {
-    te.scale = 1; te.x = 0; te.y = 0;
-  }
-
-  applyTeStyle();
-  document.getElementById('te-ov').classList.add('active');
-}
-
-function applyTeStyle() {
-  const bg    = document.getElementById('te-bg');
-  const frame = document.getElementById('te-frame');
-  const fw = frame.offsetWidth;
-  const fh = frame.offsetHeight;
-  const bw = fw * te.scale;
-  const bh = fh * te.scale;
-  const bx = (fw - bw) / 2 + te.x;
-  const by = (fh - bh) / 2 + te.y;
-  bg.style.backgroundSize     = `${bw}px ${bh}px`;
-  bg.style.backgroundPosition = `${bx}px ${by}px`;
-}
-
-function resetEditor() {
-  te = { x: 0, y: 0, scale: 1 };
-  applyTeStyle();
-}
-
-function closeEditor() {
-  document.getElementById('te-ov').classList.remove('active');
-}
-
-
-function applyBgToElement(bgId, frameId) {
-  const bg    = document.getElementById(bgId);
-  const frame = document.getElementById(frameId);
-  if (!bg || !frame) return;
-  const fw = frame.offsetWidth;
-  const fh = frame.offsetHeight;
-  const bw = fw * imgState.scale;
-  const bh = fh * imgState.scale;
-  const bx = (fw - bw) / 2 + (imgState.ox || 0) * fw;
-  const by = (fh - bh) / 2 + (imgState.oy || 0) * fh;
-  bg.style.backgroundImage    = `url('${COVER_URL}')`;
-  bg.style.backgroundRepeat   = 'no-repeat';
-  bg.style.backgroundSize     = `${bw}px ${bh}px`;
-  bg.style.backgroundPosition = `${bx}px ${by}px`;
-}
-function saveEditor() {
-  const tfw = document.getElementById('te-frame').offsetWidth;
-  const tfh = document.getElementById('te-frame').offsetHeight;
-
-  // Lưu dạng tỉ lệ: scale, và offset % so với frame
-  imgState = {
-    scale: te.scale,
-    ox: te.x / tfw,   // offset ngang / width → tỉ lệ
-    oy: te.y / tfh    // offset dọc / height → tỉ lệ
-  };
-
-  applyBgToElement('arch-bg', 'arch-frame');
-  document.getElementById('arch-placeholder').style.display = 'none';
-  saveLocal();
-  closeEditor();
-  alert('✅ Đã lưu!');
-}
-
-// Touch & Mouse events
-(function setupEditor() {
-  const frame = document.getElementById('te-frame');
-
-  // Mouse
-  frame.addEventListener('mousedown', e => {
-    teDrag = { sx: e.clientX, sy: e.clientY, ox: te.x, oy: te.y };
-    frame.classList.add('grabbing'); e.preventDefault();
-  });
-  document.addEventListener('mousemove', e => {
-    if (!teDrag) return;
-    te.x = teDrag.ox + (e.clientX - teDrag.sx);
-    te.y = teDrag.oy + (e.clientY - teDrag.sy);
-    applyTeStyle();
-  });
-  document.addEventListener('mouseup', () => { teDrag=null; frame.classList.remove('grabbing'); });
-  frame.addEventListener('wheel', e => {
-    e.preventDefault();
-    te.scale = Math.max(0.3, Math.min(5, te.scale * (e.deltaY < 0 ? 1.05 : 0.95)));
-    applyTeStyle();
-  }, {passive:false});
-
-  // Touch
-  frame.addEventListener('touchstart', e => {
-    if (e.touches.length === 1) {
-      teDrag  = { sx: e.touches[0].clientX, sy: e.touches[0].clientY, ox: te.x, oy: te.y };
-      tePinch = null;
-    } else if (e.touches.length === 2) {
-      const dx = e.touches[0].clientX - e.touches[1].clientX;
-      const dy = e.touches[0].clientY - e.touches[1].clientY;
-      tePinch = { dist: Math.hypot(dx,dy), os: te.scale };
-      teDrag  = null;
-    }
-    e.preventDefault();
-  }, {passive:false});
-
-  frame.addEventListener('touchmove', e => {
-    if (e.touches.length === 1 && teDrag) {
-      te.x = teDrag.ox + (e.touches[0].clientX - teDrag.sx);
-      te.y = teDrag.oy + (e.touches[0].clientY - teDrag.sy);
-      applyTeStyle();
-    } else if (e.touches.length === 2 && tePinch) {
-      const dx = e.touches[0].clientX - e.touches[1].clientX;
-      const dy = e.touches[0].clientY - e.touches[1].clientY;
-      te.scale = Math.max(0.3, Math.min(5, tePinch.os * Math.hypot(dx,dy) / tePinch.dist));
-      applyTeStyle();
-    }
-    e.preventDefault();
-  }, {passive:false});
-
-  frame.addEventListener('touchend', () => { teDrag=null; tePinch=null; });
-})();
 
 // ── Sakura ────────────────────────────────────────────────────────────────
 (function(){
