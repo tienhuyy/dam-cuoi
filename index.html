@@ -9,21 +9,21 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --ivory: #faf7f2;
-    --cream: #f5f0e8;
-    --gold: #a07840;
-    --gold-light: #d6c9b0;
-    --brown: #5a3e28;
-    --brown-mid: #8a6a4a;
-    --rose: #d4a0a7;
-    --deep-rose: #9e5b65;
-    --dark: #2c1f1f;
-    --text: #4a3030;
-    --text-light: #8a6a6a;
+    --ivory: #fdf0f0;
+    --cream: #f7e0e0;
+    --gold: #c0785a;
+    --gold-light: #e8b8a8;
+    --brown: #6b2d2d;
+    --brown-mid: #a05050;
+    --rose: #e89090;
+    --deep-rose: #c0485a;
+    --dark: #3a1515;
+    --text: #5a2828;
+    --text-light: #a06868;
   }
 
   body {
-    background: var(--ivory);
+    background: linear-gradient(135deg, #fce8e8 0%, #f8d8d0 40%, #fce4d8 100%);
     color: var(--text);
     font-family: 'Nunito', 'Hiragino Kaku Gothic Pro', sans-serif;
     font-weight: 300;
@@ -37,14 +37,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--ivory);
+    background: transparent;
     padding: 2.5rem 1.5rem;
   }
 
   .cover-card {
     position: relative;
     width: min(400px, 90vw);
-    background: #fff;
+    background: rgba(255,255,255,0.92);
     border: 1.5px solid var(--gold-light);
     border-radius: 3px;
     padding: 2.2rem 2rem 2rem;
@@ -197,6 +197,7 @@
     padding: 5rem 2rem 3rem;
     max-width: 600px;
     margin: 0 auto;
+    background: transparent;
   }
   .intro h2 {
     font-family: 'Cormorant Garamond', 'Georgia', serif;
@@ -212,6 +213,7 @@
     padding: 2rem 1.5rem 5rem;
     max-width: 1100px;
     margin: 0 auto;
+    background: transparent;
   }
   .section-title {
     text-align: center;
@@ -348,9 +350,23 @@
   .btn-cancel { background: transparent; color: var(--text-light); border: 1px solid var(--rose) !important; }
   .btn-save { background: var(--deep-rose); color: #fff; }
   .btn-save:hover { background: var(--dark); }
+
+  /* ===== PARTICLES ===== */
+  #particle-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .cover, .intro, .gallery-section, footer {
+    position: relative;
+    z-index: 1;
+  }
 </style>
 </head>
 <body>
+<canvas id="particle-canvas"></canvas>
 
 <!-- COVER PAGE -->
 <section class="cover">
@@ -652,6 +668,91 @@
   }
 
   init();
+
+  // ===== SAKURA PETALS =====
+  (function() {
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let W, H;
+    const COUNT = 28;
+    const petals = [];
+
+    function resize() {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    function newPetal(fromTop) {
+      const size = Math.random() * 7 + 5; // 5–12px
+      return {
+        x: Math.random() * (W + 100) - 50,
+        y: fromTop ? -size * 2 : Math.random() * H,
+        size,
+        rotation: Math.random() * Math.PI * 2,
+        rotSpeed: (Math.random() - 0.5) * 0.04,
+        vx: (Math.random() - 0.4) * 0.8,
+        vy: Math.random() * 0.8 + 0.4,
+        sway: Math.random() * Math.PI * 2,
+        swaySpeed: Math.random() * 0.015 + 0.005,
+        swayAmp: Math.random() * 1.2 + 0.3,
+        alpha: Math.random() * 0.35 + 0.25,
+        // hồng nhạt đến trắng hồng
+        hue: Math.floor(Math.random() * 20 + 340), // 340–360 = pink-red
+        sat: Math.floor(Math.random() * 30 + 55),
+        light: Math.floor(Math.random() * 15 + 78),
+      };
+    }
+
+    for (let i = 0; i < COUNT; i++) petals.push(newPetal(false));
+
+    function drawPetal(p) {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rotation);
+      ctx.globalAlpha = p.alpha;
+
+      // hình cánh hoa oval nghiêng
+      ctx.beginPath();
+      ctx.ellipse(0, 0, p.size, p.size * 0.55, 0, 0, Math.PI * 2);
+
+      const grad = ctx.createRadialGradient(0, -p.size * 0.1, 0, 0, 0, p.size);
+      grad.addColorStop(0, `hsl(${p.hue},${p.sat}%,${p.light + 8}%)`);
+      grad.addColorStop(1, `hsl(${p.hue},${p.sat - 10}%,${p.light - 5}%)`);
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // đường gân lá nhỏ
+      ctx.beginPath();
+      ctx.moveTo(0, -p.size * 0.45);
+      ctx.lineTo(0, p.size * 0.45);
+      ctx.strokeStyle = `hsla(${p.hue},${p.sat}%,${p.light - 20}%,0.18)`;
+      ctx.lineWidth = 0.5;
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, W, H);
+      petals.forEach((p, i) => {
+        p.sway += p.swaySpeed;
+        p.x += p.vx + Math.sin(p.sway) * p.swayAmp;
+        p.y += p.vy;
+        p.rotation += p.rotSpeed;
+
+        // reset khi ra ngoài màn hình
+        if (p.y > H + 20 || p.x < -60 || p.x > W + 60) {
+          petals[i] = newPetal(true);
+        }
+        drawPetal(p);
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
+  })();
+
 </script>
 </body>
 </html>
