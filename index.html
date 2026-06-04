@@ -267,7 +267,7 @@ let groom   = 'Tiến Huy';
 let bride   = 'Quỳnh Hoa';
 
 // imgState lưu: bgSize (vd "150%"), bgPosX (vd "50%"), bgPosY (vd "30%")
-let imgState = { size: 'cover', px: '50%', py: '20%' };
+let imgState = { scale: 1, ox: 0, oy: -0.1 }; // scale, offset tỉ lệ ngang/dọc
 
 // ── Init ──────────────────────────────────────────────────────────────────
 function init() {
@@ -305,20 +305,18 @@ function saveLocal() {
 
 // ── Cover image dùng background-image ────────────────────────────────────
 function applyCoverImg() {
-  const bg = document.getElementById('arch-bg');
-  const ph = document.getElementById('arch-placeholder');
+  const ph  = document.getElementById('arch-placeholder');
   const img = new Image();
   img.onload = () => {
-    bg.style.backgroundImage    = `url('${COVER_URL}?t=${Date.now()}')`;
-    bg.style.backgroundRepeat   = 'no-repeat';
-    if (imgState.size && imgState.size !== 'cover') {
-      // Đã có setting pixel từ editor
-      bg.style.backgroundSize     = imgState.size;
-      bg.style.backgroundPosition = `${imgState.px} ${imgState.py}`;
+    if (imgState && imgState.scale) {
+      applyBgToElement('arch-bg', 'arch-frame');
     } else {
-      // Mặc định: cover, căn trên
+      // Mặc định
+      const bg = document.getElementById('arch-bg');
+      bg.style.backgroundImage    = `url('${COVER_URL}')`;
       bg.style.backgroundSize     = 'cover';
       bg.style.backgroundPosition = '50% 20%';
+      bg.style.backgroundRepeat   = 'no-repeat';
     }
     ph.style.display = 'none';
   };
@@ -402,28 +400,22 @@ let teDrag = null, tePinch = null;
 
 function openTouchEditor() {
   closeAdmin();
-  const frame = document.getElementById('te-frame');
-  const bg    = document.getElementById('te-bg');
-
-  // Set background image giống arch-bg
-  bg.style.backgroundImage = `url('${COVER_URL}?t=${Date.now()}')`;
+  const bg = document.getElementById('te-bg');
+  bg.style.backgroundImage  = `url('${COVER_URL}?t=${Date.now()}')`;
   bg.style.backgroundRepeat = 'no-repeat';
 
-  // Convert imgState → pixel state cho editor
+  const frame = document.getElementById('te-frame');
   const fw = frame.offsetWidth;
   const fh = frame.offsetHeight;
 
-  // Parse size: "cover" → scale=1, "150%" → scale=1.5
-  if (imgState.size === 'cover') {
-    te.scale = 1;
+  // Sync từ imgState (tỉ lệ) → pixel cho editor
+  if (imgState && imgState.scale) {
+    te.scale = imgState.scale;
+    te.x = (imgState.ox || 0) * fw;
+    te.y = (imgState.oy || 0) * fh;
   } else {
-    te.scale = parseFloat(imgState.size) / 100;
+    te.scale = 1; te.x = 0; te.y = 0;
   }
-  // Parse position: "50%" → 0 offset từ center, "30%" → ...
-  const px = parseFloat(imgState.px) / 100; // 0..1
-  const py = parseFloat(imgState.py) / 100;
-  te.x = (px - 0.5) * fw * (te.scale - 1) * 2;
-  te.y = (py - 0.5) * fh * (te.scale - 1) * 2;
 
   applyTeStyle();
   document.getElementById('te-ov').classList.add('active');
@@ -434,14 +426,10 @@ function applyTeStyle() {
   const frame = document.getElementById('te-frame');
   const fw = frame.offsetWidth;
   const fh = frame.offsetHeight;
-
-  // Tính background-size và background-position từ te
   const bw = fw * te.scale;
   const bh = fh * te.scale;
-  // offset: center + te.x/y
   const bx = (fw - bw) / 2 + te.x;
   const by = (fh - bh) / 2 + te.y;
-
   bg.style.backgroundSize     = `${bw}px ${bh}px`;
   bg.style.backgroundPosition = `${bx}px ${by}px`;
 }
@@ -455,46 +443,38 @@ function closeEditor() {
   document.getElementById('te-ov').classList.remove('active');
 }
 
+
+function applyBgToElement(bgId, frameId) {
+  const bg    = document.getElementById(bgId);
+  const frame = document.getElementById(frameId);
+  if (!bg || !frame) return;
+  const fw = frame.offsetWidth;
+  const fh = frame.offsetHeight;
+  const bw = fw * imgState.scale;
+  const bh = fh * imgState.scale;
+  const bx = (fw - bw) / 2 + (imgState.ox || 0) * fw;
+  const by = (fh - bh) / 2 + (imgState.oy || 0) * fh;
+  bg.style.backgroundImage    = `url('${COVER_URL}')`;
+  bg.style.backgroundRepeat   = 'no-repeat';
+  bg.style.backgroundSize     = `${bw}px ${bh}px`;
+  bg.style.backgroundPosition = `${bx}px ${by}px`;
+}
 function saveEditor() {
-  const teFrame   = document.getElementById('te-frame');
-  const archFrame = document.getElementById('arch-frame');
+  const tfw = document.getElementById('te-frame').offsetWidth;
+  const tfh = document.getElementById('te-frame').offsetHeight;
 
-  const tfw = teFrame.offsetWidth;
-  const tfh = teFrame.offsetHeight;
-  const afw = archFrame.offsetWidth;
-  const afh = archFrame.offsetHeight;
+  // Lưu dạng tỉ lệ: scale, và offset % so với frame
+  imgState = {
+    scale: te.scale,
+    ox: te.x / tfw,   // offset ngang / width → tỉ lệ
+    oy: te.y / tfh    // offset dọc / height → tỉ lệ
+  };
 
-  // Tỉ lệ giữa arch thật và editor
-  const ratioW = afw / tfw;
-  const ratioH = afh / tfh;
-
-  // Scale và position trong editor (pixel của te-frame)
-  const teBw = tfw * te.scale;
-  const teBh = tfh * te.scale;
-  const teBx = (tfw - teBw) / 2 + te.x;
-  const teBy = (tfh - teBh) / 2 + te.y;
-
-  // Convert sang pixel của arch-frame thật
-  const archBw = teBw * ratioW;
-  const archBh = teBh * ratioH;
-  const archBx = teBx * ratioW;
-  const archBy = teBy * ratioH;
-
-  imgState.size = `${archBw}px ${archBh}px`;
-  imgState.px   = `${archBx}px`;
-  imgState.py   = `${archBy}px`;
-
-  // Apply lên ảnh bìa thật
-  const archBg = document.getElementById('arch-bg');
-  archBg.style.backgroundImage    = `url('${COVER_URL}?t=${Date.now()}')`;
-  archBg.style.backgroundSize     = imgState.size;
-  archBg.style.backgroundPosition = `${imgState.px} ${imgState.py}`;
-  archBg.style.backgroundRepeat   = 'no-repeat';
+  applyBgToElement('arch-bg', 'arch-frame');
   document.getElementById('arch-placeholder').style.display = 'none';
-
   saveLocal();
   closeEditor();
-  alert('✅ Đã lưu vị trí ảnh!');
+  alert('✅ Đã lưu!');
 }
 
 // Touch & Mouse events
