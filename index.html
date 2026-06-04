@@ -534,7 +534,11 @@ footer .fheart { display: block; font-size: 1.4rem; margin-bottom: 0.7rem; }
 
   function openTouchEditor() {
     closeAdmin();
-    // Sync state từ ảnh bìa hiện tại
+    // Lấy src từ cover-img thật
+    const coverImg = document.getElementById('cover-img');
+    const teImg    = document.getElementById('te-img');
+    if (coverImg && coverImg.src) teImg.src = coverImg.src;
+    // Sync state đã lưu
     try {
       const s = JSON.parse(localStorage.getItem('wimg')||'{}');
       teState = { scale: s.scale||1, x: s.x||0, y: s.y||0 };
@@ -561,8 +565,11 @@ footer .fheart { display: block; font-size: 1.4rem; margin-bottom: 0.7rem; }
   function applyMainImg() {
     const img = document.getElementById('cover-img');
     if (!img) return;
-    img.style.transform = `translate(${teState.x}px, ${teState.y}px) scale(${teState.scale})`;
+    img.style.transform       = `translate(${teState.x}px, ${teState.y}px) scale(${teState.scale})`;
     img.style.transformOrigin = 'center center';
+    img.style.objectFit       = 'none'; // tắt object-fit để transform hoạt động đúng
+    img.style.width           = '100%';
+    img.style.height          = '100%';
   }
 
   function saveTouchEditor() {
@@ -576,7 +583,7 @@ footer .fheart { display: block; font-size: 1.4rem; margin-bottom: 0.7rem; }
     try {
       const s = JSON.parse(localStorage.getItem('wimg')||'{}');
       if (!s.scale) return;
-      teState = s;
+      teState = { scale: s.scale||1, x: s.x||0, y: s.y||0 };
       applyMainImg();
     } catch(e) {}
   }
