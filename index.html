@@ -638,7 +638,6 @@
       if (saved.messages) messages = saved.messages;
     } catch(e) {}
     updateNames(currentGroom, currentBride);
-    renderMessages();
     loadPhotosFromGitHub();
     checkAdminMode();
   }
@@ -790,32 +789,6 @@
     if (e.key === 'ArrowLeft') changePhoto(-1);
     if (e.key === 'ArrowRight') changePhoto(1);
   });
-
-  // ===== MESSAGES =====
-  function addMessage() {
-    const name = document.getElementById('msg-name').value.trim();
-    const text = document.getElementById('msg-text').value.trim();
-    if (!name || !text) return alert('Bạn ơi điền cả tên và lời chúc nhé! 😊');
-    messages.unshift({ name, text, time: new Date().toLocaleDateString('vi-VN') });
-    document.getElementById('msg-name').value = '';
-    document.getElementById('msg-text').value = '';
-    renderMessages();
-    saveInfo_local();
-  }
-
-  function renderMessages() {
-    const list = document.getElementById('messages-list');
-    if (messages.length === 0) {
-      list.innerHTML = '<p style="text-align:center;color:var(--text-light);font-style:italic;">Chưa có lời chúc nào. Hãy là người đầu tiên! 💌</p>';
-      return;
-    }
-    list.innerHTML = messages.map(m => `
-      <div class="message-card">
-        <div class="sender">✉️ ${m.name}</div>
-        <p>${m.text}</p>
-        <div class="time">${m.time}</div>
-      </div>`).join('');
-  }
 
   init();
 </script>
