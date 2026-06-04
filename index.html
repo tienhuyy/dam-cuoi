@@ -307,17 +307,22 @@ function saveLocal() {
 function applyCoverImg() {
   const bg = document.getElementById('arch-bg');
   const ph = document.getElementById('arch-placeholder');
-  // Thử load ảnh để kiểm tra
   const img = new Image();
   img.onload = () => {
     bg.style.backgroundImage    = `url('${COVER_URL}?t=${Date.now()}')`;
-    bg.style.backgroundSize     = imgState.size;
-    bg.style.backgroundPosition = `${imgState.px} ${imgState.py}`;
+    bg.style.backgroundRepeat   = 'no-repeat';
+    if (imgState.size && imgState.size !== 'cover') {
+      // Đã có setting pixel từ editor
+      bg.style.backgroundSize     = imgState.size;
+      bg.style.backgroundPosition = `${imgState.px} ${imgState.py}`;
+    } else {
+      // Mặc định: cover, căn trên
+      bg.style.backgroundSize     = 'cover';
+      bg.style.backgroundPosition = '50% 20%';
+    }
     ph.style.display = 'none';
   };
-  img.onerror = () => {
-    ph.style.display = 'flex';
-  };
+  img.onerror = () => { ph.style.display = 'flex'; };
   img.src = COVER_URL + '?t=' + Date.now();
 }
 
@@ -451,18 +456,33 @@ function closeEditor() {
 }
 
 function saveEditor() {
-  const frame = document.getElementById('te-frame');
-  const fw = frame.offsetWidth;
-  const fh = frame.offsetHeight;
-  const bw = fw * te.scale;
-  const bh = fh * te.scale;
-  const bx = (fw - bw) / 2 + te.x;
-  const by = (fh - bh) / 2 + te.y;
+  const teFrame   = document.getElementById('te-frame');
+  const archFrame = document.getElementById('arch-frame');
 
-  // Convert pixel → percentage cho arch-bg
-  imgState.size = `${bw}px ${bh}px`;
-  imgState.px   = `${bx}px`;
-  imgState.py   = `${by}px`;
+  const tfw = teFrame.offsetWidth;
+  const tfh = teFrame.offsetHeight;
+  const afw = archFrame.offsetWidth;
+  const afh = archFrame.offsetHeight;
+
+  // Tỉ lệ giữa arch thật và editor
+  const ratioW = afw / tfw;
+  const ratioH = afh / tfh;
+
+  // Scale và position trong editor (pixel của te-frame)
+  const teBw = tfw * te.scale;
+  const teBh = tfh * te.scale;
+  const teBx = (tfw - teBw) / 2 + te.x;
+  const teBy = (tfh - teBh) / 2 + te.y;
+
+  // Convert sang pixel của arch-frame thật
+  const archBw = teBw * ratioW;
+  const archBh = teBh * ratioH;
+  const archBx = teBx * ratioW;
+  const archBy = teBy * ratioH;
+
+  imgState.size = `${archBw}px ${archBh}px`;
+  imgState.px   = `${archBx}px`;
+  imgState.py   = `${archBy}px`;
 
   // Apply lên ảnh bìa thật
   const archBg = document.getElementById('arch-bg');
