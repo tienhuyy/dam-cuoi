@@ -356,6 +356,59 @@ footer .fheart { display: block; font-size: 1.4rem; margin-bottom: 0.7rem; }
     color: #8a6a4a;
     line-height: 1;
   }
+
+  /* Touch image editor */
+  .touch-edit-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 2000;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  .touch-edit-overlay.active { display: flex; }
+  .touch-edit-title {
+    color: #fff; font-family: 'Playfair Display', serif;
+    font-size: 1rem; margin-bottom: 1rem;
+    letter-spacing: 0.1rem; opacity: 0.85;
+  }
+  .touch-edit-frame {
+    width: min(320px, 85vw);
+    aspect-ratio: 4/5;
+    overflow: hidden;
+    border-radius: 50% 50% 6px 6px / 22% 22% 6px 6px;
+    border: 2px solid rgba(255,255,255,0.4);
+    position: relative;
+    cursor: grab;
+    touch-action: none;
+  }
+  .touch-edit-frame.grabbing { cursor: grabbing; }
+  .touch-edit-frame img {
+    position: absolute;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transform-origin: center center;
+    pointer-events: none;
+    user-select: none;
+  }
+  .touch-edit-hint {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.78rem; margin-top: 0.8rem;
+    text-align: center; line-height: 1.6;
+  }
+  .touch-edit-btns {
+    display: flex; gap: 0.8rem; margin-top: 1.2rem;
+  }
+  .touch-edit-btns button {
+    padding: 0.65rem 1.6rem; border-radius: 50px;
+    font-family: 'Nunito', sans-serif; font-size: 0.9rem;
+    border: none; cursor: pointer; transition: all 0.2s;
+  }
+  .teb-cancel { background: rgba(255,255,255,0.15); color: #fff; }
+  .teb-save   { background: var(--gold); color: #fff; }
+  .teb-reset  { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); font-size:0.8rem; }
 </style>
 </head>
 <body>
@@ -473,6 +526,119 @@ footer .fheart { display: block; font-size: 1.4rem; margin-bottom: 0.7rem; }
   let bride   = 'Quỳnh Hoa';
 
 
+
+  // ── Touch Image Editor ─────────────────────────────────────────────────
+  let teState = { scale: 1, x: 0, y: 0 };
+  let teDrag  = null; // {startX, startY, origX, origY}
+  let tePinch = null; // {dist, origScale}
+
+  function openTouchEditor() {
+    closeAdmin();
+    // Sync state từ ảnh bìa hiện tại
+    try {
+      const s = JSON.parse(localStorage.getItem('wimg')||'{}');
+      teState = { scale: s.scale||1, x: s.x||0, y: s.y||0 };
+    } catch(e) { teState = {scale:1,x:0,y:0}; }
+    applyTeTransform();
+    document.getElementById('touch-editor').classList.add('active');
+  }
+
+  function closeTouchEditor() {
+    document.getElementById('touch-editor').classList.remove('active');
+  }
+
+  function resetTouchEditor() {
+    teState = {scale:1, x:0, y:0};
+    applyTeTransform();
+  }
+
+  function applyTeTransform() {
+    const img = document.getElementById('te-img');
+    img.style.transform = `translate(${teState.x}px, ${teState.y}px) scale(${teState.scale})`;
+    img.style.transformOrigin = 'center center';
+  }
+
+  function applyMainImg() {
+    const img = document.getElementById('cover-img');
+    if (!img) return;
+    img.style.transform = `translate(${teState.x}px, ${teState.y}px) scale(${teState.scale})`;
+    img.style.transformOrigin = 'center center';
+  }
+
+  function saveTouchEditor() {
+    applyMainImg();
+    try { localStorage.setItem('wimg', JSON.stringify(teState)); } catch(e){}
+    closeTouchEditor();
+    alert('✅ Đã lưu vị trí ảnh!');
+  }
+
+  function loadImgStyle() {
+    try {
+      const s = JSON.parse(localStorage.getItem('wimg')||'{}');
+      if (!s.scale) return;
+      teState = s;
+      applyMainImg();
+    } catch(e) {}
+  }
+
+  // Touch & Mouse events cho te-frame
+  document.addEventListener('DOMContentLoaded', () => {
+    const frame = document.getElementById('te-frame');
+    if (!frame) return;
+
+    // Mouse drag
+    frame.addEventListener('mousedown', e => {
+      teDrag = {startX: e.clientX, startY: e.clientY, origX: teState.x, origY: teState.y};
+      frame.classList.add('grabbing');
+      e.preventDefault();
+    });
+    document.addEventListener('mousemove', e => {
+      if (!teDrag) return;
+      teState.x = teDrag.origX + (e.clientX - teDrag.startX);
+      teState.y = teDrag.origY + (e.clientY - teDrag.startY);
+      applyTeTransform();
+    });
+    document.addEventListener('mouseup', () => { teDrag = null; frame.classList.remove('grabbing'); });
+
+    // Mouse wheel zoom
+    frame.addEventListener('wheel', e => {
+      e.preventDefault();
+      teState.scale = Math.max(0.5, Math.min(4, teState.scale - e.deltaY * 0.002));
+      applyTeTransform();
+    }, {passive:false});
+
+    // Touch drag + pinch
+    frame.addEventListener('touchstart', e => {
+      if (e.touches.length === 1) {
+        teDrag = {startX: e.touches[0].clientX, startY: e.touches[0].clientY, origX: teState.x, origY: teState.y};
+        tePinch = null;
+      } else if (e.touches.length === 2) {
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        tePinch = {dist: Math.hypot(dx,dy), origScale: teState.scale};
+        teDrag = null;
+      }
+      e.preventDefault();
+    }, {passive:false});
+
+    frame.addEventListener('touchmove', e => {
+      if (e.touches.length === 1 && teDrag) {
+        teState.x = teDrag.origX + (e.touches[0].clientX - teDrag.startX);
+        teState.y = teDrag.origY + (e.touches[0].clientY - teDrag.startY);
+        applyTeTransform();
+      } else if (e.touches.length === 2 && tePinch) {
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        const dist = Math.hypot(dx,dy);
+        teState.scale = Math.max(0.5, Math.min(4, tePinch.origScale * dist / tePinch.dist));
+        applyTeTransform();
+      }
+      e.preventDefault();
+    }, {passive:false});
+
+    frame.addEventListener('touchend', () => { teDrag = null; tePinch = null; });
+  });
+
   // ── Init ────────────────────────────────────────────────────────────────
   function init() {
     try {
@@ -482,6 +648,7 @@ footer .fheart { display: block; font-size: 1.4rem; margin-bottom: 0.7rem; }
       if (s.date)  document.getElementById('cover-date').textContent = s.date;
     } catch(e) {}
     setNames(groom, bride);
+    loadImgStyle();
     loadPhotos();
     if (location.search.includes('admin')) {
       document.getElementById('admin-btn').style.display = 'block';
@@ -575,7 +742,8 @@ footer .fheart { display: block; font-size: 1.4rem; margin-bottom: 0.7rem; }
     document.getElementById('admin-note').innerHTML =
       `📸 <strong>${photos.length}</strong> ảnh trong <code>photos/</code><br>
        🖼️ Ảnh bìa: upload <code>cover.jpg</code> vào thư mục gốc<br>
-       ➕ Thêm ảnh: GitHub → photos → Add file → Upload`;
+       ➕ Thêm ảnh: GitHub → photos → Add file → Upload<br>
+       <button onclick="openTouchEditor()" style="margin-top:0.6rem;padding:0.5rem 1.2rem;background:var(--gold);color:#fff;border:none;border-radius:50px;font-family:Nunito,sans-serif;font-size:0.82rem;cursor:pointer">🖼️ Chỉnh ảnh bìa</button>`;
     document.getElementById('admin-overlay').classList.add('active');
   }
   function closeAdmin() { document.getElementById('admin-overlay').classList.remove('active'); }
@@ -652,5 +820,24 @@ footer .fheart { display: block; font-size: 1.4rem; margin-bottom: 0.7rem; }
 
   init();
 </script>
+
+<!-- Touch Image Editor -->
+<div class="touch-edit-overlay" id="touch-editor">
+  <div class="touch-edit-title">✦ Chỉnh ảnh bìa ✦</div>
+  <div class="touch-edit-frame" id="te-frame">
+    <img id="te-img" src="cover.jpg" alt="cover"
+      onerror="this.style.opacity='0.3'">
+  </div>
+  <div class="touch-edit-hint">
+    👆 Kéo để di chuyển<br>
+    🤏 Chụm/banh 2 ngón để zoom
+  </div>
+  <div class="touch-edit-btns">
+    <button class="teb-reset" onclick="resetTouchEditor()">↺ Reset</button>
+    <button class="teb-cancel" onclick="closeTouchEditor()">Hủy</button>
+    <button class="teb-save" onclick="saveTouchEditor()">💾 Lưu</button>
+  </div>
+</div>
+
 </body>
 </html>
