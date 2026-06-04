@@ -99,6 +99,32 @@ footer .fh{display:block;font-size:1.4rem;margin-bottom:.7rem}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+
+/* FLOATING SLIDER PANEL */
+.float-ctrl {
+  display: none;
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(255,255,255,0.97);
+  border-top: 1.5px solid var(--gold-light);
+  box-shadow: 0 -4px 20px rgba(100,50,50,0.12);
+  padding: 0.8rem 1.2rem 1rem;
+  z-index: 300;
+  backdrop-filter: blur(6px);
+}
+.float-ctrl.show { display: block; }
+.float-ctrl .fc-title {
+  font-size: 0.78rem; color: var(--brown-mid);
+  margin-bottom: 0.6rem; display: flex;
+  align-items: center; justify-content: space-between;
+}
+.float-ctrl .fc-title span { font-weight: 400; }
+.float-ctrl .fc-title button {
+  font-size: 0.75rem; background: none; border: none;
+  color: var(--text-light); cursor: pointer; padding: 0;
+}
+.float-ctrl .srow { margin-bottom: 0.4rem; }
+.float-ctrl .srow label { width: 3rem; }
 </style>
 </head>
 <body>
@@ -182,29 +208,10 @@ footer .fh{display:block;font-size:1.4rem;margin-bottom:.7rem}
     <label>Ngày cưới</label>
     <input type="text" id="id" placeholder="VD: 15.06.2025">
 
-    <!-- SLIDERS -->
-    <div class="sliders">
-      <p>🖼️ Điều chỉnh ảnh bìa (kéo thanh → xem trực tiếp)</p>
-      <div class="srow">
-        <label>🔍 Zoom</label>
-        <input type="range" id="szoom" min="50" max="300" value="100" step="5" oninput="onSlider()">
-        <span class="sv" id="vzoom">100%</span>
-      </div>
-      <div class="srow">
-        <label>↔ Ngang</label>
-        <input type="range" id="sx" min="-50" max="50" value="0" step="1" oninput="onSlider()">
-        <span class="sv" id="vx">0%</span>
-      </div>
-      <div class="srow">
-        <label>↕ Dọc</label>
-        <input type="range" id="sy" min="-50" max="50" value="0" step="1" oninput="onSlider()">
-        <span class="sv" id="vy">0%</span>
-      </div>
-    </div>
-
     <div class="anote" id="anote"></div>
     <div class="mbtns">
       <button class="bc" onclick="closeAov()">Đóng</button>
+      <button class="bc" onclick="openFloat()" style="color:var(--brown);border-color:var(--gold)!important">🖼️ Chỉnh ảnh</button>
       <button class="bs" onclick="saveAdmin()">💾 Lưu</button>
     </div>
   </div>
@@ -283,27 +290,36 @@ function applyCover() {
   el.style.backgroundRepeat   = 'no-repeat';
 }
 
-/* ── SLIDERS ── */
-function onSlider() {
-  const zoom = +document.getElementById('szoom').value;
-  const x    = +document.getElementById('sx').value;
-  const y    = +document.getElementById('sy').value;
-  document.getElementById('vzoom').textContent = zoom + '%';
-  document.getElementById('vx').textContent    = x + '%';
-  document.getElementById('vy').textContent    = y + '%';
-  // x,y slider: -50..50 → map sang 0..100 cho background-position
+
+/* ── FLOATING SLIDER ── */
+function openFloat() {
+  closeAov();
+  // Sync giá trị từ img state
+  document.getElementById('fzoom').value = img.zoom;
+  document.getElementById('fx').value    = img.x - 50;
+  document.getElementById('fy').value    = img.y - 50;
+  document.getElementById('fvzoom').textContent = img.zoom + '%';
+  document.getElementById('fvx').textContent    = (img.x - 50) + '%';
+  document.getElementById('fvy').textContent    = (img.y - 50) + '%';
+  document.getElementById('float-ctrl').classList.add('show');
+}
+
+function hideFloat() {
+  document.getElementById('float-ctrl').classList.remove('show');
+  save(); // tự động lưu khi đóng
+}
+
+function onFloat() {
+  const zoom = +document.getElementById('fzoom').value;
+  const x    = +document.getElementById('fx').value;
+  const y    = +document.getElementById('fy').value;
+  document.getElementById('fvzoom').textContent = zoom + '%';
+  document.getElementById('fvx').textContent    = x + '%';
+  document.getElementById('fvy').textContent    = y + '%';
   img = { zoom, x: x + 50, y: y + 50 };
   applyCover();
 }
 
-function syncSliders() {
-  document.getElementById('szoom').value = img.zoom;
-  document.getElementById('sx').value   = img.x - 50;
-  document.getElementById('sy').value   = img.y - 50;
-  document.getElementById('vzoom').textContent = img.zoom + '%';
-  document.getElementById('vx').textContent    = (img.x - 50) + '%';
-  document.getElementById('vy').textContent    = (img.y - 50) + '%';
-}
 
 /* ── PHOTOS ── */
 async function loadPhotos() {
@@ -360,7 +376,6 @@ function openAdmin() {
   document.getElementById('ig').value = groom;
   document.getElementById('ib').value = bride;
   document.getElementById('id').value = document.getElementById('cdate').textContent;
-  syncSliders();
   document.getElementById('anote').innerHTML =
     `📸 <strong>${photos.length}</strong> ảnh trong <code>photos/</code><br>
      🖼️ Ảnh bìa: upload <code>cover.jpg</code> vào thư mục gốc`;
@@ -405,5 +420,29 @@ function saveAdmin() {
 
 init();
 </script>
+
+<!-- FLOATING SLIDER -->
+<div class="float-ctrl" id="float-ctrl">
+  <div class="fc-title">
+    <span>🖼️ Chỉnh ảnh bìa — kéo thanh để xem trực tiếp</span>
+    <button onclick="hideFloat()">✕ Đóng</button>
+  </div>
+  <div class="srow">
+    <label>🔍 Zoom</label>
+    <input type="range" id="fzoom" min="50" max="300" value="100" step="5" oninput="onFloat()">
+    <span class="sv" id="fvzoom">100%</span>
+  </div>
+  <div class="srow">
+    <label>↔ Ngang</label>
+    <input type="range" id="fx" min="-50" max="50" value="0" step="1" oninput="onFloat()">
+    <span class="sv" id="fvx">0%</span>
+  </div>
+  <div class="srow">
+    <label>↕ Dọc</label>
+    <input type="range" id="fy" min="-50" max="50" value="0" step="1" oninput="onFloat()">
+    <span class="sv" id="fvy">0%</span>
+  </div>
+</div>
+
 </body>
 </html>
