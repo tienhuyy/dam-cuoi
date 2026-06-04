@@ -4,440 +4,174 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tiến Huy & Quỳnh Hoa</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Great+Vibes&family=Nunito:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Great+Vibes&family=Nunito:wght@300;400&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --brown:     #5a3e28;
-  --brown-mid: #8a6a4a;
-  --gold:      #c9a86c;
-  --gold-light:#e8d8b8;
-  --rose:      #e8a0a8;
-  --deep-rose: #c05060;
-  --text:      #5a2828;
-  --text-light:#a06868;
-  --dark:      #3a1515;
+  --brown: #5a3e28; --brown-mid: #8a6a4a;
+  --gold: #c9a86c; --gold-light: #e8d8b8;
+  --rose: #e8a0a8; --deep-rose: #c05060;
+  --text: #5a2828; --text-light: #a06868; --dark: #3a1515;
 }
-
 body {
-  font-family: 'Nunito', sans-serif;
-  font-weight: 300;
+  font-family: 'Nunito', sans-serif; font-weight: 300;
   min-height: 100vh;
   background: linear-gradient(135deg, #fce8e8 0%, #f8d8d0 50%, #fce4d8 100%);
   color: var(--text);
 }
+#particle-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 9999; }
 
-/* PARTICLES */
-#particle-canvas {
-  position: fixed; inset: 0;
-  pointer-events: none;
-  z-index: 9999;
-}
-
-/* ═══════════════════════════════
-   COVER
-═══════════════════════════════ */
+/* ── COVER ── */
 .cover {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem 1.2rem;
-  position: relative; z-index: 1;
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 2rem 1.2rem; position: relative; z-index: 1;
 }
-
 .cover-card {
-  width: min(380px, 94vw);
+  width: min(360px, 92vw);
   background: rgba(255,255,255,0.93);
-  border: 1.5px solid var(--gold-light);
-  border-radius: 4px;
-  padding: 2.8rem 1.6rem 2rem;
+  border: 1.5px solid var(--gold-light); border-radius: 4px;
+  padding: 2.2rem 1.6rem 2rem;
   box-shadow: 0 12px 50px rgba(100,50,50,0.13);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  position: relative;
-  animation: fadeUp 1s ease both;
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  position: relative; animation: fadeUp 1s ease both;
 }
-
-/* viền kép bên trong */
 .cover-card::before {
-  content: '';
-  position: absolute;
-  inset: 10px;
-  border: 1px solid var(--gold-light);
-  border-radius: 2px;
-  pointer-events: none;
+  content: ''; position: absolute; inset: 10px;
+  border: 1px solid var(--gold-light); border-radius: 2px; pointer-events: none;
 }
-/* hoa nhỏ giữa viền trên/dưới */
-.cover-card::after {
-  content: '✿';
-  position: absolute;
-  top: 4px; left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.75rem;
-  color: var(--gold-light);
-  background: rgba(255,255,255,0.93);
-  padding: 0 4px;
-  line-height: 1;
-}
-.cover-bottom-flower {
-  position: absolute;
-  bottom: 4px; left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.75rem;
-  color: var(--gold-light);
-  background: rgba(255,255,255,0.93);
-  padding: 0 4px;
-  line-height: 1;
-  z-index: 1;
-}
+.cover-card::after   { content: '✿'; position: absolute; top: 4px; left: 50%; transform: translateX(-50%); font-size: .75rem; color: var(--gold-light); background: rgba(255,255,255,.93); padding: 0 4px; }
+.bottom-flower       { position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%); font-size: .75rem; color: var(--gold-light); background: rgba(255,255,255,.93); padding: 0 4px; z-index: 1; }
+.watermark           { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) rotate(-15deg); font-family: 'Great Vibes',cursive; font-size: 5rem; color: rgba(180,100,120,.09); white-space: nowrap; pointer-events: none; user-select: none; z-index: 0; }
 
-/* Watermark */
-.cover-watermark {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%) rotate(-15deg);
-  font-family: 'Great Vibes', cursive;
-  font-size: 5rem;
-  color: rgba(180,100,120,0.1);
-  white-space: nowrap;
-  pointer-events: none;
-  user-select: none;
-  z-index: 0;
-}
+/* SAVE the DATE */
+.save-the-date { display: flex; align-items: baseline; justify-content: center; gap: .5rem; margin-bottom: .9rem; position: relative; z-index: 1; }
+.std-s, .std-d { font-family: 'Playfair Display',Georgia,serif; font-size: clamp(.8rem,2.5vw,1rem); font-weight: 700; letter-spacing: .3rem; color: var(--brown); text-transform: uppercase; }
+.std-t         { font-family: 'Great Vibes',cursive; font-size: clamp(1.3rem,4vw,1.6rem); color: var(--brown-mid); line-height: 1; }
 
-/* Layout: ảnh arch + chữ dọc */
-.arch-row {
-  width: 100%;
-  margin-bottom: 1.2rem;
-  position: relative; z-index: 1;
-}
-
-/* Ảnh vòm */
+/* Arch */
+.arch-wrap { width: 100%; position: relative; z-index: 1; margin-bottom: 1.2rem; }
 .arch-frame {
-  width: 100%;
-  position: relative;
-  padding-top: 125%;
+  width: 100%; padding-top: 125%; position: relative;
   overflow: hidden;
   border-radius: 50% 50% 6px 6px / 22% 22% 6px 6px;
-  border: 2px solid var(--gold-light);
-  background: #f5efe8;
+  border: 2px solid var(--gold-light); background: #f5efe8;
 }
-.arch-frame img {
-  position: absolute;
-  /* Kích thước và vị trí được điều khiển bởi JS */
-  display: block;
-  max-width: none;
-  transform-origin: center center;
+/* ảnh bìa — dùng background-image để dễ control vị trí/zoom */
+.arch-bg {
+  position: absolute; inset: 0;
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  transition: background-position .1s, background-size .1s;
 }
 .arch-placeholder {
-  position: absolute; inset: 0;
-  display: flex; flex-direction: column;
+  position: absolute; inset: 0; display: flex; flex-direction: column;
   align-items: center; justify-content: center;
-  color: #b0a090; font-size: 0.75rem; gap: 0.4rem;
+  color: #b0a090; font-size: .75rem; gap: .4rem;
 }
 .arch-placeholder span { font-size: 2rem; }
 
-/* Chữ dọc SAVE the DATE */
+/* Tên */
+.cover-name { font-family: 'Great Vibes',cursive; font-size: clamp(1.6rem,5.5vw,2rem); color: var(--brown); margin-bottom: .4rem; white-space: nowrap; position: relative; z-index: 1; }
+.cover-date { font-family: 'Playfair Display',Georgia,serif; font-size: .85rem; letter-spacing: .15rem; color: var(--brown-mid); position: relative; z-index: 1; }
 
+.scroll-hint { margin-top: 1.2rem; display: flex; flex-direction: column; align-items: center; gap: .3rem; color: var(--rose); font-size: .68rem; letter-spacing: .15rem; text-transform: uppercase; animation: bounce 2s infinite; position: relative; z-index: 1; }
+.scroll-hint::after { content: '↓'; font-size: .9rem; }
 
-/* Tên đôi */
-.cover-name {
-  font-family: 'Great Vibes', cursive;
-  font-size: clamp(1.5rem, 5.5vw, 2rem);
-  color: var(--brown);
-  margin-bottom: 0.4rem;
-  white-space: nowrap;
-  position: relative; z-index: 1;
-}
-.cover-date {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 0.85rem;
-  letter-spacing: 0.15rem;
-  color: var(--brown-mid);
-  position: relative; z-index: 1;
-}
-
-/* Scroll hint */
-.scroll-hint {
-  margin-top: 1.2rem;
-  display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
-  color: var(--rose); font-size: 0.68rem;
-  letter-spacing: 0.15rem; text-transform: uppercase;
-  animation: bounce 2s infinite;
-  position: relative; z-index: 1;
-}
-.scroll-hint::after { content: '↓'; font-size: 0.9rem; }
-
-/* ═══════════════════════════════
-   INTRO
-═══════════════════════════════ */
-.intro {
-  text-align: center;
-  padding: 5rem 2rem 3rem;
-  max-width: 580px;
-  margin: 0 auto;
-  position: relative; z-index: 1;
-}
-.intro h2 {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1.8rem; font-weight: 400;
-  color: var(--deep-rose); margin-bottom: 0.8rem;
-}
+/* ── INTRO ── */
+.intro { text-align: center; padding: 5rem 2rem 3rem; max-width: 580px; margin: 0 auto; position: relative; z-index: 1; }
+.intro h2 { font-family: 'Playfair Display',Georgia,serif; font-size: 1.8rem; font-weight: 400; color: var(--deep-rose); margin-bottom: .8rem; }
 .intro p { color: var(--text-light); line-height: 1.9; }
 
-/* ═══════════════════════════════
-   GALLERY
-═══════════════════════════════ */
-.gallery-section {
-  padding: 1rem 1.2rem 5rem;
-  max-width: 1100px;
-  margin: 0 auto;
-  position: relative; z-index: 1;
-}
-.section-title {
-  text-align: center;
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1.5rem; font-weight: 400;
-  color: var(--deep-rose);
-  margin-bottom: 2rem;
-}
-.section-title::after {
-  content: ''; display: block;
-  width: 50px; height: 2px;
-  background: var(--gold);
-  margin: 0.6rem auto 0;
-}
-.empty-state {
-  text-align: center; padding: 3rem 1rem;
-  color: var(--text-light); font-style: italic; display: none;
-}
+/* ── GALLERY ── */
+.gallery-section { padding: 1rem 1.2rem 5rem; max-width: 1100px; margin: 0 auto; position: relative; z-index: 1; }
+.section-title { text-align: center; font-family: 'Playfair Display',Georgia,serif; font-size: 1.5rem; font-weight: 400; color: var(--deep-rose); margin-bottom: 2rem; }
+.section-title::after { content: ''; display: block; width: 50px; height: 2px; background: var(--gold); margin: .6rem auto 0; }
+.empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-light); font-style: italic; display: none; }
 .empty-state.show { display: block; }
-
-.photo-grid { columns: 3; column-gap: 0.8rem; }
-@media (max-width: 700px) { .photo-grid { columns: 2; } }
-@media (max-width: 400px) { .photo-grid { columns: 1; } }
-
-.photo-item {
-  break-inside: avoid;
-  margin-bottom: 0.8rem;
-  border-radius: 8px; overflow: hidden;
-  cursor: zoom-in;
-  box-shadow: 0 4px 16px rgba(150,80,80,0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-.photo-item:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(150,80,80,0.18); }
+.photo-grid { columns: 3; column-gap: .8rem; }
+@media(max-width:700px){.photo-grid{columns:2}}
+@media(max-width:400px){.photo-grid{columns:1}}
+.photo-item { break-inside: avoid; margin-bottom: .8rem; border-radius: 8px; overflow: hidden; cursor: zoom-in; box-shadow: 0 4px 16px rgba(150,80,80,.1); transition: transform .3s,box-shadow .3s; }
+.photo-item:hover { transform: translateY(-3px); box-shadow: 0 10px 28px rgba(150,80,80,.18); }
 .photo-item img { width: 100%; display: block; }
 
-/* ═══════════════════════════════
-   LIGHTBOX
-═══════════════════════════════ */
-.lightbox {
-  display: none; position: fixed; inset: 0;
-  background: rgba(20,8,8,0.92);
-  z-index: 1000;
-  align-items: center; justify-content: center;
-  padding: 1rem; cursor: zoom-out;
-}
+/* ── LIGHTBOX ── */
+.lightbox { display: none; position: fixed; inset: 0; background: rgba(20,8,8,.92); z-index: 1000; align-items: center; justify-content: center; padding: 1rem; cursor: zoom-out; }
 .lightbox.active { display: flex; }
-.lightbox img {
-  max-width: 92vw; max-height: 92vh;
-  border-radius: 6px; object-fit: contain;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-  cursor: default;
-}
-.lb-close {
-  position: absolute; top: 1.2rem; right: 1.4rem;
-  color: #fff; font-size: 2.2rem;
-  background: none; border: none; cursor: pointer;
-  opacity: 0.8; transition: opacity 0.2s;
-}
+.lightbox img { max-width: 92vw; max-height: 92vh; border-radius: 6px; object-fit: contain; box-shadow: 0 20px 60px rgba(0,0,0,.5); cursor: default; }
+.lb-close { position: absolute; top: 1.2rem; right: 1.4rem; color: #fff; font-size: 2.2rem; background: none; border: none; cursor: pointer; opacity: .8; }
 .lb-close:hover { opacity: 1; }
 
-/* ═══════════════════════════════
-   FOOTER
-═══════════════════════════════ */
-footer {
-  text-align: center; padding: 3rem 2rem;
-  background: var(--dark);
-  color: rgba(255,255,255,0.45); font-size: 0.82rem;
-  position: relative; z-index: 1;
-}
-footer .fheart { display: block; font-size: 1.4rem; margin-bottom: 0.7rem; }
+/* ── FOOTER ── */
+footer { text-align: center; padding: 3rem 2rem; background: var(--dark); color: rgba(255,255,255,.45); font-size: .82rem; position: relative; z-index: 1; }
+footer .fheart { display: block; font-size: 1.4rem; margin-bottom: .7rem; }
 
-/* ═══════════════════════════════
-   ADMIN
-═══════════════════════════════ */
-.admin-btn {
-  position: fixed; bottom: 1.8rem; right: 1.8rem;
-  background: var(--gold); color: #fff;
-  border: none; border-radius: 50px;
-  padding: 0.65rem 1.3rem;
-  font-family: 'Nunito', sans-serif; font-size: 0.82rem;
-  cursor: pointer; box-shadow: 0 4px 14px rgba(180,140,60,0.35);
-  z-index: 200; display: none; transition: all 0.25s;
-}
+/* ── ADMIN ── */
+.admin-btn { position: fixed; bottom: 1.8rem; right: 1.8rem; background: var(--gold); color: #fff; border: none; border-radius: 50px; padding: .65rem 1.3rem; font-family: 'Nunito',sans-serif; font-size: .82rem; cursor: pointer; box-shadow: 0 4px 14px rgba(180,140,60,.35); z-index: 200; display: none; transition: all .25s; }
 .admin-btn:hover { transform: translateY(-2px); }
-
-.overlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(30,12,12,0.55);
-  z-index: 400; align-items: center; justify-content: center;
-}
+.overlay { display: none; position: fixed; inset: 0; background: rgba(30,12,12,.55); z-index: 400; align-items: center; justify-content: center; }
 .overlay.active { display: flex; }
-.modal {
-  background: #faf6f0; border-radius: 14px;
-  padding: 2.2rem; width: min(380px, 92vw);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.28);
-  max-height: 90vh; overflow-y: auto;
-}
-.modal h3 {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1.3rem; color: var(--deep-rose);
-  margin-bottom: 1.1rem; font-weight: 400;
-}
-.modal label { display: block; font-size: 0.82rem; color: var(--text-light); margin-bottom: 0.25rem; }
-.modal input {
-  width: 100%; padding: 0.65rem 0.9rem;
-  border: 1px solid var(--rose); border-radius: 8px;
-  font-family: 'Nunito', sans-serif; font-size: 0.95rem;
-  color: var(--text); margin-bottom: 0.9rem; background: #fff;
-}
+.modal { background: #faf6f0; border-radius: 14px; padding: 2.2rem; width: min(380px,92vw); box-shadow: 0 20px 60px rgba(0,0,0,.28); max-height: 90vh; overflow-y: auto; }
+.modal h3 { font-family: 'Playfair Display',Georgia,serif; font-size: 1.3rem; color: var(--deep-rose); margin-bottom: 1.1rem; font-weight: 400; }
+.modal label { display: block; font-size: .82rem; color: var(--text-light); margin-bottom: .25rem; }
+.modal input { width: 100%; padding: .65rem .9rem; border: 1px solid var(--rose); border-radius: 8px; font-family: 'Nunito',sans-serif; font-size: .95rem; color: var(--text); margin-bottom: .9rem; background: #fff; }
 .modal input:focus { outline: none; border-color: var(--deep-rose); }
-.modal-btns { display: flex; gap: 0.7rem; justify-content: flex-end; }
-.modal-btns button {
-  padding: 0.55rem 1.4rem; border-radius: 50px;
-  font-family: 'Nunito', sans-serif; font-size: 0.88rem;
-  cursor: pointer; border: none; transition: all 0.2s;
-}
+.modal-btns { display: flex; gap: .7rem; justify-content: flex-end; }
+.modal-btns button { padding: .55rem 1.4rem; border-radius: 50px; font-family: 'Nunito',sans-serif; font-size: .88rem; cursor: pointer; border: none; transition: all .2s; }
 .btn-cancel { background: transparent; color: var(--text-light); border: 1px solid var(--rose) !important; }
 .btn-save { background: var(--deep-rose); color: #fff; }
 .btn-save:hover { background: var(--dark); }
-.admin-note {
-  font-size: 0.8rem; color: var(--text-light);
-  background: #f5ede0; border-radius: 8px;
-  padding: 0.75rem; margin-bottom: 0.9rem; line-height: 1.7;
-}
+.admin-note { font-size: .8rem; color: var(--text-light); background: #f5ede0; border-radius: 8px; padding: .75rem; margin-bottom: .9rem; line-height: 1.7; }
 
-/* Animations */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* ── TOUCH EDITOR ── */
+.te-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.88); z-index: 2000; flex-direction: column; align-items: center; justify-content: center; padding: 1rem; }
+.te-overlay.active { display: flex; }
+.te-title { color: #fff; font-family: 'Playfair Display',serif; font-size: 1rem; margin-bottom: .8rem; opacity: .9; letter-spacing: .1rem; }
+.te-frame {
+  width: min(300px,80vw); aspect-ratio: 4/5;
+  overflow: hidden; position: relative;
+  border-radius: 50% 50% 6px 6px / 22% 22% 6px 6px;
+  border: 2px solid rgba(255,255,255,.4);
+  touch-action: none; cursor: grab;
 }
-@keyframes bounce {
-  0%,100% { transform: translateY(0); }
-  50%      { transform: translateY(6px); }
-}
+.te-frame.grabbing { cursor: grabbing; }
+/* ảnh trong editor cũng dùng background-image */
+.te-bg { position: absolute; inset: 0; background-repeat: no-repeat; }
+.te-hint { color: rgba(255,255,255,.6); font-size: .78rem; margin-top: .7rem; text-align: center; line-height: 1.6; }
+.te-btns { display: flex; gap: .7rem; margin-top: 1rem; }
+.te-btns button { padding: .6rem 1.4rem; border-radius: 50px; font-family: 'Nunito',sans-serif; font-size: .88rem; border: none; cursor: pointer; }
+.teb-reset  { background: rgba(255,255,255,.12); color: #fff; }
+.teb-cancel { background: rgba(255,255,255,.2); color: #fff; }
+.teb-save   { background: var(--gold); color: #fff; }
 
-  /* SAVE the DATE phía trên vòm */
-  .save-the-date {
-    display: flex;
-    align-items: baseline;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-bottom: 0.8rem;
-    position: relative; z-index: 1;
-  }
-  .std-save, .std-date {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: clamp(0.85rem, 2.8vw, 1.1rem);
-    font-weight: 700;
-    letter-spacing: 0.3rem;
-    color: #5a3e28;
-    text-transform: uppercase;
-  }
-  .std-the {
-    font-family: 'Great Vibes', cursive;
-    font-size: clamp(1.3rem, 4vw, 1.7rem);
-    color: #8a6a4a;
-    line-height: 1;
-  }
-
-  /* Touch image editor */
-  .touch-edit-overlay {
-    display: none;
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.85);
-    z-index: 2000;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-  }
-  .touch-edit-overlay.active { display: flex; }
-  .touch-edit-title {
-    color: #fff; font-family: 'Playfair Display', serif;
-    font-size: 1rem; margin-bottom: 1rem;
-    letter-spacing: 0.1rem; opacity: 0.85;
-  }
-  .touch-edit-frame {
-    width: min(320px, 85vw);
-    aspect-ratio: 4/5;
-    overflow: hidden;
-    border-radius: 50% 50% 6px 6px / 22% 22% 6px 6px;
-    border: 2px solid rgba(255,255,255,0.4);
-    position: relative;
-    cursor: grab;
-    touch-action: none;
-  }
-  .touch-edit-frame.grabbing { cursor: grabbing; }
-  .touch-edit-frame img {
-    position: absolute;
-    pointer-events: none;
-    user-select: none;
-    object-fit: cover;
-  }
-  .touch-edit-hint {
-    color: rgba(255,255,255,0.6);
-    font-size: 0.78rem; margin-top: 0.8rem;
-    text-align: center; line-height: 1.6;
-  }
-  .touch-edit-btns {
-    display: flex; gap: 0.8rem; margin-top: 1.2rem;
-  }
-  .touch-edit-btns button {
-    padding: 0.65rem 1.6rem; border-radius: 50px;
-    font-family: 'Nunito', sans-serif; font-size: 0.9rem;
-    border: none; cursor: pointer; transition: all 0.2s;
-  }
-  .teb-cancel { background: rgba(255,255,255,0.15); color: #fff; }
-  .teb-save   { background: var(--gold); color: #fff; }
-  .teb-reset  { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); font-size:0.8rem; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
 </style>
 </head>
 <body>
 
 <canvas id="particle-canvas"></canvas>
 
-<!-- ═══ COVER ═══ -->
 <section class="cover">
   <div class="cover-card">
-    <div class="cover-bottom-flower">✿</div>
-    <div class="cover-watermark">Love</div>
+    <div class="bottom-flower">✿</div>
+    <div class="watermark">Love</div>
 
-    <!-- SAVE the DATE -->
     <div class="save-the-date">
-      <span class="std-save">Save</span>
-      <span class="std-the">the</span>
-      <span class="std-date">Date</span>
+      <span class="std-s">Save</span>
+      <span class="std-t">the</span>
+      <span class="std-d">Date</span>
     </div>
 
-    <!-- Arch -->
-    <div class="arch-row" style="position:relative;width:100%;margin-bottom:1.2rem;">
-
+    <div class="arch-wrap">
       <div class="arch-frame" id="arch-frame">
-        <div class="arch-placeholder" id="cover-placeholder">
+        <div class="arch-bg" id="arch-bg"></div>
+        <div class="arch-placeholder" id="arch-placeholder">
           <span>🌸</span>
-          <p>Upload <code>cover.jpg</code><br>lên GitHub</p>
+          <p>Upload <code>cover.jpg</code><br>lên GitHub repo</p>
         </div>
-        <img id="cover-img" src="cover.jpg" alt="Ảnh bìa"
-          onload="this.style.display='block';document.getElementById('cover-placeholder').style.display='none';loadImgStyle();"
-          onerror="this.style.display='none';document.getElementById('cover-placeholder').style.display='flex';"
-          style="display:none;position:absolute;">
       </div>
     </div>
 
@@ -447,43 +181,36 @@ footer .fheart { display: block; font-size: 1.4rem; margin-bottom: 0.7rem; }
   <div class="scroll-hint">Cuộn xuống</div>
 </section>
 
-<!-- ═══ INTRO ═══ -->
 <section class="intro">
   <h2>Album Ảnh Cưới</h2>
   <p>Những khoảnh khắc đẹp nhất trong ngày trọng đại của chúng mình. Mời bạn cùng lưu giữ những kỷ niệm không thể nào quên này 🌹</p>
 </section>
 
-<!-- ═══ GALLERY ═══ -->
 <section class="gallery-section">
   <h2 class="section-title">Khoảnh Khắc Đáng Nhớ</h2>
   <div class="empty-state" id="empty-state">Ảnh cưới sẽ sớm được cập nhật 🌸</div>
   <div class="photo-grid" id="photo-grid"></div>
 </section>
 
-<!-- ═══ LIGHTBOX ═══ -->
 <div class="lightbox" id="lightbox" onclick="closeLB()">
   <button class="lb-close" onclick="closeLB()">×</button>
   <img id="lb-img" src="" alt="" onclick="event.stopPropagation()">
 </div>
 
-<!-- ═══ FOOTER ═══ -->
 <footer>
   <span class="fheart">💕</span>
   <span id="footer-name">Tiến Huy &amp; Quỳnh Hoa — Mãi bên nhau</span>
 </footer>
 
-<!-- ═══ ADMIN ═══ -->
 <button class="admin-btn" id="admin-btn" onclick="openAdmin()">⚙️ Admin</button>
 
-<div class="overlay" id="login-overlay">
+<!-- Login -->
+<div class="overlay" id="login-ov">
   <div class="modal">
     <h3>🔐 Đăng nhập Admin</h3>
     <label>Mật khẩu</label>
-    <input type="password" id="pw" placeholder="Nhập mật khẩu..."
-      onkeydown="if(event.key==='Enter')doLogin()">
-    <div id="pw-err" style="color:#c0392b;font-size:0.82rem;margin-top:-0.5rem;margin-bottom:0.8rem;display:none">
-      Sai mật khẩu! 🔒
-    </div>
+    <input type="password" id="pw" placeholder="Nhập mật khẩu..." onkeydown="if(event.key==='Enter')doLogin()">
+    <div id="pw-err" style="color:#c0392b;font-size:.82rem;margin-top:-.5rem;margin-bottom:.8rem;display:none">Sai mật khẩu! 🔒</div>
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeLogin()">Hủy</button>
       <button class="btn-save" onclick="doLogin()">Đăng nhập</button>
@@ -491,7 +218,8 @@ footer .fheart { display: block; font-size: 1.4rem; margin-bottom: 0.7rem; }
   </div>
 </div>
 
-<div class="overlay" id="admin-overlay">
+<!-- Admin panel -->
+<div class="overlay" id="admin-ov">
   <div class="modal">
     <h3>⚙️ Quản lý Album</h3>
     <label>Tên chú rể</label>
@@ -503,367 +231,340 @@ footer .fheart { display: block; font-size: 1.4rem; margin-bottom: 0.7rem; }
     <div class="admin-note" id="admin-note"></div>
     <div class="modal-btns">
       <button class="btn-cancel" onclick="closeAdmin()">Đóng</button>
+      <button class="teb-reset" onclick="openTouchEditor()" style="background:var(--gold-light);color:var(--brown)">🖼️ Chỉnh ảnh bìa</button>
       <button class="btn-save" onclick="saveAdmin()">💾 Lưu</button>
     </div>
   </div>
 </div>
 
-<script>
-  // ── Config ──────────────────────────────────────────────────────────────
-  const PASS        = '12345678';
-  const GH_USER     = 'tienhuyy';
-  const GH_REPO     = 'dam-cuoi';
-  const GH_BRANCH   = 'main';
-  const RAW_BASE    = `https://raw.githubusercontent.com/${GH_USER}/${GH_REPO}/${GH_BRANCH}/photos/`;
-  const API_URL     = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/photos`;
-  const IMG_EXTS    = ['jpg','jpeg','png','gif','webp','JPG','JPEG','PNG','GIF','WEBP'];
-
-  let isAdmin = false;
-  let photos  = [];
-  let groom   = 'Tiến Huy';
-  let bride   = 'Quỳnh Hoa';
-
-
-
-  // ── Touch Image Editor ─────────────────────────────────────────────────
-  let teState = { scale: 1, x: 0, y: 0 };
-  let teDrag  = null; // {startX, startY, origX, origY}
-  let tePinch = null; // {dist, origScale}
-
-  function openTouchEditor() {
-    closeAdmin();
-    // Lấy src từ cover-img thật
-    const coverImg = document.getElementById('cover-img');
-    const teImg    = document.getElementById('te-img');
-    if (coverImg && coverImg.src) teImg.src = coverImg.src;
-    // Sync state đã lưu
-    try {
-      const s = JSON.parse(localStorage.getItem('wimg')||'{}');
-      teState = { scale: s.scale||1, x: s.x||0, y: s.y||0 };
-    } catch(e) { teState = {scale:1,x:0,y:0}; }
-    applyTeTransform();
-    document.getElementById('touch-editor').classList.add('active');
-  }
-
-  function closeTouchEditor() {
-    document.getElementById('touch-editor').classList.remove('active');
-  }
-
-  function resetTouchEditor() {
-    teState = {scale:1, x:0, y:0};
-    applyTeTransform();
-  }
-
-  function applyTeTransform() {
-    const img   = document.getElementById('te-img');
-    const frame = document.getElementById('te-frame');
-    if (!img || !frame) return;
-    const fw = frame.offsetWidth;
-    const fh = frame.offsetHeight;
-    const w  = fw * teState.scale;
-    const h  = fh * teState.scale;
-    const left = (fw - w) / 2 + teState.x;
-    const top  = (fh - h) / 2 + teState.y;
-    img.style.width    = w + 'px';
-    img.style.height   = h + 'px';
-    img.style.left     = left + 'px';
-    img.style.top      = top + 'px';
-    img.style.transform = 'none';
-    img.style.objectFit = 'cover';
-  }
-
-  function applyMainImg() {
-    const img   = document.getElementById('cover-img');
-    const frame = document.getElementById('arch-frame');
-    if (!img || !frame) return;
-    const fw = frame.offsetWidth;
-    const fh = frame.offsetHeight;
-    const w  = fw * teState.scale;
-    const h  = fh * teState.scale;
-    const left = (fw - w) / 2 + teState.x;
-    const top  = (fh - h) / 2 + teState.y;
-    img.style.width    = w + 'px';
-    img.style.height   = h + 'px';
-    img.style.left     = left + 'px';
-    img.style.top      = top + 'px';
-    img.style.transform = 'none';
-  }
-
-  function saveTouchEditor() {
-    applyMainImg();
-    try { localStorage.setItem('wimg', JSON.stringify(teState)); } catch(e){}
-    closeTouchEditor();
-    alert('✅ Đã lưu vị trí ảnh!');
-  }
-
-  function loadImgStyle() {
-    try {
-      const s = JSON.parse(localStorage.getItem('wimg')||'{}');
-      if (!s.scale) return;
-      teState = { scale: s.scale||1, x: s.x||0, y: s.y||0 };
-      applyMainImg();
-    } catch(e) {}
-  }
-
-  // Touch & Mouse events cho te-frame
-  document.addEventListener('DOMContentLoaded', () => {
-    const frame = document.getElementById('te-frame');
-    if (!frame) return;
-
-    // Mouse drag
-    frame.addEventListener('mousedown', e => {
-      teDrag = {startX: e.clientX, startY: e.clientY, origX: teState.x, origY: teState.y};
-      frame.classList.add('grabbing');
-      e.preventDefault();
-    });
-    document.addEventListener('mousemove', e => {
-      if (!teDrag) return;
-      teState.x = teDrag.origX + (e.clientX - teDrag.startX);
-      teState.y = teDrag.origY + (e.clientY - teDrag.startY);
-      applyTeTransform();
-    });
-    document.addEventListener('mouseup', () => { teDrag = null; frame.classList.remove('grabbing'); });
-
-    // Mouse wheel zoom
-    frame.addEventListener('wheel', e => {
-      e.preventDefault();
-      teState.scale = Math.max(0.5, Math.min(4, teState.scale - e.deltaY * 0.002));
-      applyTeTransform();
-    }, {passive:false});
-
-    // Touch drag + pinch
-    frame.addEventListener('touchstart', e => {
-      if (e.touches.length === 1) {
-        teDrag = {startX: e.touches[0].clientX, startY: e.touches[0].clientY, origX: teState.x, origY: teState.y};
-        tePinch = null;
-      } else if (e.touches.length === 2) {
-        const dx = e.touches[0].clientX - e.touches[1].clientX;
-        const dy = e.touches[0].clientY - e.touches[1].clientY;
-        tePinch = {dist: Math.hypot(dx,dy), origScale: teState.scale};
-        teDrag = null;
-      }
-      e.preventDefault();
-    }, {passive:false});
-
-    frame.addEventListener('touchmove', e => {
-      if (e.touches.length === 1 && teDrag) {
-        teState.x = teDrag.origX + (e.touches[0].clientX - teDrag.startX);
-        teState.y = teDrag.origY + (e.touches[0].clientY - teDrag.startY);
-        applyTeTransform();
-      } else if (e.touches.length === 2 && tePinch) {
-        const dx = e.touches[0].clientX - e.touches[1].clientX;
-        const dy = e.touches[0].clientY - e.touches[1].clientY;
-        const dist = Math.hypot(dx,dy);
-        teState.scale = Math.max(0.5, Math.min(4, tePinch.origScale * dist / tePinch.dist));
-        applyTeTransform();
-      }
-      e.preventDefault();
-    }, {passive:false});
-
-    frame.addEventListener('touchend', () => { teDrag = null; tePinch = null; });
-  });
-
-  // ── Init ────────────────────────────────────────────────────────────────
-  function init() {
-    try {
-      const s = JSON.parse(localStorage.getItem('winfo') || '{}');
-      if (s.groom) groom = s.groom;
-      if (s.bride) bride = s.bride;
-      if (s.date)  document.getElementById('cover-date').textContent = s.date;
-    } catch(e) {}
-    setNames(groom, bride);
-    loadImgStyle();
-    loadPhotos();
-    if (location.search.includes('admin')) {
-      document.getElementById('admin-btn').style.display = 'block';
-      openLogin();
-    }
-  }
-
-  function setNames(g, b) {
-    groom = g; bride = b;
-    document.getElementById('cover-name').innerHTML  = `${g} &amp; ${b}`;
-    document.getElementById('footer-name').innerHTML = `${g} &amp; ${b} — Mãi bên nhau`;
-  }
-
-  function saveLocal() {
-    try {
-      localStorage.setItem('winfo', JSON.stringify({
-        groom, bride,
-        date: document.getElementById('cover-date').textContent
-      }));
-    } catch(e) {}
-  }
-
-  // ── Photos ──────────────────────────────────────────────────────────────
-  async function loadPhotos() {
-    const empty = document.getElementById('empty-state');
-    empty.textContent = '⏳ Đang tải ảnh...';
-    empty.classList.add('show');
-    try {
-      const res   = await fetch(API_URL);
-      if (!res.ok) throw new Error();
-      const files = await res.json();
-      photos = files
-        .filter(f => f.type === 'file' && IMG_EXTS.some(e => f.name.endsWith('.'+e)))
-        .map(f => RAW_BASE + encodeURIComponent(f.name));
-      renderGrid();
-    } catch(e) {
-      empty.textContent = 'Không tải được ảnh — thử lại sau 🌸';
-    }
-  }
-
-  function renderGrid() {
-    const grid  = document.getElementById('photo-grid');
-    const empty = document.getElementById('empty-state');
-    grid.innerHTML = '';
-    if (!photos.length) { empty.classList.add('show'); empty.textContent = 'Ảnh cưới sẽ sớm được cập nhật 🌸'; return; }
-    empty.classList.remove('show');
-    photos.forEach(src => {
-      const d = document.createElement('div');
-      d.className = 'photo-item';
-      d.innerHTML = `<img src="${src}" loading="lazy" alt="">`;
-      d.onclick   = () => openLB(src);
-      grid.appendChild(d);
-    });
-  }
-
-  // ── Lightbox ─────────────────────────────────────────────────────────────
-  function openLB(src) {
-    document.getElementById('lb-img').src = src;
-    document.getElementById('lightbox').classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeLB() {
-    document.getElementById('lightbox').classList.remove('active');
-    document.body.style.overflow = '';
-  }
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLB(); });
-
-  // ── Admin ────────────────────────────────────────────────────────────────
-  function openLogin() {
-    document.getElementById('login-overlay').classList.add('active');
-    setTimeout(() => document.getElementById('pw').focus(), 100);
-  }
-  function closeLogin() {
-    document.getElementById('login-overlay').classList.remove('active');
-    document.getElementById('pw').value = '';
-    document.getElementById('pw-err').style.display = 'none';
-  }
-  function doLogin() {
-    if (document.getElementById('pw').value === PASS) {
-      isAdmin = true; closeLogin(); openAdmin();
-    } else {
-      document.getElementById('pw-err').style.display = 'block';
-      document.getElementById('pw').value = '';
-    }
-  }
-  function openAdmin() {
-    if (!isAdmin) { openLogin(); return; }
-    document.getElementById('in-groom').value = groom;
-    document.getElementById('in-bride').value = bride;
-    document.getElementById('in-date').value  = document.getElementById('cover-date').textContent;
-    document.getElementById('admin-note').innerHTML =
-      `📸 <strong>${photos.length}</strong> ảnh trong <code>photos/</code><br>
-       🖼️ Ảnh bìa: upload <code>cover.jpg</code> vào thư mục gốc<br>
-       ➕ Thêm ảnh: GitHub → photos → Add file → Upload<br>
-       <button onclick="openTouchEditor()" style="margin-top:0.6rem;padding:0.5rem 1.2rem;background:var(--gold);color:#fff;border:none;border-radius:50px;font-family:Nunito,sans-serif;font-size:0.82rem;cursor:pointer">🖼️ Chỉnh ảnh bìa</button>`;
-    document.getElementById('admin-overlay').classList.add('active');
-  }
-  function closeAdmin() { document.getElementById('admin-overlay').classList.remove('active'); }
-  function saveAdmin() {
-    const g = document.getElementById('in-groom').value.trim() || groom;
-    const b = document.getElementById('in-bride').value.trim() || bride;
-    const d = document.getElementById('in-date').value.trim();
-    setNames(g, b);
-    if (d) document.getElementById('cover-date').textContent = d;
-    saveLocal();
-    closeAdmin();
-    alert('✅ Đã lưu!');
-  }
-
-  // ── Sakura Particles ─────────────────────────────────────────────────────
-  (function() {
-    const canvas = document.getElementById('particle-canvas');
-    const ctx    = canvas.getContext('2d');
-    let W, H;
-    const COUNT  = 35;
-    const petals = [];
-
-    function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
-    window.addEventListener('resize', resize);
-    resize();
-
-    function newPetal(randomY) {
-      return {
-        x: Math.random() * W,
-        y: randomY ? Math.random() * H : -20 - Math.random() * 80,
-        size: Math.random() * 7 + 5,
-        angle: Math.random() * Math.PI * 2,
-        rot: (Math.random() - 0.5) * 0.03,
-        vx: (Math.random() - 0.5) * 0.8,
-        vy: Math.random() * 1.0 + 0.5,
-        swing: Math.random() * 0.6 + 0.2,
-        swingS: Math.random() * 0.015 + 0.008,
-        swingP: Math.random() * Math.PI * 2,
-        alpha: Math.random() * 0.45 + 0.3,
-        hue: 340 + Math.random() * 25,
-      };
-    }
-
-    for (let i = 0; i < COUNT; i++) petals.push(newPetal(true));
-
-    function drawPetal(p) {
-      const t = Date.now() / 1000;
-      const sx = Math.sin(t * p.swingS * 60 + p.swingP) * p.swing;
-      ctx.save();
-      ctx.translate(p.x + sx, p.y);
-      ctx.rotate(p.angle);
-      ctx.globalAlpha = p.alpha;
-      const g = ctx.createRadialGradient(0,0,0,0,0,p.size);
-      g.addColorStop(0, `hsl(${p.hue},90%,88%)`);
-      g.addColorStop(1, `hsl(${p.hue},75%,82%)`);
-      ctx.beginPath();
-      ctx.ellipse(0, 0, p.size * 0.5, p.size, 0, 0, Math.PI * 2);
-      ctx.fillStyle = g;
-      ctx.fill();
-      ctx.restore();
-    }
-
-    function loop() {
-      ctx.clearRect(0, 0, W, H);
-      petals.forEach(p => {
-        drawPetal(p);
-        p.y += p.vy; p.x += p.vx * 0.3; p.angle += p.rot;
-        if (p.y > H + 20) Object.assign(p, newPetal(false));
-      });
-      requestAnimationFrame(loop);
-    }
-    loop();
-  })();
-
-  init();
-</script>
-
-<!-- Touch Image Editor -->
-<div class="touch-edit-overlay" id="touch-editor">
-  <div class="touch-edit-title">✦ Chỉnh ảnh bìa ✦</div>
-  <div class="touch-edit-frame" id="te-frame">
-    <img id="te-img" src="cover.jpg" alt="cover"
-      onload="applyTeTransform()"
-      onerror="this.style.opacity='0.3'"
-      style="position:absolute;">
+<!-- Touch Editor -->
+<div class="te-overlay" id="te-ov">
+  <div class="te-title">✦ Chỉnh ảnh bìa ✦</div>
+  <div class="te-frame" id="te-frame">
+    <div class="te-bg" id="te-bg"></div>
   </div>
-  <div class="touch-edit-hint">
-    👆 Kéo để di chuyển<br>
-    🤏 Chụm/banh 2 ngón để zoom
-  </div>
-  <div class="touch-edit-btns">
-    <button class="teb-reset" onclick="resetTouchEditor()">↺ Reset</button>
-    <button class="teb-cancel" onclick="closeTouchEditor()">Hủy</button>
-    <button class="teb-save" onclick="saveTouchEditor()">💾 Lưu</button>
+  <div class="te-hint">👆 Kéo để di chuyển &nbsp;|&nbsp; 🤏 Chụm/banh 2 ngón để zoom</div>
+  <div class="te-btns">
+    <button class="teb-reset" onclick="resetEditor()">↺ Reset</button>
+    <button class="teb-cancel" onclick="closeEditor()">Hủy</button>
+    <button class="teb-save" onclick="saveEditor()">💾 Lưu</button>
   </div>
 </div>
 
+<script>
+const PASS      = '1';
+const GH_USER   = 'tienhuyy';
+const GH_REPO   = 'dam-cuoi';
+const GH_BRANCH = 'main';
+const RAW_BASE  = `https://raw.githubusercontent.com/${GH_USER}/${GH_REPO}/${GH_BRANCH}/photos/`;
+const API_URL   = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents/photos`;
+const COVER_URL = `https://raw.githubusercontent.com/${GH_USER}/${GH_REPO}/${GH_BRANCH}/cover.jpg`;
+const IMG_EXTS  = ['jpg','jpeg','png','gif','webp','JPG','JPEG','PNG','GIF','WEBP'];
+
+let isAdmin = false;
+let photos  = [];
+let groom   = 'Tiến Huy';
+let bride   = 'Quỳnh Hoa';
+
+// imgState lưu: bgSize (vd "150%"), bgPosX (vd "50%"), bgPosY (vd "30%")
+let imgState = { size: 'cover', px: '50%', py: '20%' };
+
+// ── Init ──────────────────────────────────────────────────────────────────
+function init() {
+  try {
+    const s = JSON.parse(localStorage.getItem('winfo') || '{}');
+    if (s.groom) groom = s.groom;
+    if (s.bride) bride = s.bride;
+    if (s.date)  document.getElementById('cover-date').textContent = s.date;
+    if (s.img)   imgState = s.img;
+  } catch(e) {}
+  setNames(groom, bride);
+  applyCoverImg();   // áp dụng ảnh bìa
+  loadPhotos();
+  if (location.search.includes('admin')) {
+    document.getElementById('admin-btn').style.display = 'block';
+    openLogin();
+  }
+}
+
+function setNames(g, b) {
+  groom = g; bride = b;
+  document.getElementById('cover-name').innerHTML  = `${g} &amp; ${b}`;
+  document.getElementById('footer-name').innerHTML = `${g} &amp; ${b} — Mãi bên nhau`;
+}
+
+function saveLocal() {
+  try {
+    localStorage.setItem('winfo', JSON.stringify({
+      groom, bride,
+      date: document.getElementById('cover-date').textContent,
+      img: imgState
+    }));
+  } catch(e) {}
+}
+
+// ── Cover image dùng background-image ────────────────────────────────────
+function applyCoverImg() {
+  const bg = document.getElementById('arch-bg');
+  const ph = document.getElementById('arch-placeholder');
+  // Thử load ảnh để kiểm tra
+  const img = new Image();
+  img.onload = () => {
+    bg.style.backgroundImage    = `url('${COVER_URL}?t=${Date.now()}')`;
+    bg.style.backgroundSize     = imgState.size;
+    bg.style.backgroundPosition = `${imgState.px} ${imgState.py}`;
+    ph.style.display = 'none';
+  };
+  img.onerror = () => {
+    ph.style.display = 'flex';
+  };
+  img.src = COVER_URL + '?t=' + Date.now();
+}
+
+// ── Photos ────────────────────────────────────────────────────────────────
+async function loadPhotos() {
+  const empty = document.getElementById('empty-state');
+  empty.textContent = '⏳ Đang tải ảnh...'; empty.classList.add('show');
+  try {
+    const res = await fetch(API_URL);
+    if (!res.ok) throw new Error();
+    const files = await res.json();
+    photos = files
+      .filter(f => f.type === 'file' && IMG_EXTS.some(e => f.name.endsWith('.'+e)))
+      .map(f => RAW_BASE + encodeURIComponent(f.name));
+    renderGrid();
+  } catch(e) {
+    empty.textContent = 'Không tải được ảnh — thử lại sau 🌸';
+  }
+}
+
+function renderGrid() {
+  const grid = document.getElementById('photo-grid');
+  const empty = document.getElementById('empty-state');
+  grid.innerHTML = '';
+  if (!photos.length) { empty.classList.add('show'); empty.textContent='Ảnh cưới sẽ sớm được cập nhật 🌸'; return; }
+  empty.classList.remove('show');
+  photos.forEach(src => {
+    const d = document.createElement('div');
+    d.className = 'photo-item';
+    d.innerHTML = `<img src="${src}" loading="lazy" alt="">`;
+    d.onclick = () => openLB(src);
+    grid.appendChild(d);
+  });
+}
+
+// ── Lightbox ──────────────────────────────────────────────────────────────
+function openLB(src) { document.getElementById('lb-img').src=src; document.getElementById('lightbox').classList.add('active'); document.body.style.overflow='hidden'; }
+function closeLB()   { document.getElementById('lightbox').classList.remove('active'); document.body.style.overflow=''; }
+document.addEventListener('keydown', e => { if(e.key==='Escape'){closeLB();closeEditor();} });
+
+// ── Admin ─────────────────────────────────────────────────────────────────
+function openLogin()  { document.getElementById('login-ov').classList.add('active'); setTimeout(()=>document.getElementById('pw').focus(),100); }
+function closeLogin() { document.getElementById('login-ov').classList.remove('active'); document.getElementById('pw').value=''; document.getElementById('pw-err').style.display='none'; }
+function doLogin() {
+  if (document.getElementById('pw').value === PASS) {
+    isAdmin=true; closeLogin(); openAdmin();
+  } else {
+    document.getElementById('pw-err').style.display='block';
+    document.getElementById('pw').value='';
+  }
+}
+function openAdmin() {
+  if (!isAdmin) { openLogin(); return; }
+  document.getElementById('in-groom').value = groom;
+  document.getElementById('in-bride').value = bride;
+  document.getElementById('in-date').value  = document.getElementById('cover-date').textContent;
+  document.getElementById('admin-note').innerHTML =
+    `📸 <strong>${photos.length}</strong> ảnh trong <code>photos/</code><br>
+     🖼️ Ảnh bìa: upload <code>cover.jpg</code> vào thư mục gốc<br>
+     ➕ Thêm ảnh: GitHub → photos → Add file → Upload`;
+  document.getElementById('admin-ov').classList.add('active');
+}
+function closeAdmin() { document.getElementById('admin-ov').classList.remove('active'); }
+function saveAdmin() {
+  const g = document.getElementById('in-groom').value.trim() || groom;
+  const b = document.getElementById('in-bride').value.trim() || bride;
+  const d = document.getElementById('in-date').value.trim();
+  setNames(g,b);
+  if(d) document.getElementById('cover-date').textContent = d;
+  saveLocal(); closeAdmin(); alert('✅ Đã lưu!');
+}
+
+// ── Touch Editor ──────────────────────────────────────────────────────────
+// State riêng cho editor (pixel trên te-frame)
+let te = { x: 0, y: 0, scale: 1 };
+let teDrag = null, tePinch = null;
+
+function openTouchEditor() {
+  closeAdmin();
+  const frame = document.getElementById('te-frame');
+  const bg    = document.getElementById('te-bg');
+
+  // Set background image giống arch-bg
+  bg.style.backgroundImage = `url('${COVER_URL}?t=${Date.now()}')`;
+  bg.style.backgroundRepeat = 'no-repeat';
+
+  // Convert imgState → pixel state cho editor
+  const fw = frame.offsetWidth;
+  const fh = frame.offsetHeight;
+
+  // Parse size: "cover" → scale=1, "150%" → scale=1.5
+  if (imgState.size === 'cover') {
+    te.scale = 1;
+  } else {
+    te.scale = parseFloat(imgState.size) / 100;
+  }
+  // Parse position: "50%" → 0 offset từ center, "30%" → ...
+  const px = parseFloat(imgState.px) / 100; // 0..1
+  const py = parseFloat(imgState.py) / 100;
+  te.x = (px - 0.5) * fw * (te.scale - 1) * 2;
+  te.y = (py - 0.5) * fh * (te.scale - 1) * 2;
+
+  applyTeStyle();
+  document.getElementById('te-ov').classList.add('active');
+}
+
+function applyTeStyle() {
+  const bg    = document.getElementById('te-bg');
+  const frame = document.getElementById('te-frame');
+  const fw = frame.offsetWidth;
+  const fh = frame.offsetHeight;
+
+  // Tính background-size và background-position từ te
+  const bw = fw * te.scale;
+  const bh = fh * te.scale;
+  // offset: center + te.x/y
+  const bx = (fw - bw) / 2 + te.x;
+  const by = (fh - bh) / 2 + te.y;
+
+  bg.style.backgroundSize     = `${bw}px ${bh}px`;
+  bg.style.backgroundPosition = `${bx}px ${by}px`;
+}
+
+function resetEditor() {
+  te = { x: 0, y: 0, scale: 1 };
+  applyTeStyle();
+}
+
+function closeEditor() {
+  document.getElementById('te-ov').classList.remove('active');
+}
+
+function saveEditor() {
+  const frame = document.getElementById('te-frame');
+  const fw = frame.offsetWidth;
+  const fh = frame.offsetHeight;
+  const bw = fw * te.scale;
+  const bh = fh * te.scale;
+  const bx = (fw - bw) / 2 + te.x;
+  const by = (fh - bh) / 2 + te.y;
+
+  // Convert pixel → percentage cho arch-bg
+  imgState.size = `${bw}px ${bh}px`;
+  imgState.px   = `${bx}px`;
+  imgState.py   = `${by}px`;
+
+  // Apply lên ảnh bìa thật
+  const archBg = document.getElementById('arch-bg');
+  archBg.style.backgroundImage    = `url('${COVER_URL}?t=${Date.now()}')`;
+  archBg.style.backgroundSize     = imgState.size;
+  archBg.style.backgroundPosition = `${imgState.px} ${imgState.py}`;
+  archBg.style.backgroundRepeat   = 'no-repeat';
+  document.getElementById('arch-placeholder').style.display = 'none';
+
+  saveLocal();
+  closeEditor();
+  alert('✅ Đã lưu vị trí ảnh!');
+}
+
+// Touch & Mouse events
+(function setupEditor() {
+  const frame = document.getElementById('te-frame');
+
+  // Mouse
+  frame.addEventListener('mousedown', e => {
+    teDrag = { sx: e.clientX, sy: e.clientY, ox: te.x, oy: te.y };
+    frame.classList.add('grabbing'); e.preventDefault();
+  });
+  document.addEventListener('mousemove', e => {
+    if (!teDrag) return;
+    te.x = teDrag.ox + (e.clientX - teDrag.sx);
+    te.y = teDrag.oy + (e.clientY - teDrag.sy);
+    applyTeStyle();
+  });
+  document.addEventListener('mouseup', () => { teDrag=null; frame.classList.remove('grabbing'); });
+  frame.addEventListener('wheel', e => {
+    e.preventDefault();
+    te.scale = Math.max(0.3, Math.min(5, te.scale * (e.deltaY < 0 ? 1.05 : 0.95)));
+    applyTeStyle();
+  }, {passive:false});
+
+  // Touch
+  frame.addEventListener('touchstart', e => {
+    if (e.touches.length === 1) {
+      teDrag  = { sx: e.touches[0].clientX, sy: e.touches[0].clientY, ox: te.x, oy: te.y };
+      tePinch = null;
+    } else if (e.touches.length === 2) {
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      tePinch = { dist: Math.hypot(dx,dy), os: te.scale };
+      teDrag  = null;
+    }
+    e.preventDefault();
+  }, {passive:false});
+
+  frame.addEventListener('touchmove', e => {
+    if (e.touches.length === 1 && teDrag) {
+      te.x = teDrag.ox + (e.touches[0].clientX - teDrag.sx);
+      te.y = teDrag.oy + (e.touches[0].clientY - teDrag.sy);
+      applyTeStyle();
+    } else if (e.touches.length === 2 && tePinch) {
+      const dx = e.touches[0].clientX - e.touches[1].clientX;
+      const dy = e.touches[0].clientY - e.touches[1].clientY;
+      te.scale = Math.max(0.3, Math.min(5, tePinch.os * Math.hypot(dx,dy) / tePinch.dist));
+      applyTeStyle();
+    }
+    e.preventDefault();
+  }, {passive:false});
+
+  frame.addEventListener('touchend', () => { teDrag=null; tePinch=null; });
+})();
+
+// ── Sakura ────────────────────────────────────────────────────────────────
+(function(){
+  const canvas = document.getElementById('particle-canvas');
+  const ctx    = canvas.getContext('2d');
+  let W, H;
+  const COUNT = 35, petals = [];
+  function resize(){ W=canvas.width=innerWidth; H=canvas.height=innerHeight; }
+  addEventListener('resize', resize); resize();
+  function newPetal(randY){
+    return { x:Math.random()*W, y:randY?Math.random()*H:-20-Math.random()*80,
+      size:Math.random()*7+5, angle:Math.random()*Math.PI*2, rot:(Math.random()-.5)*.03,
+      vx:(Math.random()-.5)*.8, vy:Math.random()*1+.5,
+      swing:Math.random()*.6+.2, swS:Math.random()*.015+.008, swP:Math.random()*Math.PI*2,
+      alpha:Math.random()*.45+.3, hue:340+Math.random()*25 };
+  }
+  for(let i=0;i<COUNT;i++) petals.push(newPetal(true));
+  function loop(){
+    ctx.clearRect(0,0,W,H);
+    const t=Date.now()/1000;
+    petals.forEach(p=>{
+      const sx=Math.sin(t*p.swS*60+p.swP)*p.swing;
+      ctx.save(); ctx.translate(p.x+sx,p.y); ctx.rotate(p.angle); ctx.globalAlpha=p.alpha;
+      const g=ctx.createRadialGradient(0,0,0,0,0,p.size);
+      g.addColorStop(0,`hsl(${p.hue},90%,88%)`); g.addColorStop(1,`hsl(${p.hue},75%,82%)`);
+      ctx.beginPath(); ctx.ellipse(0,0,p.size*.5,p.size,0,0,Math.PI*2);
+      ctx.fillStyle=g; ctx.fill(); ctx.restore();
+      p.y+=p.vy; p.x+=p.vx*.3; p.angle+=p.rot;
+      if(p.y>H+20) Object.assign(p,newPetal(false));
+    });
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+
+init();
+</script>
 </body>
 </html>
