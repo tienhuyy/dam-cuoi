@@ -327,7 +327,9 @@ function init(){
 function setNames(g,b){
   groom=g;bride=b;
   document.getElementById('cname').innerHTML=`${g} &amp; ${b}`;
-  document.getElementById('fname').innerHTML=`${g} &amp; ${b} — Mãi bên nhau`;
+  // footer dùng id riêng fname cho tên
+  const fn=document.getElementById('fname');
+  if(fn) fn.innerHTML=`${g} &amp; ${b}`;
 }
 
 function save(){
@@ -363,14 +365,20 @@ function loadCover(){
 }
 
 async function loadPhotos(){
-  const e=document.getElementById('empty');
-  e.textContent='⏳ Đang tải ảnh...';e.classList.add('show');
+  const empty=document.getElementById('empty');
+  empty.textContent='⏳ Đang tải ảnh...';empty.classList.add('show');
   try{
-    const r=await fetch(API);if(!r.ok)throw 0;
-    const f=await r.json();
-    photos=f.filter(f=>f.type==='file'&&EXTS.some(e=>f.name.endsWith('.'+e))).map(f=>`${RAW}/photos/${encodeURIComponent(f.name)}`);
+    const r=await fetch(API);
+    if(!r.ok) throw new Error('API '+r.status);
+    const files=await r.json();
+    photos=files
+      .filter(f=>f.type==='file'&&EXTS.some(ext=>f.name.toLowerCase().endsWith('.'+ext)))
+      .map(f=>`${RAW}/photos/${encodeURIComponent(f.name)}`);
     renderGrid();
-  }catch(e){e.textContent='Không tải được ảnh 🌸';}
+  }catch(err){
+    console.error('loadPhotos:',err);
+    empty.textContent='Không tải được ảnh — thử F5 lại nhé 🌸';
+  }
 }
 
 function renderGrid(){
