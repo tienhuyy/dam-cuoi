@@ -154,6 +154,29 @@ footer .fh{display:block;font-size:1.4rem;margin-bottom:.7rem}
 .std{display:flex;align-items:baseline;justify-content:center;gap:0.6rem;margin-bottom:1rem;}
 .std-s,.std-d{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1rem,3.5vw,1.3rem);font-weight:700;letter-spacing:0.3rem;color:var(--brown);text-transform:uppercase;}
 .std-t{font-family:'Great Vibes',cursive;font-size:clamp(1.7rem,5vw,2.1rem);color:var(--brown-mid);line-height:1;}
+
+/* Skeleton loading cho cover */
+.arch-frame{position:relative}
+.arch-skeleton{
+  position:absolute;inset:0;
+  background:linear-gradient(90deg,#f5e8e8 25%,#fce0e0 50%,#f5e8e8 75%);
+  background-size:200% 100%;
+  animation:shimmer 1.5s infinite;
+  z-index:2;
+  border-radius:inherit;
+  transition:opacity .4s ease;
+}
+.arch-skeleton.hidden{opacity:0;pointer-events:none}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.arch-img{
+  position:absolute;inset:0;
+  background:no-repeat center 20%;
+  background-size:cover;
+  opacity:0;
+  transition:opacity .5s ease;
+  z-index:1;
+}
+.arch-img.loaded{opacity:1}
 </style>
 </head>
 <body>
@@ -168,6 +191,7 @@ footer .fh{display:block;font-size:1.4rem;margin-bottom:.7rem}
   </div>
   <div class="arch-wrap">
     <div class="arch-frame" id="arch-frame">
+      <div class="arch-skeleton" id="arch-skeleton"></div>
       <div class="arch-img" id="arch-img"></div>
       <div class="arch-ph" id="arch-ph">
         <span>🌸</span>
@@ -287,17 +311,30 @@ function save(){
 
 function applyCover(){
   const el=document.getElementById('arch-img');
-  el.style.backgroundImage=`url('${COVER}?cb=${Date.now()}')`;
+  el.style.backgroundImage=`url('${COVER}')`;
   el.style.backgroundSize=`${img.zoom}%`;
   el.style.backgroundPosition=`${img.x}% ${img.y}%`;
   el.style.backgroundRepeat='no-repeat';
 }
 
 function loadCover(){
+  const sk=document.getElementById('arch-skeleton');
+  const ph=document.getElementById('arch-ph');
+  const el=document.getElementById('arch-img');
+  // Preload ảnh
   const t=new Image();
-  t.onload=()=>{applyCover();document.getElementById('arch-ph').style.display='none';};
-  t.onerror=()=>{document.getElementById('arch-ph').style.display='flex';};
-  t.src=COVER+'?cb='+Date.now();
+  t.onload=()=>{
+    applyCover();
+    el.classList.add('loaded');       // fade in mượt
+    ph.style.display='none';
+    // Ẩn skeleton sau khi ảnh hiện
+    setTimeout(()=>sk.classList.add('hidden'), 100);
+  };
+  t.onerror=()=>{
+    sk.classList.add('hidden');
+    ph.style.display='flex';
+  };
+  t.src=COVER;
 }
 
 async function loadPhotos(){
