@@ -105,12 +105,21 @@ body{font-family:'Nunito',sans-serif;font-weight:300;min-height:100vh;background
 .gtitle::after{content:'';display:block;width:50px;height:2px;background:var(--gold);margin:.6rem auto 0}
 .empty{text-align:center;padding:3rem 1rem;color:var(--text-light);font-style:italic;display:none}
 .empty.show{display:block}
-.pgrid{columns:3;column-gap:.8rem}
-@media(max-width:700px){.pgrid{columns:2}}
-@media(max-width:400px){.pgrid{columns:1}}
-.pitem{break-inside:avoid;margin-bottom:.8rem;border-radius:8px;overflow:hidden;cursor:zoom-in;box-shadow:0 4px 16px rgba(150,80,80,.1);transition:transform .3s,box-shadow .3s}
+.pgrid{display:flex;flex-direction:column;gap:.6rem}
+.prow{display:grid;gap:.6rem}
+.prow.big-left{grid-template-columns:1.6fr 1fr;grid-template-rows:auto}
+.prow.big-right{grid-template-columns:1fr 1.6fr;grid-template-rows:auto}
+.prow .small-col{display:flex;flex-direction:column;gap:.6rem}
+.pitem{border-radius:8px;overflow:hidden;cursor:zoom-in;box-shadow:0 4px 16px rgba(150,80,80,.1);transition:transform .3s,box-shadow .3s;flex:1}
 .pitem:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(150,80,80,.18)}
-.pitem img{width:100%;display:block}
+.pitem img{width:100%;height:100%;object-fit:cover;display:block}
+.pitem.big img{min-height:280px}
+.pitem.small img{min-height:130px}
+@media(max-width:500px){
+  .prow.big-left,.prow.big-right{grid-template-columns:1fr 1fr}
+  .pitem.big img{min-height:180px}
+  .pitem.small img{min-height:85px}
+}
 
 /* ══ LIGHTBOX ══ */
 .lb{display:none;position:fixed;inset:0;background:rgba(20,8,8,.92);z-index:1000;align-items:center;justify-content:center;padding:1rem;cursor:zoom-out}
@@ -317,11 +326,36 @@ function renderGrid(){
   g.innerHTML='';
   if(!photos.length){e.classList.add('show');e.textContent='Ảnh cưới sẽ sớm được cập nhật 🌸';return;}
   e.classList.remove('show');
-  photos.forEach(src=>{
-    const d=document.createElement('div');d.className='pitem';
-    d.innerHTML=`<img src="${src}" loading="lazy" alt="">`;
-    d.onclick=()=>openLB(src);g.appendChild(d);
-  });
+
+  // Chia ảnh thành nhóm 3: 1 to + 2 nhỏ, xen kẽ chiều
+  for(let i=0;i<photos.length;i+=3){
+    const row=document.createElement('div');
+    const isLeft=(Math.floor(i/3)%2===0);
+    row.className=`prow ${isLeft?'big-left':'big-right'}`;
+
+    // Ảnh to
+    const big=document.createElement('div');
+    big.className='pitem big';
+    big.innerHTML=`<img src="${photos[i]}" loading="lazy" alt="">`;
+    big.onclick=()=>openLB(photos[i]);
+
+    // 2 ảnh nhỏ
+    const col=document.createElement('div');
+    col.className='small-col';
+    [1,2].forEach(j=>{
+      if(i+j<photos.length){
+        const sm=document.createElement('div');
+        sm.className='pitem small';
+        sm.innerHTML=`<img src="${photos[i+j]}" loading="lazy" alt="">`;
+        sm.onclick=()=>openLB(photos[i+j]);
+        col.appendChild(sm);
+      }
+    });
+
+    if(isLeft){row.appendChild(big);row.appendChild(col);}
+    else{row.appendChild(col);row.appendChild(big);}
+    g.appendChild(row);
+  }
 }
 
 function openLB(src){document.getElementById('lb-img').src=src;document.getElementById('lb').classList.add('on');document.body.style.overflow='hidden';}
