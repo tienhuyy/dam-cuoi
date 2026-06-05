@@ -16,92 +16,36 @@
 body{font-family:'Nunito',sans-serif;font-weight:300;min-height:100vh;background:linear-gradient(135deg,#fce8e8 0%,#f8d8d0 50%,#fce4d8 100%);color:var(--text)}
 #pcanvas{position:fixed;inset:0;pointer-events:none;z-index:9999}
 
-/* ══ COVER ══ */
-.cover{
-  min-height:100vh;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  padding:3rem 2rem 2rem;position:relative;z-index:1;
-}
-
-/* Wrapper: arch + chữ dọc ngang nhau */
-.arch-wrap{
-  position:relative;
-  width:min(320px,80vw);
-}
-
-/* Vòm ảnh */
-.arch-frame{
-  flex:1;min-width:0;
-  position:relative;
-  aspect-ratio:3/4;
-  overflow:hidden;
-  border-radius:50% 50% 4px 4px / 20% 20% 4px 4px;
-  border:2px solid rgba(201,168,108,0.6);
-  box-shadow:0 8px 32px rgba(100,50,50,0.18);
-}
-.arch-img{
-  position:absolute;inset:0;
-  background:no-repeat center 20%;
-  background-size:cover;
-}
-.arch-ph{
-  position:absolute;inset:0;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  background:rgba(245,239,232,0.9);
-  color:#b0a090;font-size:.75rem;gap:.4rem;
-}
+/* COVER */
+.cover{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3rem 2rem 2rem;position:relative;z-index:1}
+.std{display:flex;align-items:baseline;justify-content:center;gap:.6rem;margin-bottom:1rem}
+.std-s,.std-d{font-family:'Playfair Display',serif;font-size:clamp(1rem,3.5vw,1.3rem);font-weight:700;letter-spacing:.3rem;color:var(--brown);text-transform:uppercase}
+.std-t{font-family:'Great Vibes',cursive;font-size:clamp(1.7rem,5vw,2.1rem);color:var(--brown-mid);line-height:1}
+.arch-wrap{position:relative;width:min(320px,80vw)}
+.arch-frame{position:relative;aspect-ratio:3/4;overflow:hidden;border-radius:50% 50% 4px 4px/20% 20% 4px 4px;border:2px solid rgba(201,168,108,.6);box-shadow:0 8px 32px rgba(100,50,50,.18)}
+/* Skeleton shimmer */
+.arch-sk{position:absolute;inset:0;background:linear-gradient(90deg,#f5e0e0 25%,#fce8e8 50%,#f5e0e0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;z-index:2;border-radius:inherit;transition:opacity .4s}
+.arch-sk.gone{opacity:0;pointer-events:none}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+/* Ảnh bìa */
+.arch-bg{position:absolute;inset:0;background:no-repeat 50% 20%;background-size:cover;opacity:0;transition:opacity .5s;z-index:1}
+.arch-bg.show{opacity:1}
+.arch-ph{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(245,239,232,.9);color:#b0a090;font-size:.75rem;gap:.4rem;z-index:3}
 .arch-ph span{font-size:2rem}
 
-/* Chữ dọc SAVE the DATE */
-.vside{
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  padding:0 0.6rem;gap:0.05rem;
-  flex-shrink:0;
-  align-self:center;
-}
-.vs{
-  font-family:'Playfair Display',Georgia,serif;
-  font-size:1.05rem;font-weight:700;
-  color:var(--brown);writing-mode:vertical-rl;
-  text-transform:uppercase;letter-spacing:0.1rem;line-height:1.25;
-}
-.vt{
-  font-family:'Great Vibes',cursive;
-  font-size:1.8rem;color:var(--brown-mid);
-  writing-mode:vertical-rl;line-height:1;margin:0.3rem 0;
-}
-
-/* Tên đôi */
-.cname{
-  font-family:'Great Vibes',cursive;
-  font-size:clamp(1.8rem,6vw,2.4rem);
-  color:var(--brown);margin-top:1.4rem;
-  white-space:nowrap;
-  text-shadow:0 1px 8px rgba(255,255,255,0.6);
-}
-.cdate{
-  font-family:'Playfair Display',Georgia,serif;
-  font-size:.85rem;letter-spacing:.2rem;
-  color:var(--brown-mid);margin-top:.4rem;
-  text-shadow:0 1px 6px rgba(255,255,255,0.5);
-}
-.scroll-hint{
-  margin-top:1.5rem;display:flex;flex-direction:column;
-  align-items:center;gap:.3rem;color:var(--rose);
-  font-size:.68rem;letter-spacing:.15rem;text-transform:uppercase;
-  animation:bounce 2s infinite;
-}
+.cname{font-family:'Great Vibes',cursive;font-size:clamp(1.8rem,6vw,2.4rem);color:var(--brown);margin-top:1.4rem;text-shadow:0 1px 8px rgba(255,255,255,.6)}
+.cdate{font-family:'Playfair Display',serif;font-size:.85rem;letter-spacing:.2rem;color:var(--brown-mid);margin-top:.4rem;text-shadow:0 1px 6px rgba(255,255,255,.5)}
+.scroll-hint{margin-top:1.5rem;display:flex;flex-direction:column;align-items:center;gap:.3rem;color:var(--rose);font-size:.68rem;letter-spacing:.15rem;text-transform:uppercase;animation:bounce 2s infinite}
 .scroll-hint::after{content:'↓';font-size:.9rem}
 
-/* ══ INTRO ══ */
+/* INTRO */
 .intro{text-align:center;padding:5rem 2rem 3rem;max-width:580px;margin:0 auto;position:relative;z-index:1}
-.intro h2{font-family:'Playfair Display',Georgia,serif;font-size:1.8rem;font-weight:400;color:var(--deep-rose);margin-bottom:.8rem}
+.intro h2{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:400;color:var(--deep-rose);margin-bottom:.8rem}
 .intro p{color:var(--text-light);line-height:1.9}
 
-/* ══ GALLERY ══ */
-.gallery{padding:1rem 1.2rem 5rem;max-width:1100px;margin:0 auto;position:relative;z-index:1}
-.gtitle{text-align:center;font-family:'Playfair Display',Georgia,serif;font-size:1.5rem;font-weight:400;color:var(--deep-rose);margin-bottom:2rem}
+/* GALLERY */
+.gallery{padding:1rem 1.2rem 4rem;max-width:1100px;margin:0 auto;position:relative;z-index:1}
+.gtitle{text-align:center;font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:400;color:var(--deep-rose);margin-bottom:2rem}
 .gtitle::after{content:'';display:block;width:50px;height:2px;background:var(--gold);margin:.6rem auto 0}
 .empty{text-align:center;padding:3rem 1rem;color:var(--text-light);font-style:italic;display:none}
 .empty.show{display:block}
@@ -111,82 +55,54 @@ body{font-family:'Nunito',sans-serif;font-weight:300;min-height:100vh;background
 .pitem:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(150,80,80,.2)}
 .pitem img{width:100%;display:block}
 
-/* ══ LIGHTBOX ══ */
+/* LIGHTBOX */
 .lb{display:none;position:fixed;inset:0;background:rgba(20,8,8,.92);z-index:1000;align-items:center;justify-content:center;padding:1rem;cursor:zoom-out}
 .lb.on{display:flex}
-.lb img{max-width:92vw;max-height:92vh;border-radius:6px;object-fit:contain;cursor:default}
+.lb img{max-width:92vw;max-height:92vh;border-radius:6px;object-fit:contain;cursor:default;box-shadow:0 20px 60px rgba(0,0,0,.5)}
 .lb-x{position:absolute;top:1.2rem;right:1.4rem;color:#fff;font-size:2.2rem;background:none;border:none;cursor:pointer;opacity:.8}
+.lb-x:hover{opacity:1}
 
-/* ══ FOOTER ══ */
+/* FOOTER */
 footer{text-align:center;padding:3.5rem 2rem 4rem;background:var(--dark);color:rgba(255,255,255,.5);position:relative;z-index:1;overflow:hidden}
 footer::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center top,rgba(200,100,120,.15) 0%,transparent 70%);pointer-events:none}
-footer .fh{display:block;font-size:1.8rem;margin-bottom:1rem}
-footer .f-names{font-family:'Great Vibes',cursive;font-size:clamp(1.6rem,5vw,2.2rem);color:rgba(255,255,255,.85);margin-bottom:1.5rem;display:block}
-footer .f-since{font-family:'Playfair Display',serif;font-size:.75rem;letter-spacing:.2rem;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:1.2rem}
-footer .f-counter{display:flex;justify-content:center;gap:1.2rem;margin-bottom:1.5rem;flex-wrap:wrap}
-footer .f-unit{display:flex;flex-direction:column;align-items:center;gap:.2rem}
-footer .f-num{font-family:'Playfair Display',serif;font-size:clamp(2rem,6vw,2.8rem);font-weight:700;color:rgba(255,255,255,.9);line-height:1}
-footer .f-label{font-size:.65rem;letter-spacing:.15rem;text-transform:uppercase;color:rgba(255,255,255,.35)}
-footer .f-dot{font-size:2rem;color:rgba(255,255,255,.15);align-self:center;padding-bottom:.3rem}
-footer .f-msg{font-size:.8rem;color:rgba(255,255,255,.3);font-style:italic}
-footer .f-not-yet{font-family:'Playfair Display',serif;font-size:1rem;color:rgba(255,255,255,.5);letter-spacing:.1rem}
+.fh{display:block;font-size:1.8rem;margin-bottom:1rem}
+.f-names{font-family:'Great Vibes',cursive;font-size:clamp(1.6rem,5vw,2.2rem);color:rgba(255,255,255,.85);margin-bottom:1.5rem;display:block}
+.f-since{font-family:'Playfair Display',serif;font-size:.75rem;letter-spacing:.2rem;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:1.2rem;display:block}
+.f-counter{display:flex;justify-content:center;gap:1.2rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.f-unit{display:flex;flex-direction:column;align-items:center;gap:.2rem}
+.f-num{font-family:'Playfair Display',serif;font-size:clamp(2rem,6vw,2.8rem);font-weight:700;color:rgba(255,255,255,.9);line-height:1}
+.f-lbl{font-size:.65rem;letter-spacing:.15rem;text-transform:uppercase;color:rgba(255,255,255,.35)}
+.f-dot{font-size:2rem;color:rgba(255,255,255,.15);align-self:center;padding-bottom:.3rem}
+.f-msg{font-size:.8rem;color:rgba(255,255,255,.3);font-style:italic}
+.f-soon{font-family:'Playfair Display',serif;font-size:1rem;color:rgba(255,255,255,.5);letter-spacing:.1rem}
 
-/* ══ ADMIN ══ */
-.abtn{position:fixed;bottom:1.8rem;right:1.8rem;background:var(--gold);color:#fff;border:none;border-radius:50px;padding:.65rem 1.3rem;font-family:'Nunito',sans-serif;font-size:.82rem;cursor:pointer;box-shadow:0 4px 14px rgba(180,140,60,.35);z-index:200;display:none;transition:all .25s}
-.abtn:hover{transform:translateY(-2px)}
+/* ADMIN */
+.abtn{position:fixed;bottom:1.8rem;right:1.8rem;background:var(--gold);color:#fff;border:none;border-radius:50px;padding:.65rem 1.3rem;font-family:'Nunito',sans-serif;font-size:.82rem;cursor:pointer;box-shadow:0 4px 14px rgba(180,140,60,.35);z-index:200;display:none}
 .ov{display:none;position:fixed;inset:0;background:rgba(30,12,12,.55);z-index:400;align-items:center;justify-content:center}
 .ov.on{display:flex}
 .modal{background:#faf6f0;border-radius:14px;padding:2.2rem;width:min(390px,92vw);box-shadow:0 20px 60px rgba(0,0,0,.28);max-height:90vh;overflow-y:auto}
-.modal h3{font-family:'Playfair Display',Georgia,serif;font-size:1.3rem;color:var(--deep-rose);margin-bottom:1.1rem;font-weight:400}
+.modal h3{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--deep-rose);margin-bottom:1.1rem;font-weight:400}
 .modal label{display:block;font-size:.82rem;color:var(--text-light);margin-bottom:.25rem}
 .modal input[type=text],.modal input[type=password]{width:100%;padding:.65rem .9rem;border:1px solid var(--rose);border-radius:8px;font-family:'Nunito',sans-serif;font-size:.95rem;color:var(--text);margin-bottom:.9rem;background:#fff}
 .modal input:focus{outline:none;border-color:var(--deep-rose)}
-.mbtns{display:flex;gap:.7rem;justify-content:flex-end;margin-top:.5rem}
-.mbtns button{padding:.55rem 1.4rem;border-radius:50px;font-family:'Nunito',sans-serif;font-size:.88rem;cursor:pointer;border:none;transition:all .2s}
+.mbtns{display:flex;gap:.7rem;justify-content:flex-end;margin-top:.5rem;flex-wrap:wrap}
+.mbtns button{padding:.55rem 1.4rem;border-radius:50px;font-family:'Nunito',sans-serif;font-size:.88rem;cursor:pointer;border:none}
 .bc{background:transparent;color:var(--text-light);border:1px solid var(--rose)!important}
 .bs{background:var(--deep-rose);color:#fff}
-.bs:hover{background:var(--dark)}
 .anote{font-size:.8rem;color:var(--text-light);background:#ede8e0;border-radius:8px;padding:.75rem;margin-bottom:.9rem;line-height:1.7}
 
-/* ══ FLOATING SLIDERS ══ */
-.fctrl{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.97);border-top:1.5px solid var(--gold-light);box-shadow:0 -4px 20px rgba(100,50,50,.12);padding:.8rem 1.2rem 1rem;z-index:300;backdrop-filter:blur(6px)}
-.fctrl.show{display:block}
-.fctrl .fctop{display:flex;align-items:center;justify-content:space-between;font-size:.78rem;color:var(--brown-mid);margin-bottom:.6rem}
-.fctrl .fctop button{background:none;border:none;color:var(--text-light);cursor:pointer;font-size:.8rem}
+/* FLOATING SLIDERS */
+.fctrl{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.97);border-top:1.5px solid var(--gold-light);box-shadow:0 -4px 20px rgba(100,50,50,.12);padding:.8rem 1.2rem 1.2rem;z-index:300;backdrop-filter:blur(6px)}
+.fctrl.on{display:block}
+.fctop{display:flex;align-items:center;justify-content:space-between;font-size:.78rem;color:var(--brown-mid);margin-bottom:.6rem}
+.fctop button{background:none;border:none;color:var(--text-light);cursor:pointer;font-size:.85rem;padding:.2rem .5rem}
 .srow{display:flex;align-items:center;gap:.6rem;margin-bottom:.45rem;font-size:.8rem;color:var(--text-light)}
-.srow label{width:3.2rem;flex-shrink:0}
+.srow label{width:3.5rem;flex-shrink:0}
 .srow input[type=range]{flex:1;accent-color:var(--gold);cursor:pointer}
 .srow .sv{width:3rem;text-align:right;color:var(--gold);font-size:.75rem}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
-
-.std{display:flex;align-items:baseline;justify-content:center;gap:0.6rem;margin-bottom:1rem;}
-.std-s,.std-d{font-family:'Playfair Display',Georgia,serif;font-size:clamp(1rem,3.5vw,1.3rem);font-weight:700;letter-spacing:0.3rem;color:var(--brown);text-transform:uppercase;}
-.std-t{font-family:'Great Vibes',cursive;font-size:clamp(1.7rem,5vw,2.1rem);color:var(--brown-mid);line-height:1;}
-
-/* Skeleton loading cho cover */
-.arch-frame{position:relative}
-.arch-skeleton{
-  position:absolute;inset:0;
-  background:linear-gradient(90deg,#f5e8e8 25%,#fce0e0 50%,#f5e8e8 75%);
-  background-size:200% 100%;
-  animation:shimmer 1.5s infinite;
-  z-index:2;
-  border-radius:inherit;
-  transition:opacity .4s ease;
-}
-.arch-skeleton.hidden{opacity:0;pointer-events:none}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.arch-img{
-  position:absolute;inset:0;
-  background:no-repeat center 20%;
-  background-size:cover;
-  opacity:0;
-  transition:opacity .5s ease;
-  z-index:1;
-}
-.arch-img.loaded{opacity:1}
 </style>
 </head>
 <body>
@@ -200,16 +116,12 @@ footer .f-not-yet{font-family:'Playfair Display',serif;font-size:1rem;color:rgba
     <span class="std-d">Date</span>
   </div>
   <div class="arch-wrap">
-    <div class="arch-frame" id="arch-frame">
-      <div class="arch-skeleton" id="arch-skeleton"></div>
-      <div class="arch-img" id="arch-img"></div>
-      <div class="arch-ph" id="arch-ph">
-        <span>🌸</span>
-        <p>Upload <code>cover.jpg</code><br>lên GitHub repo</p>
-      </div>
+    <div class="arch-frame">
+      <div class="arch-sk" id="arch-sk"></div>
+      <div class="arch-bg" id="arch-bg"></div>
+      <div class="arch-ph" id="arch-ph"><span>🌸</span><p>Upload <code>cover.jpg</code><br>lên GitHub repo</p></div>
     </div>
   </div>
-
   <div class="cname" id="cname">Tiến Huy &amp; Quỳnh Hoa</div>
   <div class="cdate" id="cdate">Sắp được công bố</div>
   <div class="scroll-hint">Cuộn xuống</div>
@@ -224,7 +136,7 @@ footer .f-not-yet{font-family:'Playfair Display',serif;font-size:1rem;color:rgba
 <!-- GALLERY -->
 <section class="gallery">
   <h2 class="gtitle">Khoảnh Khắc Đáng Nhớ</h2>
-  <div class="empty" id="empty">Ảnh cưới sẽ sớm được cập nhật 🌸</div>
+  <div class="empty show" id="empty">⏳ Đang tải ảnh...</div>
   <div class="pgrid" id="pgrid"></div>
 </section>
 
@@ -238,19 +150,17 @@ footer .f-not-yet{font-family:'Playfair Display',serif;font-size:1rem;color:rgba
 <footer>
   <span class="fh">💕</span>
   <span class="f-names" id="fname">Tiến Huy &amp; Quỳnh Hoa</span>
-  <div id="f-counter-wrap">
-    <div class="f-not-yet" id="f-not-yet" style="display:none">Ngày cưới sắp đến... 🌸</div>
-    <div id="f-counting" style="display:none">
-      <div class="f-since" id="f-since">Đã bên nhau từ</div>
-      <div class="f-counter">
-        <div class="f-unit"><span class="f-num" id="f-years">0</span><span class="f-label">Năm</span></div>
-        <div class="f-dot">·</div>
-        <div class="f-unit"><span class="f-num" id="f-months">0</span><span class="f-label">Tháng</span></div>
-        <div class="f-dot">·</div>
-        <div class="f-unit"><span class="f-num" id="f-days">0</span><span class="f-label">Ngày</span></div>
-      </div>
-      <div class="f-msg">Mãi bên nhau 💕</div>
+  <div id="f-soon" class="f-soon" style="display:none">Ngày cưới sắp đến... 🌸</div>
+  <div id="f-count" style="display:none">
+    <span class="f-since" id="f-since"></span>
+    <div class="f-counter">
+      <div class="f-unit"><span class="f-num" id="fy">0</span><span class="f-lbl">Năm</span></div>
+      <div class="f-dot">·</div>
+      <div class="f-unit"><span class="f-num" id="fm">0</span><span class="f-lbl">Tháng</span></div>
+      <div class="f-dot">·</div>
+      <div class="f-unit"><span class="f-num" id="fd">0</span><span class="f-lbl">Ngày</span></div>
     </div>
+    <div class="f-msg">Mãi bên nhau 💕</div>
   </div>
 </footer>
 
@@ -278,12 +188,12 @@ footer .f-not-yet{font-family:'Playfair Display',serif;font-size:1rem;color:rgba
     <input type="text" id="ig" placeholder="Tên chú rể">
     <label>Tên cô dâu</label>
     <input type="text" id="ib" placeholder="Tên cô dâu">
-    <label>Ngày cưới</label>
+    <label>Ngày cưới (dd.mm.yyyy)</label>
     <input type="text" id="id" placeholder="VD: 15.06.2025">
     <div class="anote" id="anote"></div>
     <div class="mbtns">
       <button class="bc" onclick="closeAov()">Đóng</button>
-      <button class="bc" onclick="openFloat()" style="color:var(--brown);border-color:var(--gold)!important">🖼️ Chỉnh ảnh</button>
+      <button class="bc" style="color:var(--brown);border-color:var(--gold)!important" onclick="openFloat()">🖼️ Chỉnh ảnh</button>
       <button class="bs" onclick="saveAdmin()">💾 Lưu</button>
     </div>
   </div>
@@ -301,116 +211,186 @@ footer .f-not-yet{font-family:'Playfair Display',serif;font-size:1rem;color:rgba
 </div>
 
 <script>
-const PASS='1',GH='tienhuyy',REPO='dam-cuoi',BRANCH='main';
-const RAW=`https://raw.githubusercontent.com/${GH}/${REPO}/${BRANCH}`;
-const COVER=`${RAW}/cover.jpg`;
-const API=`https://api.github.com/repos/${GH}/${REPO}/contents/photos`;
-const EXTS=['jpg','jpeg','png','gif','webp','JPG','JPEG','PNG','GIF','WEBP'];
+const PASS='1', GH='tienhuyy', REPO='dam-cuoi', BRANCH='main';
+const RAW   = `https://raw.githubusercontent.com/${GH}/${REPO}/${BRANCH}`;
+const COVER = `${RAW}/cover.jpg`;
+const API   = `https://api.github.com/repos/${GH}/${REPO}/contents/photos`;
+const EXTS  = ['jpg','jpeg','png','gif','webp'];
 
 let isAdmin=false, photos=[], groom='Tiến Huy', bride='Quỳnh Hoa';
 let img={zoom:100,x:50,y:20};
 
+/* ── INIT ── */
 function init(){
   try{
     const s=JSON.parse(localStorage.getItem('wdata')||'{}');
-    if(s.groom)groom=s.groom; if(s.bride)bride=s.bride;
-    if(s.date)document.getElementById('cdate').textContent=s.date;
-    if(s.img)img=s.img;
+    if(s.groom) groom=s.groom;
+    if(s.bride) bride=s.bride;
+    if(s.date)  document.getElementById('cdate').textContent=s.date;
+    if(s.img)   img=s.img;
   }catch(e){}
-  setNames(groom,bride);
+  setNames(groom, bride);
   loadCover();
-  startCounter();
   loadPhotos();
-  if(location.search.includes('admin')){document.getElementById('abtn').style.display='block';openLov();}
+  startCounter();
+  if(location.search.includes('admin')){
+    document.getElementById('abtn').style.display='block';
+    openLov();
+  }
 }
 
 function setNames(g,b){
-  groom=g;bride=b;
+  groom=g; bride=b;
   document.getElementById('cname').innerHTML=`${g} &amp; ${b}`;
-  // footer dùng id riêng fname cho tên
-  const fn=document.getElementById('fname');
-  if(fn) fn.innerHTML=`${g} &amp; ${b}`;
+  document.getElementById('fname').innerHTML=`${g} &amp; ${b}`;
 }
 
 function save(){
-  try{localStorage.setItem('wdata',JSON.stringify({groom,bride,date:document.getElementById('cdate').textContent,img}));}catch(e){}
+  try{
+    localStorage.setItem('wdata', JSON.stringify({
+      groom, bride,
+      date: document.getElementById('cdate').textContent,
+      img
+    }));
+  }catch(e){}
 }
 
+/* ── COVER ── */
 function applyCover(){
-  const el=document.getElementById('arch-img');
-  el.style.backgroundImage=`url('${COVER}')`;
-  el.style.backgroundSize=`${img.zoom}%`;
-  el.style.backgroundPosition=`${img.x}% ${img.y}%`;
-  el.style.backgroundRepeat='no-repeat';
+  const bg=document.getElementById('arch-bg');
+  bg.style.backgroundImage=`url('${COVER}')`;
+  bg.style.backgroundSize=`${img.zoom}%`;
+  bg.style.backgroundPosition=`${img.x}% ${img.y}%`;
+  bg.style.backgroundRepeat='no-repeat';
 }
 
 function loadCover(){
-  const sk=document.getElementById('arch-skeleton');
+  const sk=document.getElementById('arch-sk');
+  const bg=document.getElementById('arch-bg');
   const ph=document.getElementById('arch-ph');
-  const el=document.getElementById('arch-img');
-  // Preload ảnh
   const t=new Image();
   t.onload=()=>{
     applyCover();
-    el.classList.add('loaded');       // fade in mượt
+    bg.classList.add('show');
     ph.style.display='none';
-    // Ẩn skeleton sau khi ảnh hiện
-    setTimeout(()=>sk.classList.add('hidden'), 100);
+    setTimeout(()=>sk.classList.add('gone'), 200);
   };
   t.onerror=()=>{
-    sk.classList.add('hidden');
+    sk.classList.add('gone');
     ph.style.display='flex';
   };
   t.src=COVER;
 }
 
+/* ── PHOTOS ── */
 async function loadPhotos(){
   const empty=document.getElementById('empty');
-  empty.textContent='⏳ Đang tải ảnh...';empty.classList.add('show');
   try{
     const r=await fetch(API);
-    if(!r.ok) throw new Error('API '+r.status);
+    if(!r.ok) throw new Error(r.status);
     const files=await r.json();
     photos=files
-      .filter(f=>f.type==='file'&&EXTS.some(ext=>f.name.toLowerCase().endsWith('.'+ext)))
+      .filter(f=>f.type==='file' && EXTS.some(e=>f.name.toLowerCase().endsWith('.'+e)))
       .map(f=>`${RAW}/photos/${encodeURIComponent(f.name)}`);
     renderGrid();
-  }catch(err){
-    console.error('loadPhotos:',err);
-    empty.textContent='Không tải được ảnh — thử F5 lại nhé 🌸';
+  }catch(e){
+    empty.textContent='Không tải được ảnh — F5 thử lại nhé 🌸';
   }
 }
 
 function renderGrid(){
-  const g=document.getElementById('pgrid'),e=document.getElementById('empty');
-  g.innerHTML='';
-  if(!photos.length){e.classList.add('show');e.textContent='Ảnh cưới sẽ sớm được cập nhật 🌸';return;}
-  e.classList.remove('show');
+  const grid=document.getElementById('pgrid');
+  const empty=document.getElementById('empty');
+  grid.innerHTML='';
+  if(!photos.length){
+    empty.textContent='Ảnh cưới sẽ sớm được cập nhật 🌸';
+    empty.classList.add('show');
+    return;
+  }
+  empty.classList.remove('show');
   photos.forEach(src=>{
     const d=document.createElement('div');
     d.className='pitem';
     d.innerHTML=`<img src="${src}" loading="lazy" alt="">`;
     d.onclick=()=>openLB(src);
-    g.appendChild(d);
+    grid.appendChild(d);
   });
 }
 
-function openLB(src){document.getElementById('lb-img').src=src;document.getElementById('lb').classList.add('on');document.body.style.overflow='hidden';}
-function closeLB(){document.getElementById('lb').classList.remove('on');document.body.style.overflow='';}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLB();});
-
-function openLov(){document.getElementById('lov').classList.add('on');setTimeout(()=>document.getElementById('pw').focus(),100);}
-function closeLov(){document.getElementById('lov').classList.remove('on');document.getElementById('pw').value='';document.getElementById('pwerr').style.display='none';}
-function doLogin(){
-  if(document.getElementById('pw').value===PASS){isAdmin=true;closeLov();openAdmin();}
-  else{document.getElementById('pwerr').style.display='block';document.getElementById('pw').value='';}
+/* ── LIGHTBOX ── */
+function openLB(src){
+  document.getElementById('lb-img').src=src;
+  document.getElementById('lb').classList.add('on');
+  document.body.style.overflow='hidden';
 }
+function closeLB(){
+  document.getElementById('lb').classList.remove('on');
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape') closeLB();});
+
+/* ── COUNTER ── */
+function startCounter(){
+  const soon  =document.getElementById('f-soon');
+  const count =document.getElementById('f-count');
+  soon.style.display='none';
+  count.style.display='none';
+
+  const dateStr=document.getElementById('cdate').textContent.trim();
+  const m=dateStr.match(/(\d{1,2})[.\/\-](\d{1,2})[.\/\-](\d{4})/);
+  if(!m){soon.style.display='block';return;}
+
+  const wedding=new Date(+m[3], +m[2]-1, +m[1]);
+  if(isNaN(wedding.getTime())){soon.style.display='block';return;}
+  if(wedding>new Date()){soon.style.display='block';return;}
+
+  document.getElementById('f-since').textContent=
+    `Đã bên nhau từ ${String(m[1]).padStart(2,'0')}.${String(m[2]).padStart(2,'0')}.${m[3]}`;
+  count.style.display='block';
+
+  function tick(){
+    const n=new Date();
+    let y=n.getFullYear()-wedding.getFullYear();
+    let mo=n.getMonth()-wedding.getMonth();
+    let d=n.getDate()-wedding.getDate();
+    if(d<0){mo--;d+=new Date(n.getFullYear(),n.getMonth(),0).getDate();}
+    if(mo<0){y--;mo+=12;}
+    document.getElementById('fy').textContent=y;
+    document.getElementById('fm').textContent=mo;
+    document.getElementById('fd').textContent=d;
+  }
+  tick();
+  setInterval(tick,60000);
+}
+
+/* ── LOGIN ── */
+function openLov(){
+  document.getElementById('lov').classList.add('on');
+  setTimeout(()=>document.getElementById('pw').focus(),150);
+}
+function closeLov(){
+  document.getElementById('lov').classList.remove('on');
+  document.getElementById('pw').value='';
+  document.getElementById('pwerr').style.display='none';
+}
+function doLogin(){
+  if(document.getElementById('pw').value===PASS){
+    isAdmin=true; closeLov(); openAdmin();
+  }else{
+    document.getElementById('pwerr').style.display='block';
+    document.getElementById('pw').value='';
+  }
+}
+
+/* ── ADMIN ── */
 function openAdmin(){
   if(!isAdmin){openLov();return;}
   document.getElementById('ig').value=groom;
   document.getElementById('ib').value=bride;
   document.getElementById('id').value=document.getElementById('cdate').textContent;
-  document.getElementById('anote').innerHTML=`📸 <strong>${photos.length}</strong> ảnh trong <code>photos/</code><br>🖼️ Ảnh bìa: upload <code>cover.jpg</code> vào thư mục gốc`;
+  document.getElementById('anote').innerHTML=
+    `📸 <strong>${photos.length}</strong> ảnh trong <code>photos/</code><br>
+     🖼️ Ảnh bìa: upload <code>cover.jpg</code> vào thư mục gốc`;
   document.getElementById('aov').classList.add('on');
 }
 function closeAov(){document.getElementById('aov').classList.remove('on');}
@@ -418,10 +398,15 @@ function saveAdmin(){
   const g=document.getElementById('ig').value.trim()||groom;
   const b=document.getElementById('ib').value.trim()||bride;
   const d=document.getElementById('id').value.trim();
-  setNames(g,b);if(d)document.getElementById('cdate').textContent=d;
-  save();startCounter();closeAov();alert('✅ Đã lưu!');
+  setNames(g,b);
+  if(d) document.getElementById('cdate').textContent=d;
+  save();
+  startCounter();
+  closeAov();
+  alert('✅ Đã lưu!');
 }
 
+/* ── FLOATING SLIDERS ── */
 function openFloat(){
   closeAov();
   document.getElementById('fz').value=img.zoom;
@@ -430,9 +415,12 @@ function openFloat(){
   document.getElementById('fvz').textContent=img.zoom+'%';
   document.getElementById('fvx').textContent=(img.x-50)+'%';
   document.getElementById('fvy').textContent=(img.y-50)+'%';
-  document.getElementById('fctrl').classList.add('show');
+  document.getElementById('fctrl').classList.add('on');
 }
-function hideFloat(){document.getElementById('fctrl').classList.remove('show');save();}
+function hideFloat(){
+  document.getElementById('fctrl').classList.remove('on');
+  save();
+}
 function onFloat(){
   const z=+document.getElementById('fz').value;
   const x=+document.getElementById('fx').value;
@@ -440,28 +428,28 @@ function onFloat(){
   document.getElementById('fvz').textContent=z+'%';
   document.getElementById('fvx').textContent=x+'%';
   document.getElementById('fvy').textContent=y+'%';
-  img={zoom:z,x:x+50,y:y+50};
+  img={zoom:z, x:x+50, y:y+50};
   applyCover();
 }
 
-// SAKURA
+/* ── SAKURA ── */
 (function(){
   const c=document.getElementById('pcanvas'),ctx=c.getContext('2d');
-  let W,H;const N=35,ps=[];
+  let W,H; const N=35,ps=[];
   function rsz(){W=c.width=innerWidth;H=c.height=innerHeight;}
-  addEventListener('resize',rsz);rsz();
+  addEventListener('resize',rsz); rsz();
   function np(ry){return{x:Math.random()*W,y:ry?Math.random()*H:-20-Math.random()*80,sz:Math.random()*7+5,ang:Math.random()*Math.PI*2,rot:(Math.random()-.5)*.03,vx:(Math.random()-.5)*.8,vy:Math.random()*1+.5,sw:Math.random()*.6+.2,swS:Math.random()*.015+.008,swP:Math.random()*Math.PI*2,al:Math.random()*.45+.3,hue:340+Math.random()*25};}
-  for(let i=0;i<N;i++)ps.push(np(true));
+  for(let i=0;i<N;i++) ps.push(np(true));
   function loop(){
-    ctx.clearRect(0,0,W,H);const t=Date.now()/1000;
+    ctx.clearRect(0,0,W,H); const t=Date.now()/1000;
     ps.forEach(p=>{
       const sx=Math.sin(t*p.swS*60+p.swP)*p.sw;
-      ctx.save();ctx.translate(p.x+sx,p.y);ctx.rotate(p.ang);ctx.globalAlpha=p.al;
+      ctx.save(); ctx.translate(p.x+sx,p.y); ctx.rotate(p.ang); ctx.globalAlpha=p.al;
       const g=ctx.createRadialGradient(0,0,0,0,0,p.sz);
-      g.addColorStop(0,`hsl(${p.hue},90%,88%)`);g.addColorStop(1,`hsl(${p.hue},75%,82%)`);
-      ctx.beginPath();ctx.ellipse(0,0,p.sz*.5,p.sz,0,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();ctx.restore();
-      p.y+=p.vy;p.x+=p.vx*.3;p.ang+=p.rot;
-      if(p.y>H+20)Object.assign(p,np(false));
+      g.addColorStop(0,`hsl(${p.hue},90%,88%)`); g.addColorStop(1,`hsl(${p.hue},75%,82%)`);
+      ctx.beginPath(); ctx.ellipse(0,0,p.sz*.5,p.sz,0,0,Math.PI*2); ctx.fillStyle=g; ctx.fill(); ctx.restore();
+      p.y+=p.vy; p.x+=p.vx*.3; p.ang+=p.rot;
+      if(p.y>H+20) Object.assign(p,np(false));
     });
     requestAnimationFrame(loop);
   }
