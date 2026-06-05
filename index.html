@@ -124,6 +124,28 @@ footer::before{content:'';position:absolute;inset:0;background:radial-gradient(e
   </div>
   <div class="cname" id="cname">Tiến Huy &amp; Quỳnh Hoa</div>
   <div class="cdate" id="cdate">Sắp được công bố</div>
+  <!-- Counter ngay dưới ngày -->
+  <div id="c-soon" style="display:none;font-family:'Playfair Display',serif;font-size:.85rem;letter-spacing:.15rem;color:var(--brown-mid);margin-top:.3rem;text-shadow:0 1px 6px rgba(255,255,255,.5)"></div>
+  <div id="c-count" style="display:none;margin-top:.8rem;text-align:center">
+    <div style="font-size:.7rem;letter-spacing:.2rem;text-transform:uppercase;color:var(--brown-mid);margin-bottom:.5rem;text-shadow:0 1px 4px rgba(255,255,255,.5)" id="c-since"></div>
+    <div style="display:flex;justify-content:center;gap:.8rem;flex-wrap:wrap">
+      <div style="display:flex;flex-direction:column;align-items:center">
+        <span style="font-family:'Playfair Display',serif;font-size:clamp(1.6rem,5vw,2.2rem);font-weight:700;color:var(--brown);line-height:1;text-shadow:0 2px 8px rgba(255,255,255,.6)" id="cy">0</span>
+        <span style="font-size:.65rem;letter-spacing:.12rem;text-transform:uppercase;color:var(--brown-mid)">Năm</span>
+      </div>
+      <div style="font-size:1.5rem;color:var(--gold);align-self:center;line-height:1">·</div>
+      <div style="display:flex;flex-direction:column;align-items:center">
+        <span style="font-family:'Playfair Display',serif;font-size:clamp(1.6rem,5vw,2.2rem);font-weight:700;color:var(--brown);line-height:1;text-shadow:0 2px 8px rgba(255,255,255,.6)" id="cmo">0</span>
+        <span style="font-size:.65rem;letter-spacing:.12rem;text-transform:uppercase;color:var(--brown-mid)">Tháng</span>
+      </div>
+      <div style="font-size:1.5rem;color:var(--gold);align-self:center;line-height:1">·</div>
+      <div style="display:flex;flex-direction:column;align-items:center">
+        <span style="font-family:'Playfair Display',serif;font-size:clamp(1.6rem,5vw,2.2rem);font-weight:700;color:var(--brown);line-height:1;text-shadow:0 2px 8px rgba(255,255,255,.6)" id="cd">0</span>
+        <span style="font-size:.65rem;letter-spacing:.12rem;text-transform:uppercase;color:var(--brown-mid)">Ngày</span>
+      </div>
+    </div>
+    <div style="font-size:.78rem;color:var(--brown-mid);margin-top:.5rem;font-style:italic;text-shadow:0 1px 4px rgba(255,255,255,.5)">Mãi bên nhau 💕</div>
+  </div>
   <div class="scroll-hint">Cuộn xuống</div>
 </section>
 
@@ -150,18 +172,7 @@ footer::before{content:'';position:absolute;inset:0;background:radial-gradient(e
 <footer>
   <span class="fh">💕</span>
   <span class="f-names" id="fname">Tiến Huy &amp; Quỳnh Hoa</span>
-  <div id="f-soon" class="f-soon" style="display:none">Ngày cưới sắp đến... 🌸</div>
-  <div id="f-count" style="display:none">
-    <span class="f-since" id="f-since"></span>
-    <div class="f-counter">
-      <div class="f-unit"><span class="f-num" id="fy">0</span><span class="f-lbl">Năm</span></div>
-      <div class="f-dot">·</div>
-      <div class="f-unit"><span class="f-num" id="fm">0</span><span class="f-lbl">Tháng</span></div>
-      <div class="f-dot">·</div>
-      <div class="f-unit"><span class="f-num" id="fd">0</span><span class="f-lbl">Ngày</span></div>
-    </div>
-    <div class="f-msg">Mãi bên nhau 💕</div>
-  </div>
+  <div style="font-size:.75rem;color:rgba(255,255,255,.3);margin-top:.8rem;letter-spacing:.1rem">tienhuyy.github.io/dam-cuoi</div>
 </footer>
 
 <button class="abtn" id="abtn" onclick="openAdmin()">⚙️ Admin</button>
@@ -331,20 +342,41 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape') closeLB();});
 
 /* ── COUNTER ── */
 function startCounter(){
-  const soon  =document.getElementById('f-soon');
-  const count =document.getElementById('f-count');
+  const soon  = document.getElementById('c-soon');
+  const count = document.getElementById('c-count');
   soon.style.display='none';
   count.style.display='none';
 
-  const dateStr=document.getElementById('cdate').textContent.trim();
-  const m=dateStr.match(/(\d{1,2})[.\/\-](\d{1,2})[.\/\-](\d{4})/);
-  if(!m){soon.style.display='block';return;}
+  const dateStr = document.getElementById('cdate').textContent.trim();
+  const m = dateStr.match(/(\d{1,2})[.\/\-](\d{1,2})[.\/\-](\d{4})/);
+  if(!m){
+    soon.style.display='block';
+    soon.textContent='Ngày cưới sắp được công bố 🌸';
+    return;
+  }
 
-  const wedding=new Date(+m[3], +m[2]-1, +m[1]);
-  if(isNaN(wedding.getTime())){soon.style.display='block';return;}
-  if(wedding>new Date()){soon.style.display='block';return;}
+  const wedding = new Date(+m[3], +m[2]-1, +m[1]);
+  if(isNaN(wedding.getTime())){
+    soon.style.display='block';
+    soon.textContent='Ngày cưới sắp được công bố 🌸';
+    return;
+  }
 
-  document.getElementById('f-since').textContent=
+  if(wedding > new Date()){
+    // Chưa đến ngày cưới — đếm ngược
+    soon.style.display='block';
+    function countdown(){
+      const diff = wedding - new Date();
+      const days = Math.ceil(diff/(1000*60*60*24));
+      soon.textContent = `Còn ${days} ngày nữa thôi! 🌸`;
+    }
+    countdown();
+    setInterval(countdown, 60000);
+    return;
+  }
+
+  // Đã cưới — đếm xuôi
+  document.getElementById('c-since').textContent =
     `Đã bên nhau từ ${String(m[1]).padStart(2,'0')}.${String(m[2]).padStart(2,'0')}.${m[3]}`;
   count.style.display='block';
 
@@ -355,9 +387,9 @@ function startCounter(){
     let d=n.getDate()-wedding.getDate();
     if(d<0){mo--;d+=new Date(n.getFullYear(),n.getMonth(),0).getDate();}
     if(mo<0){y--;mo+=12;}
-    document.getElementById('fy').textContent=y;
-    document.getElementById('fm').textContent=mo;
-    document.getElementById('fd').textContent=d;
+    document.getElementById('cy').textContent=y;
+    document.getElementById('cmo').textContent=mo;
+    document.getElementById('cd').textContent=d;
   }
   tick();
   setInterval(tick,60000);
