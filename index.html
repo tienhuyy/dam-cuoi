@@ -127,7 +127,7 @@ footer::before{content:'';position:absolute;inset:0;background:radial-gradient(e
   <!-- Counter ngay dưới ngày -->
   <div id="c-soon" style="display:none;font-family:'Playfair Display',serif;font-size:.85rem;letter-spacing:.15rem;color:var(--brown-mid);margin-top:.3rem;text-shadow:0 1px 6px rgba(255,255,255,.5)"></div>
   <div id="c-count" style="display:none;margin-top:.8rem;text-align:center">
-    <div style="font-size:.7rem;letter-spacing:.2rem;text-transform:uppercase;color:var(--brown-mid);margin-bottom:.5rem;text-shadow:0 1px 4px rgba(255,255,255,.5)" id="c-since"></div>
+
     <div style="display:flex;justify-content:center;gap:.8rem;flex-wrap:wrap">
       <div style="display:flex;flex-direction:column;align-items:center">
         <span style="font-family:'Playfair Display',serif;font-size:clamp(1.6rem,5vw,2.2rem);font-weight:700;color:var(--brown);line-height:1;text-shadow:0 2px 8px rgba(255,255,255,.6)" id="cy">0</span>
@@ -172,7 +172,6 @@ footer::before{content:'';position:absolute;inset:0;background:radial-gradient(e
 <footer>
   <span class="fh">💕</span>
   <span class="f-names" id="fname">Tiến Huy &amp; Quỳnh Hoa</span>
-  <div style="font-size:.75rem;color:rgba(255,255,255,.3);margin-top:.8rem;letter-spacing:.1rem">tienhuyy.github.io/dam-cuoi</div>
 </footer>
 
 <button class="abtn" id="abtn" onclick="openAdmin()">⚙️ Admin</button>
@@ -376,8 +375,6 @@ function startCounter(){
   }
 
   // Đã cưới — đếm xuôi
-  document.getElementById('c-since').textContent =
-    `Đã bên nhau từ ${String(m[1]).padStart(2,'0')}.${String(m[2]).padStart(2,'0')}.${m[3]}`;
   count.style.display='block';
 
   function tick(){
